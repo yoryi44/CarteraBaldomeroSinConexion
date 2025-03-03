@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#194525</color>
+    <color name="colorPrimaryDark">#44973C</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="blanco">#FFFFFFFF</color>
+
+    <color name="colorPrimaryAlpha">#B3194525</color>
+    <color name="colorAccentAlpha">#B344973C</color>
+    <color name="coloryellowAlpha">#4DF8E71C</color>
+    <color name="colorGrisClaroFondo">#F0F0F0</color>
+    <color name="colorVerdeLista">#84C356</color>
+    <color name="colorGrisOscuro">#9B9B9B</color>
+    <color name="colorGrisOscuroLetra">#4A4A4A</color>
+    <color name="colorDoradoIconos">#B2918A4B</color>
+
+
+
+
+    <color name="colorBloqueUno">#5F9534</color>
+    <color name="colorBloqueDos">#9CCC62</color>
+    <color name="colorBloqueTres">#C7E1A6</color>
+
+    <color name="colorBotonUno">#42B3A2</color>
+    <color name="colorBotonDos">#57CCA6</color>
+    <color name="colorBotonTres">#B3D24C</color>
+    <color name="colorBotonCuatro">#8BC34A</color>
+    <color name="colorBotonCinco">#3F6216</color>
+    <color name="colorBotonRojo">#C70B0B</color>
+    <color name="colorBotonNegro">#000000</color>
+    <color name="colorEncabezadoObs">#788BC34A</color>
+
+
+    <!-- COLORES BANNER , TRANSPARENTES -->
+
+
+    <color name="agco">#A6194525</color>
+    <color name="aguc">#9E002E86</color>
+    <color name="agsc">#DF2E22</color>
+    <color name="aggc">#DF2E22</color>
+    <color name="agdp">#9E002E86</color>
+    <color name="agah">#9E002E86</color>
+    <color name="afpz">#DF2E22</color>
+    <color name="afpp">#DF2E22</color>
+    <color name="afpn">#DF2E22</color>
+    <color name="adhb">#DF2E22</color>
+    <color name="aabr">#DF2E22 </color>
+
+    <color name="progress_bg">#f1efef</color>
+</resources>

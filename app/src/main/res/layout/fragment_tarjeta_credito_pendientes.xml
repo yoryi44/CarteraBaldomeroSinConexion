@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtCompaReciboDinero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/foco_std_rg"
+                    android:singleLine="true"
+                    android:text="Registrar Forma de Pago"
+                    android:textColor="@android:color/black"
+                    android:textSize="26sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtCompaReciboDinero1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/foco_std_rg"
+                    android:singleLine="true"
+                    android:text="Tarjeta"
+                    android:textColor="@android:color/black"
+                    android:textSize="26sp"
+                    android:gravity="center"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtCompaReciboDinero2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/foco_std_rg"
+                    android:singleLine="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Monto a Recaudar: "
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:id="@+id/tvMonto"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/foco_std_rg"
+                    android:layout_marginTop="10dp"
+                    android:text=""
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginBottom="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:layout_weight="87"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        android:layout_margin="10sp"
+                        android:orientation="vertical"
+                        android:weightSum="100">
+
+                        <!-- CONTENIDO PRINCIPAL -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="240dp"
+                            android:orientation="horizontal">
+
+                            <!-- ICONO DE MARCA DE LA FACTURA PROGRAMADA -->
+
+                            <!-- INFORMACION GENERAL DE LA FACTURA PROGRAMADA -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="240dp"
+                                android:weightSum="10">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="6"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="128dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Fecha:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/tvFechaFragTarje"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="3"
+                                            android:hint="yyyy-mm-dd"
+                                            android:textAlignment="center"
+                                            android:background="@drawable/cuadro_texto"
+                                            android:textColor="@color/normalColor"
+                                            android:textSize="16sp"
+                                            android:inputType="date"
+                                            android:focusable="false"
+                                            android:clickable="true"
+                                            android:drawableRight="@drawable/ic_calendario"
+                                            android:layout_marginRight="1dp"
+                                            android:textStyle="bold">
+
+                                        </EditText>
+
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="128dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Monto:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <TextView
+                                            android:id="@+id/simboloTarjeta"
+                                            android:layout_width="22dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:lines="1"
+                                            android:maxLength="4"
+                                            android:textColor="@android:color/black"
+                                            android:text=""
+                                            android:textSize="16sp"/>
+
+
+                                        <EditText
+                                            android:id="@+id/tvValorFragTarjeta"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:maxLength="10"
+                                            android:textSize="16sp"
+                                            android:inputType="numberDecimal"/>
+
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="128dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Descripcion:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/tvDescripcionTarjeta"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:maxLength="145"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="128dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="NRO Tarjeta:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/tvNROTarjeta"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp"
+                                            android:inputType="numberDecimal"/>
+
+                                    </LinearLayout>
+
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="128dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Nombre Titular:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/tvNombreTitular"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="127dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Cuenta Destino:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="16sp" />
+
+                                        <Spinner
+                                            android:id="@+id/spinnerCuentasBancoTarjeta"
+                                            android:layout_width="179dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg" />
+
+
+
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- PRECIO FACTURA -->
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="113dp"
+            android:layout_marginTop="0sp"
+            android:layout_marginBottom="15sp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15sp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/guardarFormaPagoPendienteTarje"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20sp"
+                    android:background="@drawable/pendiente"
+                    android:fontFamily="@font/foco_std"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/guardarFormaPagoFE"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20sp"
+                    android:background="@drawable/ic_add"
+                    android:fontFamily="@font/foco_std"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/cancelarFormaPagoFE"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20sp"
+                    android:background="@drawable/ic_close"
+                    android:fontFamily="@font/foco_std" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

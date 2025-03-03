@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itCerrarSesion"
+        android:icon="@drawable/cerrarsesion"
+        android:title="Close Session" />
+    <item android:id="@+id/itEnviarInformacion"
+        android:icon="@drawable/cerrarsesion"
+        android:title="Sync" />
+    <item android:id="@+id/itEnviarInformacion2"
+        android:icon="@drawable/cerrarsesion"
+        android:title="Send Information" />
+
+    <item android:id="@+id/itConfigurarImpresora"
+        android:icon="@drawable/cerrarsesion"
+        android:title="Printer Setup" />
+
+
+
+</menu>

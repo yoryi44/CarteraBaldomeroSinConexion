@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- CABECERA TITULO -->
+    <LinearLayout
+        android:id="@+id/infogenerallayaout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/idTitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/foco_std"
+            android:gravity="center"
+            android:text="Informacion General"
+            android:textColor="@color/blanco"
+            android:textSize="20sp">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialogText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="20sp"
+        android:fontFamily="@font/foco_std_rg"
+        android:gravity="center"
+        android:text="Se sincronizó correctamente..."
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- OPCIONES DIALOGO -->
+    <LinearLayout
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:layout_marginLeft="20sp"
+            android:id="@+id/btnAceptarDialogoinfoGeneral"
+            android:background="@color/colorGrisOscuroLetra"
+            android:textColor="@android:color/white"
+            android:layout_width="120sp"
+            android:layout_height="45sp"
+            android:fontFamily="@font/foco_std"
+            android:text="ACEPTAR"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

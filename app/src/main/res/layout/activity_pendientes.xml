@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
+            android:orientation="vertical">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvListaCarteraFacturasPendientes"
+                        android:layout_width="match_parent"
+                        android:layout_height="600dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="30dp"
+                        android:overScrollMode="never"
+                        android:stackFromBottom="true"
+
+                        android:transcriptMode="alwaysScroll" />
+
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="co.com.celuweb.carterabaldomero.FacturasSeleccionadasActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginTop="-13sp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="18dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <TableRow
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#51B435">
+
+                        <TextView
+                            android:id="@+id/txtNumRe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:background="#51B435"
+                            android:text="No. de Recibo"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtCodCli"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="67dp"
+                            android:background="#51B435"
+                            android:text="Codigo Cliente"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtFechCrea"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="350dp"
+                            android:background="#51B435"
+                            android:text="Fecha Creacion"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtFechCie"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="80dp"
+                            android:background="#51B435"
+                            android:text="Fecha Cierre"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtMont"
+                            android:layout_width="134dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="135dp"
+                            android:background="#51B435"
+                            android:text="Monto"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtSta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="35dp"
+                            android:background="#51B435"
+                            android:text="Status"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtSeleccion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="65dp"
+                            android:background="#51B435"
+                            android:text="Selección"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/txtImprimir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="65dp"
+                            android:background="#51B435"
+                            android:text="Imprimir"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/txtMotivosAnula"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="50dp"
+                            android:background="#51B435"
+                            android:text="Motivos Anulacion"
+                            android:textSize="15dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+
+                    </TableRow>
+
+
+                </TableLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</HorizontalScrollView>
+
+
+
+

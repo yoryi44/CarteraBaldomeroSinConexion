@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginBottom="10sp"
+
+            card_view:cardCornerRadius="40dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_margin="10sp"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <!-- CONTENIDO PRINCIPAL -->
+                <LinearLayout
+                    android:layout_width="352dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+
+                    <!-- ICONO DE MARCA DE LA FACTURA PROGRAMADA -->
+                    <LinearLayout
+                        android:id="@+id/layaoutEditar"
+                        android:layout_width="40sp"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/editar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/editar"
+                            android:buttonTint="@color/colorPrimaryDark" />
+
+
+                    </LinearLayout>
+
+                    <!-- INFORMACION GENERAL DE LA FACTURA PROGRAMADA -->
+                    <LinearLayout
+                        android:layout_width="223dp"
+                        android:layout_height="match_parent"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:layout_width="201dp"
+                            android:layout_height="60dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+//via
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textoFormaDePagoPendiente"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std"
+                                    android:text="Forma de Pago: "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTotalFormasPagoVista"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+//valorconsig
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textoValorPagadoPen"
+                                    android:layout_width="111dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std"
+                                    android:text="Valor pagado:"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tvSaldoFacturaVista"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+//descrip
+                            <LinearLayout
+                                android:id="@+id/layoutpendiDescripcion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvpendiDescripcion"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//fechaconsgi
+                            <LinearLayout
+                                android:id="@+id/layoutfechaConsignacionpe"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:id="@+id/tvfechaConsignacionpe"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//numcheq
+                            <LinearLayout
+                                android:id="@+id/layoutNumchequePend"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvNumchequePend"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//claseD
+                            <LinearLayout
+                                android:id="@+id/layoutclaseDocu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvclaseDocumento"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//soci
+                            <LinearLayout
+                                android:id="@+id/layoutsociedad"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvSociedad"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+      //codcli
+                            <LinearLayout
+                                android:id="@+id/layoutcodigoCliente"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvcodigoCliente"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+        //codvende
+                            <LinearLayout
+                                android:id="@+id/layoutcodvendedor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvcodvendedor"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+        //fechacierr
+                            <LinearLayout
+                                android:id="@+id/layoutfechacierr"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvfechacierr"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+        //valordoc
+                            <LinearLayout
+                                android:id="@+id/layoutvalorDocumento"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvvalorDocumento"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+        //moneda
+                            <LinearLayout
+                                android:id="@+id/layoutmoneda"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvmoneda"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+        //valorpagado
+                            <LinearLayout
+                                android:id="@+id/layoutvalorpagado"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvvalorpagado"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//moendaconsig
+                            <LinearLayout
+                                android:id="@+id/layoutmoendaconsig"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvmoendaconsig"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//doctofinan
+                            <LinearLayout
+                                android:id="@+id/layoutdoctofinan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvdoctofinan"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//nrorecibo
+                            <LinearLayout
+                                android:id="@+id/layoutnrorecibo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvnrorecibo"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//usuario
+                            <LinearLayout
+                                android:id="@+id/layoutusuario"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvusuario"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+//idpago
+                            <LinearLayout
+                                android:id="@+id/layoutidpago"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvidpago"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+
+
+
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutbotonAceptar"
+                        android:layout_width="40sp"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:id="@+id/AceptarPen"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_add"
+                            android:buttonTint="@color/colorPrimaryDark" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!-- PRECIO FACTURA -->
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

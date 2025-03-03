@@ -1,0 +1,213 @@
+<resources>
+    <string name="app_name">Cartera En línea</string>
+
+    <string name="title_activity_login" translatable="false">Login</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="bloquear_cliente">Bloquear/Desbloquear Cliente</string>
+    <string name="terminar_dia">Terminar Día</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="enviar_informacion">Enviar Información</string>
+
+    <string name="rango_de_fecha">Rango de Fecha</string>
+    <string name="cliente">Cliente</string>
+    <string name="rango_de_fechas">Rango de fechas</string>
+    <string name="fecha_incial">Fecha incial</string>
+    <string name="fecha_final">Fecha final</string>
+    <string name="estado">Estado</string>
+    <string name="numero_doc">N° Doc</string>
+    <string name="guardar">Guardar</string>
+    <string name="valor">Valor</string>
+    <string name="fecha_cierre">Fecha Cierre</string>
+    <string name="fecha_creacion">Fecha Creación</string>
+    <string name="creado_por">Creado Por</string>
+    <string name="acuerdo">Acuerdo #</string>
+    <string name="mas">+</string>
+    <string name="menos">-</string>
+
+    <string-array name="facturas">
+        <item>Todas</item>
+    </string-array>
+
+    <string name="nota_acuerdo">NOTA: Este pre-acuerdo de pago está sujeto a revisión y aprobación del Jefe nacional de Cartera</string>
+    <string name="mensaje_preacuerdo">Se ha enviado correctamente el preacuerdo de pago para aprobación,
+        cuando sea gestionado recibirás una notficación.</string>
+    <string name="sin_sincronizar">Sin sincronizar</string>
+
+    <string name="resumen_preacuerdo">Resumen Preacuerdo</string>
+    <string name="preacuerdo_firma">Firma pre-Acuerdos de pago</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="detalle_preacuerdo">Detalle de Pre-Acuerdos</string>
+    <string name="cartera_vencida_porcentaje">% Cartera Vencida</string>
+    <string name="factura_sin_novedad">Factura sin novedad</string>
+    <string name="factura">Factura</string>
+    <string name="cant_facturas">Total Documentos</string>
+    <string name="tittle_export">Por favor ingrese el correo electrónico al que desea enviar los informes.</string>
+    <string name="buscar">Buscar</string>
+    <string name="segmento">Segmento:</string>
+    <string name="segmento_label">Segmento</string>
+    <string name="fecha">Fecha:</string>
+    <string name="fecha_m">FECHA</string>
+    <string name="cargar">Cargar</string>
+    <string name="elige_los_criterios_para_cargar_el_rutero">Elige los criterios para cargar el rutero:</string>
+    <string name="regional">Regional:</string>
+    <string name="vendedor">Vendedor:</string>
+    <string name="poblaci_n">Población:</string>
+    <string name="todos">Todos</string>
+    <string name="poblacion">Población</string>
+    <string name="dia">Día</string>
+    <string name="dia_form">Día:</string>
+    <string name="nombre_razon_social">Nombre/Razon Social</string>
+    <string name="configurar_impresora">Configurar Impresora</string>
+    <string name="nit_sap">Nit/SAP</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="anterior">Anterior</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="total_tranf_consig">Total Tranf/Consig:</string>
+    <string name="total_cheque">Total Cheque:</string>
+    <string name="enviar">Enviar</string>
+    <string name="encuestas">Encuestas</string>
+    <string name="vic">VIC</string>
+    <string name="ugc">UGC</string>
+    <string name="seguimiento">Seguimiento</string>
+    <string name="gestion_de_recaudos">Gestión de Recaudos</string>
+    <string name="acuerdos_de_pago">Acuerdos de Pago</string>
+    <string name="gestion_de_cobros">Gestión de Cobros</string>
+    <string name="conciliacion_de_cartera">Conciliación de Cartera</string>
+    <string name="codigo_sap">Código SAP</string>
+    <string name="nombre">Nombre</string>
+    <string name="razon_social">Razón Social</string>
+    <string name="nit">NIT</string>
+    <string name="direccion">Dirección</string>
+    <string name="telefono">Teléfono</string>
+    <string name="saldo_de_cartera">Saldo de Cartera</string>
+    <string name="cupo_de_credito">Cupo de Crédito</string>
+    <string name="condicion_de_pago">Condición de Pago</string>
+    <string name="itinerario_vendedor">Itinerario Vendedor</string>
+    <string name="cartera_vencida">Cartera Vencida</string>
+    <string name="meta_cartera_vencida_vend_1">Meta % Cartera Vencida Vend. 1</string>
+    <string name="meta_cartera_vencida_vend_2">Meta % Cartera Vencida Vend. 2</string>
+    <string name="dias_reales_de_pago">Días Reales de Pago</string>
+    <string name="rotacion">Rotación</string>
+    <string name="itinerario_logistica">Itinerario Logística</string>
+    <string name="meta_cartera_por_vendedor">Meta Cartera por Vendedor</string>
+    <string name="propuesta_de_valor">Propuesta de Valor</string>
+    <string name="motivo">Motivo:</string>
+    <string name="informacion">Información</string>
+    <string name="msg_envio_informacion">Se envío información correctamente.</string>
+    <string name="msg_no_envio_informacion">Error al enviar al Información.</string>
+    <string name="msm_fechas_invalidas">Las fechas deben de ir de forma descendente desde la primera cuota hasta la última.</string>
+    <string name="num_acuerdo"># Acuerdo</string>
+    <string name="enviar_para_aprobacion">Enviar para aprobación</string>
+    <string name="generar_pdf_con_acuerdo_de_pago">Generar PDF con acuerdo de pago</string>
+    <string name="mensaje">Mensaje</string>
+    <string name="modificar_ruta">MODIFICAR RUTA</string>
+    <string name="mapa">Mapa</string>
+    <string name="buzon">Buzón</string>
+    <string name="reordenar">Reordenar</string>
+    <string name="cero">0</string>
+    <string name="exportar">Exportar</string>
+    <string name="detalle">Detalle</string>
+    <string name="descargarpdf">Descargar PDF</string>
+    <string name="downloadpdf">Download PDF</string>
+    <string name="visualizar">Visualizar PDF</string>
+    <string name="show">View PDF</string>
+
+    <string name="clientes_enrutados">Clientes enrutados:</string>
+    <string name="clientes_visitados">Clientes visitados:</string>
+    <string name="cliente_no_visitados">Clientes no visitados:</string>
+    <string name="efectividad_ruta">Efectividad de la Ruta:</string>
+    <string name="total_cobros">Total cobros programados:</string>
+    <string name="total_acuerdos">Total acuerdos realizados:</string>
+    <string name="total_preacuerdos">Total pre-acuerdo realizados:</string>
+
+    <string name="recaudos">Recaudos:</string>
+    <string name="recibos_realizador">Recibos realizados:</string>
+    <string name="acuerdos_realizados">Acuerdos realizados:</string>
+    <string name="acuerdos_comerciales">Acuerdos comerciales:</string>
+    <string name="solicitudes_de_credito">Solicitudes de credito:</string>
+    <string name="clientes_bloqueados">Clientes bloqueados:</string>
+
+
+    <string name="total_conciliacion">Acciones de conciliación:</string>
+    <string name="observacion">Observación</string>
+    <string name="total_acuerdo">Total Acuerdo</string>
+    <string name="saldo">Saldo</string>
+    <string name="acuerdo_de_pago">Acuerdo de pago</string>
+    <string name="pre_acuerdo_de_pago">Pre-acuerdo de pago</string>
+    <string name="num_documento"># Documento</string>
+    <string name="pendiente_aprovacion">Pend. Aprobación</string>
+    <string name="en_vigencia">En vigencia</string>
+    <string name="cuotas">cuotas</string>
+    <string name="fecha_pago">Fecha pago</string>
+    <string name="yyyy_mm_dd">yyyy/mm/dd</string>
+    <string name="realizando_calculos_esp">Realizando los cálculos  correspondientes</string>
+    <string name="realizando_calculos_eng">Performing the corresponding calculations</string>
+
+    <string-array name="DIAS">
+        <item>DIAS DE LA SEMANA</item>
+        <item>LUNES</item>
+        <item>MARTES</item>
+        <item>MIERCOLES</item>
+        <item>JUEVES</item>
+        <item>VIERNES</item>
+
+    </string-array>
+
+    <string-array name="DIAS_INGLES">
+        <item>PICK DAY</item>
+        <item>MONDAY</item>
+        <item>TUESDAY</item>
+        <item>WEDNESDAY</item>
+        <item>THURSDAY</item>
+        <item>FRIDAY</item>
+
+    </string-array>
+
+    <string-array name="CARTERA">
+        <item>Filtro de Busqueda</item>
+        <item>Tipo</item>
+        <item>FechaVecto</item>
+    </string-array>
+
+    <string-array name="CARTERA_INGLES">
+        <item>Search Filter</item>
+        <item>Type</item>
+        <item>Date</item>
+    </string-array>
+
+
+    <string-array name="Categorias">
+        <item>Categorias</item>
+    </string-array>
+
+    <string-array name="MOTIVO">
+        <item>Motivo</item>
+    </string-array>
+
+    <string-array name="MONEDA">
+        <item>MONEDA</item>
+    </string-array>
+
+    <string-array name="TIPO_TARJETA">
+        <item>VISA</item>
+    </string-array>
+
+    <string-array name="TIPO_CUENTA">
+        <item>AHORROS</item>
+    </string-array>
+
+    <string-array name="Cuentas_Banco">
+        <item>Cuentas Banco</item>
+    </string-array>
+
+    <string-array name="ESTATUS">
+        <item>ESTATUS</item>
+    </string-array>
+
+    <!-- TEXTOS DIALOG FIRMA FRAGMENT -->
+    <string name="limpiar">Limpiar</string>
+    <string name="firmar">Firmar</string>
+
+</resources>

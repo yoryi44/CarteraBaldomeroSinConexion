@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/transparent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical" >
+
+
+            <LinearLayout
+                android:id="@+id/panelInfoPNC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_gris"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent" >
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Configuracion Impresora"
+                            android:textColor="@color/colorBotonRojo"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="?android:attr/listSeparatorTextViewStyle"
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="5dp"
+                            android:textColor="#000000" />
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent" >
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent" >
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:text="Impresora: "
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/lblNombreImpresora"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textColor="#000000" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent" >
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:text="MAC: "
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/lblMacImpresora"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textColor="#000000" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listaOpciones"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:divider="@drawable/list_divider"
+                android:dividerHeight="1dip"
+                android:footerDividersEnabled="true"
+                android:headerDividersEnabled="false" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

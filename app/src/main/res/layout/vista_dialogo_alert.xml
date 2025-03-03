@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- CABECERA TITULO -->
+    <LinearLayout
+        android:id ="@+id/tvSincronizar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvTitleAlert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/foco_std"
+            android:gravity="center"
+            android:text="Cerrar Sesión"
+            android:textColor="@color/blanco"
+            android:textSize="20sp">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialogText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="20sp"
+        android:fontFamily="@font/foco_std_rg"
+        android:gravity="center"
+        android:text="¿Esta seguro que desea cerrar la sesión actual?."
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- OPCIONES DIALOGO -->
+    <LinearLayout
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:layout_marginLeft="20sp"
+            android:id="@+id/btnAceptarDialogoCerrarSesion"
+            android:background="@color/colorGrisOscuroLetra"
+            android:textColor="@android:color/white"
+            android:layout_width="120sp"
+            android:layout_height="45sp"
+            android:fontFamily="@font/foco_std"
+            android:text="ACEPTAR"/>
+
+        <Button
+            android:layout_marginRight="20sp"
+            android:layout_marginLeft="20sp"
+            android:id="@+id/btnCancelarDialogoCerrarSesion"
+            android:background="@color/colorGrisOscuroLetra"
+            android:textColor="@android:color/black"
+            android:layout_width="120sp"
+            android:layout_height="45sp"
+            android:fontFamily="@font/foco_std"
+            android:text="CANCELAR"/>
+
+    </LinearLayout>
+
+</LinearLayout>

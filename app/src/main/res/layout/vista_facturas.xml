@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginBottom="10sp"
+
+            card_view:cardCornerRadius="40dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_margin="10sp"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <!-- CONTENIDO PRINCIPAL -->
+                <LinearLayout
+                    android:layout_width="352dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+
+                    <!-- ICONO DE MARCA DE LA FACTURA PROGRAMADA -->
+                    <LinearLayout
+                        android:layout_width="40sp"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/editar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/editar"
+                            android:buttonTint="@color/colorPrimaryDark" />
+
+
+                    </LinearLayout>
+
+                    <!-- INFORMACION GENERAL DE LA FACTURA PROGRAMADA -->
+                    <LinearLayout
+                        android:layout_width="223dp"
+                        android:layout_height="match_parent"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:layout_width="201dp"
+                            android:layout_height="60dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tituloFormaPagoFactGeneral"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std"
+                                    android:text="Forma de Pago: "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTotalFormasPagoVista"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tituloValorPagadoGeneral"
+                                    android:layout_width="111dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std"
+                                    android:text="Valor pagado:"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tvSaldoFacturaVista"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/foco_std_rg"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="40sp"
+                        android:layout_height="60dp"
+
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/eliminar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_close"
+                            android:buttonTint="@color/colorPrimaryDark" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!-- PRECIO FACTURA -->
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

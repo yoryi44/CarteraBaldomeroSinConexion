@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="co.com.celuweb.carterabaldomero.CarteraActivity">
+
+
+    <!-- 2. LISTA CLIENTES -->
+    <Spinner
+        android:id="@+id/spinnerFiltroCartera"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/CARTERA"/>
+    <Spinner
+        android:id="@+id/spinnerFiltroTipo"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+
+       />
+
+    <LinearLayout
+        android:id="@+id/llBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15sp"
+        android:layout_marginBottom="15sp"
+        android:gravity="center"
+        android:weightSum="100">
+
+        <EditText
+            android:id="@+id/etParametroBusqueda2"
+            android:layout_width="0dp"
+            android:layout_height="35sp"
+            android:layout_weight="60"
+            android:background="@drawable/fondocampogris"
+            android:fontFamily="@font/foco_std_rg"
+            android:lines="1"
+            android:hint="Filtro de busqueda"
+            android:inputType="text"
+            android:maxLength="20"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:singleLine="true"
+            tools:ignore="LabelFor"
+            android:importantForAutofill="no" />
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="30sp"
+            android:layout_marginStart="10sp"
+            android:contentDescription="@string/app_name"
+            android:onClick="onClickbuscarParaFac"
+            android:src="@mipmap/iconobuscar"
+          />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvRangoFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="#51B435"
+        android:text="@string/rango_de_fechas"
+        android:textColor="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/etFechaIncialSAP"
+            android:layout_width="329dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/cuadro_texto"
+            android:clickable="true"
+            android:inputType="date"
+            android:focusable="false"
+            android:drawableRight="@drawable/ic_calendario"
+            android:hint="yyyy/mm/dd"
+            android:textAlignment="center"
+            android:textColor="@color/normalColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etFechaFinalSAP"
+            android:layout_width="329dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:hint="yyyy/mm/dd"
+            android:textAlignment="center"
+            android:background="@drawable/cuadro_texto"
+            android:textColor="@color/normalColor"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:inputType="date"
+            android:focusable="false"
+            android:drawableRight="@drawable/ic_calendario"
+            android:layout_marginRight="1dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ImgBusfecha"
+            android:layout_width="22dp"
+            android:layout_height="30sp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/app_name"
+            android:onClick="onClickbuscarFechas"
+            android:src="@mipmap/iconobuscar"
+            />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/titulotvFacturas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#51B435"
+        android:fontFamily="@font/foco_std"
+        android:layout_marginTop="5sp"
+        android:text="Facturas"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+
+    <FrameLayout
+        android:layout_weight="100"
+        android:layout_width="match_parent"
+        android:layout_height="410dp"
+        android:orientation="vertical">
+        <androidx.core.widget.NestedScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListaCartera"
+            android:layout_width="364dp"
+            android:layout_height="480dp"
+            android:stackFromBottom="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="15dp"
+            android:overScrollMode="never"/>
+            >
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+
+
+</LinearLayout>

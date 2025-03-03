@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "684359364907",
+    "firebase_url": "https://cartera-a12d5.firebaseio.com",
+    "project_id": "cartera-a12d5",
+    "storage_bucket": "cartera-a12d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684359364907:android:5e86a2113099c73294956e",
+        "android_client_info": {
+          "package_name": "co.com.celuweb.carterabaldomero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684359364907-l77f0iudjp16ab37c9dvhpjrcp78okfq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.com.celuweb.carteranutresa",
+            "certificate_hash": "12e4b63baa2d66c97fea2a4581454d3b04710d14"
+          }
+        },
+        {
+          "client_id": "684359364907-o0jhrk1vch5ufohkdaultuv831vpg8v7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp7LePOGiJ3ZsZUyz_3n9lI8y2svYbW_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684359364907-o0jhrk1vch5ufohkdaultuv831vpg8v7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

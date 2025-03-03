@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.com.celuweb.carterabaldomero">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".FormPrinters"
+            android:exported="false" />
+        <activity
+            android:name=".FormConfigurarImpresora"
+            android:exported="false" />
+        <activity
+            android:name=".FormConfigPrinter"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ReciboDineroActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".CarteraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".FacturasSeleccionadasActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".FacturasSeleccionadasPendientesActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".FacturasRealizadasSeleccionadasActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".MetodosDePagoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".MetodosDePagoPendientesActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".VistaClienteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".InformesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".formaPagoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".RutaActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".PendientesActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".RealizadosActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".AnuladosActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".FotosActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".Camera"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".MultiplesFotosActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".PDFViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+        <activity
+            android:name=".PrincipalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBarAction" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBm4Z69H0UuV33NFYb3uLef0zWNxIIeBEk" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <service
+            android:name="servicio.MyNotificaciones"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="servicio.ServicioEnvioToken"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+
+</manifest>

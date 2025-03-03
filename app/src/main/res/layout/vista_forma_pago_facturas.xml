@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="164dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginBottom="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="157dp"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="147dp"
+                    android:layout_weight="87"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="147dp"
+                        android:layout_margin="10sp"
+                        android:orientation="vertical"
+                        android:weightSum="100">
+
+                        <!-- CONTENIDO PRINCIPAL -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="147dp"
+                            android:orientation="horizontal">
+
+                            <!-- ICONO DE MARCA DE LA FACTURA PROGRAMADA -->
+
+                            <!-- INFORMACION GENERAL DE LA FACTURA PROGRAMADA -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="147dp"
+                                android:weightSum="10">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="147dp"
+                                    android:layout_weight="6"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvNumeroDocumentoCarteraFP"
+                                            android:layout_width="95sp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Documento:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvNumeroDocumentoCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvConceptCarteraFP"
+                                            android:layout_width="95sp"
+                                            android:layout_height="match_parent"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Tipo:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvConceptCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvFechaVencCarteraFP"
+                                            android:layout_width="96dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Fecha Venci. :"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvFechaVencCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvDiasCarteraFP"
+                                            android:layout_width="95sp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Días mora:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvDiasCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvSaldoCarteraFP"
+                                            android:layout_width="95sp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Monto:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvSaldoCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5sp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/titulotvConcecutivoCarteraFP"
+                                            android:layout_width="95sp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std"
+                                            android:text="Consecutivo:"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:id="@+id/tvConcecutivoCarteraFP"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/foco_std_rg"
+                                            android:text=""
+                                            android:textColor="@android:color/black"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- PRECIO FACTURA -->
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

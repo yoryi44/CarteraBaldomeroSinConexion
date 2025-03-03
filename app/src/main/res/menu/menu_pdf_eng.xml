@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_pdf"
+        android:icon="@drawable/pdf"
+        android:orderInCategory="100"
+
+        app:showAsAction="always|withText">
+        <menu>
+
+            <item
+                android:id="@+id/descargar"
+                android:title="@string/downloadpdf" />
+            <item
+                android:id="@+id/visualizar"
+                android:title="@string/show" />
+        </menu>
+    </item>
+</menu>
+
+
