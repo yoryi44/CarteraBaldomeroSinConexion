@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="co.com.celuweb.carterabaldomero.MetodosDePagoPendientesActivity">
 
 
@@ -21,29 +20,27 @@
             android:id="@+id/txtTotalesPendientes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
             android:background="#51B435"
             android:fontFamily="@font/foco_std"
-            android:layout_marginTop="5sp"
             android:text="Totales Recaudos Pendientes"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
-
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="115dp"
             android:orientation="horizontal"
-            android:weightSum="100"
-            >
+            android:weightSum="100">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="5dp"
-
                 android:layout_marginLeft="10sp"
+
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10sp"
                 android:layout_marginBottom="10sp"
                 app:cardCornerRadius="2dp">
@@ -189,15 +186,13 @@
         </LinearLayout>
 
 
-
-
         <TextView
             android:id="@+id/txtFormasPagoPendientes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
             android:background="#51B435"
             android:fontFamily="@font/foco_std"
-            android:layout_marginTop="5sp"
 
             android:text="Formas de Pago Realizadas"
             android:textColor="@android:color/black"
@@ -230,15 +225,13 @@
         </LinearLayout>
 
 
-
-
         <LinearLayout
-            android:layout_marginTop="5sp"
-            android:layout_marginBottom="5sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
             <ImageView
@@ -248,11 +241,10 @@
                 android:layout_marginRight="20sp"
                 android:background="@drawable/ic_close"
                 android:fontFamily="@font/foco_std"
-                android:onClick="CancelarPendientes"/>
+                android:onClick="CancelarPendientes" />
 
 
         </LinearLayout>
-
 
 
     </LinearLayout>

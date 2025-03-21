@@ -92,7 +92,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
         Log.i("WORKER", "Enviando información...");
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
-                .setInitialDelay(15, TimeUnit.MINUTES)
+                .setInitialDelay(15, TimeUnit.SECONDS)
                 .setBackoffCriteria(
                         BackoffPolicy.EXPONENTIAL, // Política de retroceso
                         10, // Tiempo inicial de retraso

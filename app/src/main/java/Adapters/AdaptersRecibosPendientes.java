@@ -59,6 +59,7 @@ import businessObject.DataBaseBO;
 import businessObject.PrinterBO;
 import co.com.celuweb.carterabaldomero.FacturasRealizadasSeleccionadasActivity;
 import co.com.celuweb.carterabaldomero.FacturasSeleccionadasPendientesActivity;
+import co.com.celuweb.carterabaldomero.LoginActivity;
 import co.com.celuweb.carterabaldomero.MetodosDePagoActivity;
 import co.com.celuweb.carterabaldomero.MetodosDePagoPendientesActivity;
 import co.com.celuweb.carterabaldomero.PendientesActivity;
@@ -179,7 +180,8 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
             context.startActivity(login);
             ((PendientesActivity) context).finish();
 
-            Alert.dialogo.cancel();
+            if (Alert.dialogo != null)
+                Alert.dialogo.cancel();
         }
         else
         {
@@ -892,27 +894,31 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                                     //    DataBaseBO.eliminarRecaudosTotalPendientesNumRe(numeroRecibos);
 
-                                                    final String empresa;
-                                                    empresa = DataBaseBO.cargarCodigo();
-                                                    Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
-                                                    sync.user = empresa;
-                                                    sync.start();
-                                                    Alert.dialogo.cancel();
+                                                    if (Utilidades.verificarNetwork(context)) {
+                                                        final String empresa;
+                                                        empresa = DataBaseBO.cargarCodigo();
+                                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        sync.user = empresa;
+                                                        sync.start();
+                                                        Alert.dialogo.cancel();
 
-                                                    envioInformacion = true;
+                                                        envioInformacion = true;
 
-                                                    Gson gson = new Gson();
-                                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-                                                    usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-                                                    // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+                                                        Gson gson = new Gson();
+                                                        String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
+                                                        usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
+                                                        // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                                    Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
 
-                                                    sync1.user = usuarioApp.codigo;
-                                                    sync1.password = usuarioApp.contrasena;
-                                                    sync1.start();
-                                                    envioInformacion = true;
-                                                    Alert.dialogo.cancel();
+                                                        sync1.user = usuarioApp.codigo;
+                                                        sync1.password = usuarioApp.contrasena;
+                                                        sync1.start();
+                                                        envioInformacion = true;
+                                                        Alert.dialogo.cancel();
+                                                    } else {
+                                                        descargarInfo(true, "", "");
+                                                    }
 
                                                 }
                                             }, new View.OnClickListener() {
@@ -955,27 +961,31 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                                             //    DataBaseBO.eliminarRecaudosTotalPendientesNumRe(numeroRecibos);
 
-                                                            final String empresa;
-                                                            empresa = DataBaseBO.cargarCodigo();
-                                                            Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
-                                                            sync.user = empresa;
-                                                            sync.start();
-                                                            Alert.dialogo.cancel();
+                                                            if (Utilidades.verificarNetwork(context)) {
+                                                                final String empresa;
+                                                                empresa = DataBaseBO.cargarCodigo();
+                                                                Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                                                sync.user = empresa;
+                                                                sync.start();
+                                                                Alert.dialogo.cancel();
 
-                                                            envioInformacion = true;
+                                                                envioInformacion = true;
 
-                                                            Gson gson = new Gson();
-                                                            String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-                                                            usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-                                                            // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+                                                                Gson gson = new Gson();
+                                                                String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
+                                                                usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
+                                                                // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                                            Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                                                Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
 
-                                                            sync1.user = usuarioApp.codigo;
-                                                            sync1.password = usuarioApp.contrasena;
-                                                            sync1.start();
-                                                            envioInformacion = true;
-                                                            Alert.dialogo.cancel();
+                                                                sync1.user = usuarioApp.codigo;
+                                                                sync1.password = usuarioApp.contrasena;
+                                                                sync1.start();
+                                                                envioInformacion = true;
+                                                                Alert.dialogo.cancel();
+                                                            } else {
+                                                                descargarInfo(true, "", "");
+                                                            }
 
                                                         }
                                                     }, new View.OnClickListener() {
@@ -1015,13 +1025,18 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                     //    DataBaseBO.eliminarRecaudosTotalPendientesNumRe(numeroRecibos);
 
-                                    final String empresa;
-                                    empresa = DataBaseBO.cargarCodigo();
-                                    Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
-                                    sync.user = empresa;
-                                    sync.start();
+                                    if (Utilidades.verificarNetwork(context)) {
+                                        final String empresa;
+                                        empresa = DataBaseBO.cargarCodigo();
+                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                        sync.user = empresa;
+                                        sync.start();
 
-                                    envioInformacion = true;
+                                        envioInformacion = true;
+                                    } else {
+                                        descargarInfo(true, "", "");
+                                    }
+
 
 //                                    Gson gson = new Gson();
 //                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);

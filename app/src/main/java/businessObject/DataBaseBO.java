@@ -1368,7 +1368,8 @@ public class DataBaseBO {
                            "c.sincronizado,c.banco,c.Numero_de_cheque,Nombre,c.Estado,c.consecutivoid, c.observacionesmotivo " +
                            "From recaudosPendientes c INNER JOIN clientes cli ON c.cod_cliente = cli.codigo " +
                            "LEFT JOIN recaudosRealizados r ON r.nro_Recibo = c.nro_Recibo " +
-                           "WHERE (c.via_Pago = 'A' or c.via_Pago = 'B') AND r.nro_Recibo IS NULL GROUP BY c.idPago)" +
+                           "LEFT JOIN recaudosAnulados ra ON c.nro_Recibo = ra.nro_Recibo " +
+                           "WHERE (c.via_Pago = 'A' or c.via_Pago = 'B') AND r.nro_Recibo IS NULL AND ra.nro_Recibo IS NULL GROUP BY c.idPago)" +
                            "GROUP BY nro_Recibo ";
 
 
@@ -7325,7 +7326,7 @@ public class DataBaseBO {
                     pendientes.doctoFinanciero = cursor.getString(cursor.getColumnIndex("docto_Financiero"));
                     pendientes.numeroRecibo = cursor.getString(cursor.getColumnIndex("nro_Recibo"));
                     pendientes.observaciones = cursor.getString(cursor.getColumnIndex("observaciones"));
-                    pendientes.observacionesMotivo = cursor.getString(cursor.getColumnIndex("observacionesMotivo"));
+                    pendientes.observacionesMotivo = cursor.getString(cursor.getColumnIndex("observacionesmotivo"));
                     pendientes.viaPago = cursor.getString(cursor.getColumnIndex("via_Pago"));
                     pendientes.usuario = cursor.getString(cursor.getColumnIndex("usuario"));
                     pendientes.operacionCME = cursor.getString(cursor.getColumnIndex("operacion_Cme"));
@@ -10790,7 +10791,7 @@ public class DataBaseBO {
 
         try {
             File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-               File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File dbFile = new File(Utilidades.dirApp(), "Database.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -10918,10 +10919,13 @@ public class DataBaseBO {
         boolean resultado = false;
 
         SQLiteDatabase dbTemp = null;
+        SQLiteDatabase db = null;
 
         try {
             File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(), "Database.db");
 
+            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             for (int i = 0; i < clase_Documento.size(); i++) {
@@ -10941,6 +10945,7 @@ public class DataBaseBO {
                 facturasCartera.put("Observacion", observaciones);
 
                 dbTemp.insertOrThrow("RecaudosAnulados", null, facturasCartera);
+                db.insertOrThrow("RecaudosAnulados", null, facturasCartera);
                 resultado = true;
             }
 
@@ -12718,7 +12723,7 @@ public class DataBaseBO {
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOSPEN
-            String query = "SELECT consecutivo  FROM recaudosPen ORDER BY  Fecha_recibo DESC ";
+            String query = "SELECT consecutivo  FROM recaudosPen ORDER BY  consecutivo DESC ";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -12727,7 +12732,7 @@ public class DataBaseBO {
             cursor.close();
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOS
-            query = "SELECT consecutivo  FROM recaudos ORDER BY  Fecha_recibo DESC ";
+            query = "SELECT consecutivo  FROM recaudos ORDER BY  consecutivo DESC ";
 
             cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -12736,7 +12741,7 @@ public class DataBaseBO {
             cursor.close();
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOSPENDIENTES
-            query = "SELECT consecutivo  FROM recaudosPendientes ORDER BY  Fecha_recibo DESC ";
+            query = "SELECT consecutivo  FROM recaudosPendientes ORDER BY  consecutivo DESC ";
 
             cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -12745,7 +12750,7 @@ public class DataBaseBO {
             cursor.close();
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOS
-            query = "SELECT consecutivo  FROM recaudosRealizados ORDER BY  Fecha_recibo DESC ";
+            query = "SELECT consecutivo  FROM recaudosRealizados ORDER BY  consecutivo DESC ";
 
             cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -12754,7 +12759,7 @@ public class DataBaseBO {
             cursor.close();
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOS TEMP
-            query = "SELECT consecutivo  FROM recaudos ORDER BY  Fecha_recibo DESC ";
+            query = "SELECT consecutivo  FROM recaudos ORDER BY  consecutivo DESC ";
 
             cursor = dbtemp.rawQuery(query, null);
             if (cursor.moveToFirst()) {

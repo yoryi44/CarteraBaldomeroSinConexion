@@ -147,6 +147,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     double TotalFormasPagoPEND = 0;
     final List<String> documentosFinanciero = new ArrayList<>();
     final Vector<String> listaItems = new Vector<>();
+
+    DialogResumenFirmaFragment dialogResumenFirmaActivity = null;
     final Collection<Cartera> facCollection = new Collection<Cartera>() {
         @Override
         public int size() {
@@ -2576,7 +2578,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -2622,7 +2624,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -2663,7 +2665,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -2704,7 +2706,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3092,7 +3094,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3133,7 +3135,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3175,7 +3177,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3217,7 +3219,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3259,7 +3261,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -3301,7 +3303,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 vendedor = DataBaseBO.cargarVendedorConsecutivo();
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
-                consec1 = consec1 + contador;
+//                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
                 empresa = DataBaseBO.cargarCodigo();
                 obtenerCoordenadas(empresa);
@@ -4568,6 +4570,9 @@ imprimirSewooLKP20(macImpresora);*/
 
                         if (msg.contains("Unable to resolve host")) {
 
+                            if(dialogResumenFirmaActivity != null)
+                                dialogResumenFirmaActivity.saveButton.setEnabled(true);
+
                             if (lenguajeElegido == null) {
 
                             } else if (lenguajeElegido != null) {
@@ -4831,6 +4836,9 @@ imprimirSewooLKP20(macImpresora);*/
 
                     public void run() {
 
+                        if(dialogResumenFirmaActivity != null)
+                            dialogResumenFirmaActivity.saveButton.setEnabled(true);
+
                         String mensaje = "";
                         if (lenguajeElegido.lenguaje.equals("USA"))
                             mensaje = "Error downloading the database, please restart the day.";
@@ -4896,9 +4904,14 @@ imprimirSewooLKP20(macImpresora);*/
 
                     } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
                         estadoEnviadoRespuesta = false;
+                        if(dialogResumenFirmaActivity != null)
+                            dialogResumenFirmaActivity.saveButton.setEnabled(true);
                     }
 
                 } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
+
+                    if(dialogResumenFirmaActivity != null)
+                        dialogResumenFirmaActivity.saveButton.setEnabled(true);
 
                     if (lenguajeElegido == null) {
 
@@ -4933,6 +4946,42 @@ imprimirSewooLKP20(macImpresora);*/
                     }
 
 
+                } else {
+
+                    if(dialogResumenFirmaActivity != null)
+                        dialogResumenFirmaActivity.saveButton.setEnabled(true);
+
+                    if (lenguajeElegido == null) {
+
+                    } else if (lenguajeElegido != null) {
+                        if (lenguajeElegido.lenguaje.equals("USA")) {
+
+                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "Could not Register Information", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    estadoEnviadoRespuesta = false;
+                                    Alert.dialogo.cancel();
+
+
+                                }
+                            }, null);
+
+                        } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    estadoEnviadoRespuesta = false;
+                                    Alert.dialogo.cancel();
+
+
+                                }
+                            }, null);
+
+                        }
+                    }
                 }
             }
         });
@@ -5059,7 +5108,7 @@ imprimirSewooLKP20(macImpresora);*/
      */
     private void mostrarDialogResumenFragmentFirma(String idPago, Bitmap signatureBitmap, String empresa, String vendedor) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        DialogResumenFirmaFragment dialogResumenFirmaActivity = new DialogResumenFirmaFragment(idPago,signatureBitmap, empresa, vendedor, lenguajeElegido.lenguaje == null ? "ESP" : lenguajeElegido.lenguaje);
+        dialogResumenFirmaActivity = new DialogResumenFirmaFragment(idPago,signatureBitmap, empresa, vendedor, lenguajeElegido.lenguaje == null ? "ESP" : lenguajeElegido.lenguaje);
         dialogResumenFirmaActivity.setStyle(DialogFragment.STYLE_NORMAL, R.style.Base_Theme_AppCompat_Dialog_MinWidth);
         dialogResumenFirmaActivity.setCancelable(false);
         dialogResumenFirmaActivity.show(fragmentManager, "signature_dialog");
