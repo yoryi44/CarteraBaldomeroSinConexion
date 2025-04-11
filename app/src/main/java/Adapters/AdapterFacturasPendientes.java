@@ -741,10 +741,11 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                     int consecutivo = 0;
                     double valorDocumento;
                     String fechaCreacion = "", fechaCierre = "";
+                    String fechaRecibo = "";
                     double montoPendientes = 0;
                     double valorConsignado = 0;
                     double saldoAfavor = 0;
-                    String cuentaBancaria = "", monedaConsiganada = "", moneda = "", comprobanteFiscal = "", observaciones = "";
+                    String cuentaBancaria = "", monedaConsiganada = "", moneda = "", comprobanteFiscal = "", observaciones = "", observacioneMotivo;
                     String viaPago = "", usuario = "", operacionCME = "", sincronizado = "", bancoPendientes = "", numeroCheqe = "", nombrePropietario = "";
                     String consec = "", numeroAnulacion = "";
                     String negocio = "";
@@ -769,6 +770,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                     final ArrayList<Pendientes> listaPendientes = new ArrayList<Pendientes>();
                     final List<String> fechaCreacions = new ArrayList<>();
                     final List<String> fechaCierres = new ArrayList<>();
+                    final List<String> fechasRecibos = new ArrayList<>();
                     final List<String> montoPendientess = new ArrayList<>();
                     final List<String> referencias = new ArrayList<>();
                     final List<String> valorConsignados = new ArrayList<>();
@@ -778,6 +780,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                     final List<String> monedas = new ArrayList<>();
                     final List<String> comprobanteFiscals = new ArrayList<>();
                     final List<String> observacioness = new ArrayList<>();
+                    final List<String> observacionesMotivos = new ArrayList<>();
                     final List<String> viaPagos = new ArrayList<>();
                     final List<String> usuarios = new ArrayList<>();
                     final List<String> operacionCMEs = new ArrayList<>();
@@ -817,6 +820,8 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                             fechaCreacions.add(fechaCreacion);
                             fechaCierre = pendientes1.getFechaCierre();
                             fechaCierres.add(fechaCierre);
+                            fechaRecibo = pendientes1.getFechaRecibo();
+                            fechasRecibos.add(fechaRecibo);
                             moneda = pendientes1.getMoneda();
                             monedas.add(moneda);
                             montoPendientes = pendientes1.getMontoPendientes();
@@ -833,9 +838,11 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                             operacionCME = pendientes1.getOperacionCME();
                             operacionCMEs.add(operacionCME);
                             observaciones = pendientes1.getObservaciones();
+                            observacioneMotivo = pendientes1.getObservacionesMotivo();
                             viaPago = pendientes1.getViaPago();
                             usuario = pendientes1.getUsuario();
                             observacioness.add(observaciones);
+                            observacionesMotivos.add(observacioneMotivo);
                             bancoPendientess.add(pendientes1.getBanco());
                             viaPagos.add(viaPago);
                             usuarios.add(usuario);
@@ -875,6 +882,8 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                             fechaCreacions.add(fechaCreacion);
                             fechaCierre = pendientes1.getFechaCierre();
                             fechaCierres.add(fechaCierre);
+                            fechaRecibo = pendientes1.getFechaRecibo();
+                            fechasRecibos.add(fechaRecibo);
                             moneda = pendientes1.getMoneda();
                             monedas.add(moneda);
                             montoPendientes = pendientes1.getMontoPendientes();
@@ -891,9 +900,11 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                             operacionCME = pendientes1.getOperacionCME();
                             operacionCMEs.add(operacionCME);
                             observaciones = pendientes1.getObservaciones();
+                            observacioneMotivo = pendientes1.getObservacionesMotivo();
                             viaPago = pendientes1.getViaPago();
                             usuario = pendientes1.getUsuario();
                             observacioness.add(observaciones);
+                            observacionesMotivos.add(observacioneMotivo);
                             bancoPendientess.add(pendientes1.getBanco());
                             viaPagos.add(viaPago);
                             usuarios.add(usuario);
@@ -954,7 +965,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                                 pendientesSeleccionada.getObservaciones(), pendientesSeleccionada.getViaPago(),
                                 pendientesSeleccionada.getUsuario(), operacionCMEs,
                                 0, bancoPendientes, "0",
-                                "0", idenFoto, numeroAnulacionId1, consecutivo, pendientesSeleccionada.observacionesMotivo)) {
+                                "0", idenFoto, numeroAnulacionId1, consecutivo, pendientesSeleccionada.observacionesMotivo,fechaRecibo)) {
 
                             if (lenguajeElegido == null) {
 
@@ -1029,7 +1040,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                                 numeroRecibos, observacioness, viaPagos,
                                 pendientesSeleccionada.getUsuario(), operacionCMEs,
                                 0, bancoPendientess, "0",
-                                "0", idenFotos, numeroAnulacion, numeroAnulacionIds,valorConsignados, consecutivos)) {
+                                "0", idenFotos, numeroAnulacion, numeroAnulacionIds,valorConsignados, consecutivos,fechasRecibos, observacionesMotivos)) {
 
 
                             if (lenguajeElegido == null) {
@@ -1038,7 +1049,6 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
                                     Toasty.warning(context, "The log was stored correctly.", Toasty.LENGTH_SHORT).show();
-
 
                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 

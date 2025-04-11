@@ -24,7 +24,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +34,6 @@ import java.util.Vector;
 
 import androidx.annotation.NonNull;
 import businessObject.DataBaseBO;
-import co.com.celuweb.carterabaldomero.MetodosDePagoActivity;
 import co.com.celuweb.carterabaldomero.MetodosDePagoPendientesActivity;
 import co.com.celuweb.carterabaldomero.MultiplesFotosActivity;
 import co.com.celuweb.carterabaldomero.R;
@@ -44,25 +42,18 @@ import dataobject.Bancos;
 import dataobject.Cartera;
 import dataobject.ClienteSincronizado;
 import dataobject.CuentasBanco;
-import dataobject.Facturas;
 import dataobject.FormaPago;
 import dataobject.Fotos;
 import dataobject.Lenguaje;
 import dataobject.MultiplesEstado;
-import dataobject.Parcial;
 import dataobject.Pendientes;
-import dataobject.PreciosFacturasParcial;
 import es.dmoral.toasty.Toasty;
 import sharedpreferences.PreferencesAnticipo;
-import sharedpreferences.PreferencesCartera;
-import sharedpreferences.PreferencesClienteSeleccionado;
 import sharedpreferences.PreferencesFacturaPendientesSeleccionada;
 import sharedpreferences.PreferencesFacturasMultiplesPendientes;
 import sharedpreferences.PreferencesFacturasMultiplesPendientesVarias;
-import sharedpreferences.PreferencesFormaPago;
 import sharedpreferences.PreferencesFotos;
 import sharedpreferences.PreferencesLenguaje;
-import sharedpreferences.PreferencesParcial;
 import sharedpreferences.PreferencesPendientesFacturas;
 import utilidades.Utilidades;
 
@@ -421,6 +412,7 @@ public class MetodoDePagoChequePendientes {
         final List<String> codigoClientes = new ArrayList<>();
         final List<String> fechaCreacions = new ArrayList<>();
         final List<String> fechaCierres = new ArrayList<>();
+        final List<String> fechasRecibos = new ArrayList<>();
         final List<String> montoPendientess = new ArrayList<>();
         final List<String> statuss = new ArrayList<>();
         final List<String> claseDocumentos = new ArrayList<>();
@@ -450,6 +442,7 @@ public class MetodoDePagoChequePendientes {
         String codigoCliente = "";
         String fechaCreacion = "";
         String fechaCierre = "";
+        String fechaRecibo = "";
         double montoPendientes = 0;
         String status = "";
         String claseDocumento = "";
@@ -510,6 +503,8 @@ public class MetodoDePagoChequePendientes {
                 fechaCreacions.add(fechaCreacion);
                 fechaCierre = String.valueOf(pendientes.getFechaCierre());
                 fechaCierres.add(fechaCierre);
+                fechaRecibo = pendientes.getFechaRecibo();
+                fechasRecibos.add(fechaRecibo);
                 valorDocumento = pendientes.getValorDocumento();
                 valorDocumentos.add(String.valueOf(valorDocumento));
                 moneda = pendientes.getMoneda();
@@ -551,7 +546,7 @@ public class MetodoDePagoChequePendientes {
                 nombrePropietarios.add(nombrePropietario);
                 precios.add(String.valueOf(valorDocumento));
                 idPagoPendientes = pendientes.getIdPago();
-                idPagosPendientes.add(idPagoPendientes);
+                idPagosPendientes.add(idPago);
                 listaConsecutivoidFac.add(pendientes.getConsecutivoidFac());
 
             }
@@ -561,7 +556,7 @@ public class MetodoDePagoChequePendientes {
 
             for (Pendientes pendientes : facCollectionPendientes) {
                 numeroRecibosMultiples.add(pendientes.getNumeroRecibo());
-                consecutivos.add(pendientes.getConsecutivo());
+                consecutivosMultiples.add(pendientes.getConsecutivo());
                 idPago = pendientes.getIdPago();
                 idPagosUnicosElminiar.add(pendientes.getIdPago());
                 idPagos.add(idPago);
@@ -587,6 +582,8 @@ public class MetodoDePagoChequePendientes {
                 fechaCreacions.add(fechaCreacion);
                 fechaCierre = String.valueOf(pendientes.getFechaCierre());
                 fechaCierres.add(fechaCierre);
+                fechaRecibo = pendientes.getFechaRecibo();
+                fechasRecibos.add(fechaRecibo);
                 valorDocumento = pendientes.getValorDocumento();
                 valorDocumentos.add(String.valueOf(valorDocumento));
                 moneda = pendientes.getMoneda();
@@ -823,6 +820,7 @@ public class MetodoDePagoChequePendientes {
         String finalFechaCierre = fechaCierre;
         String finalOperacionCME = operacionCME;
         String finalEmpresa1 = empresa;
+        String finalFechaRecibo = fechaRecibo;
         guardarFormaPagoFE.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -1136,7 +1134,7 @@ public class MetodoDePagoChequePendientes {
                                     finalNumeroRecibo,
                                     pendientesSeleccionada.getObservaciones(), finalViaPago, finalUsuario, operacionCMEs,
                                     0, spinnerBanco.getSelectedItem().toString(), tvNumeroCheque.getText().toString(),
-                                    "0",fotos.idenFoto,numeroAnulacionId1, finalConsecutivo, pendientesSeleccionada.getObservacionesMotivo())) {
+                                    "0",fotos.idenFoto,numeroAnulacionId1, finalConsecutivo, pendientesSeleccionada.getObservacionesMotivo(), finalFechaRecibo)) {
 
                                     //SE ACTUALIZAN LOS ID DE LAS FOTOS PARA RELACIONARLAS CON LAS FOTOS DE BUZON
 //                                    if(finalEmpresa1.equals("AGUC"))
@@ -1224,7 +1222,7 @@ public class MetodoDePagoChequePendientes {
                                     numeroRecibos,
                                     observacioness, viaPagos, finalUsuario, operacionCMEs,
                                     0,  spinnerBanco.getSelectedItem().toString(), tvNumeroCheque.getText().toString(),
-                                    "0",fotos.idenFoto,numeroAnulacion,numeroAnulacionId,valorConsignados,consecutivos, observacionesMotivos)) {
+                                    "0",fotos.idenFoto,numeroAnulacion,numeroAnulacionId,valorConsignados,consecutivos, observacionesMotivos, listaConsecutivoidFac, fechasRecibos)) {
 
                                     //SE ACTUALIZAN LOS ID DE LAS FOTOS PARA RELACIONARLAS CON LAS FOTOS DE BUZON
 //                                    if(finalSociedad.equals("AGUC"))

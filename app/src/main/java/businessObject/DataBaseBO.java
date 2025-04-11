@@ -508,7 +508,8 @@ public class DataBaseBO {
                     "r.NCF_Comprobante_Fiscal,r.docto_Financiero,r.nro_Recibo,r.observaciones,r.via_Pago,r.usuario,r.operacion_Cme,r.idPago,r.sincronizado, " +
                     "r.banco,r.Numero_de_cheque,r.Nombre_del_propietario,r.Estado From recaudosRealizados r " +
                     "LEFT JOIN Solicitudes_Anulacion s ON s.nro_recibo = r.nro_Recibo " +
-                    "WHERE r.cod_Cliente = '" + param + "' AND s.nro_recibo is null/**AND Estado is NULL or Estado!=1**/  GROUP BY r.nro_Recibo  ";
+                    "LEFT JOIN Solicitudes_Anulaciones an ON an.nro_recibo = r.nro_Recibo " +
+                    "WHERE r.cod_Cliente = '" + param + "' AND (s.nro_recibo is null AND an.nro_recibo is null)  /**AND Estado is NULL or Estado!=1**/  GROUP BY r.nro_Recibo  ";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -574,10 +575,14 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(), "Database.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT clase_Documento,sociedad,Documento,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
-                    "valor_Documento,moneda,SUM(valor_Pagado) AS valor_Pagado,SUM(DISTINCT valor_Consignado) AS valor_Consignado,cuenta_Bancaria," +
-                    "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado From recaudosRealizados GROUP BY nro_Recibo  ";
+            String query = "SELECT r.clase_Documento,r.sociedad,r.Documento,r.cod_Cliente,r.cod_Vendedor,r.referencia,r.fecha_Documento," +
+                    "r.fecha_Consignacion,r.valor_Documento,r.moneda,SUM(r.valor_Pagado) AS valor_Pagado,SUM(DISTINCT r.valor_Consignado) AS valor_Consignado," +
+                    "r.cuenta_Bancaria,r.moneda_Consig,r.NCF_Comprobante_Fiscal,r.docto_Financiero,r.nro_Recibo,r.observaciones,r.via_Pago," +
+                    "r.usuario,r.operacion_Cme,r.idPago,r.sincronizado,r.banco,r.Numero_de_cheque,r.Nombre_del_propietario,r.Estado " +
+                    "From recaudosRealizados r " +
+                    "LEFT JOIN Solicitudes_Anulaciones s ON s.nro_recibo = r.nro_Recibo " +
+                    "WHERE s.nro_recibo is null " +
+                    "GROUP BY r.nro_Recibo";
 
 
             Cursor cursor = db.rawQuery(query, null);
@@ -1037,7 +1042,7 @@ public class DataBaseBO {
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
                     "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado,Iden_Foto,consecutivoid, consecutivo " +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado,Iden_Foto,consecutivoid, consecutivo, Fecha_recibo " +
                     " From recaudosPendientes WHERE idPago ='" + numeroRecibo + "' and (via_Pago='6' or via_Pago='O')  ";
 
             Cursor cursor = db.rawQuery(query, null);
@@ -1074,6 +1079,7 @@ public class DataBaseBO {
                     pendientes.idenFoto = cursor.getString(cursor.getColumnIndex("Iden_Foto"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
                     pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
 
                     listaFacturasPendientes.add(pendientes);
@@ -1115,8 +1121,8 @@ public class DataBaseBO {
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
-                    "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado,Iden_Foto,consecutivoid" +
+                    "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,observacionesmotivo,via_Pago," +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado,Iden_Foto,ifnull(consecutivoid,0) as consecutivoid, ifnull(consecutivo,0) as consecutivo, Fecha_recibo " +
                     " From recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') AND via_Pago='6' or via_Pago='O'";
 
 
@@ -1142,6 +1148,7 @@ public class DataBaseBO {
                     pendientes.doctoFinanciero = cursor.getString(cursor.getColumnIndex("docto_Financiero"));
                     pendientes.numeroRecibo = cursor.getString(cursor.getColumnIndex("nro_Recibo"));
                     pendientes.observaciones = cursor.getString(cursor.getColumnIndex("observaciones"));
+                    pendientes.observacionesMotivo = cursor.getString(cursor.getColumnIndex("observacionesmotivo"));
                     pendientes.viaPago = cursor.getString(cursor.getColumnIndex("via_Pago"));
                     pendientes.usuario = cursor.getString(cursor.getColumnIndex("usuario"));
                     pendientes.operacionCME = cursor.getString(cursor.getColumnIndex("operacion_Cme"));
@@ -1153,6 +1160,8 @@ public class DataBaseBO {
                     pendientes.status = cursor.getString(cursor.getColumnIndex("Estado"));
                     pendientes.idenFoto = cursor.getString(cursor.getColumnIndex("Iden_Foto"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
+                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
 
                     listaFacturasPendientes.add(pendientes);
@@ -1365,12 +1374,12 @@ public class DataBaseBO {
                            "c.fecha_Documento,c.Fecha_recibo,c.valor_Documento,c.moneda,c.valor_Consignado AS valor_Final, " +
                            "c.valor_Consignado,c.saldo_favor,c.cuenta_Bancaria,c.moneda_Consig,c.NCF_Comprobante_Fiscal, " +
                            "c.docto_Financiero,c.nro_Recibo,c.observaciones,c.via_Pago,c.usuario,c.operacion_Cme,c.idPago, " +
-                           "c.sincronizado,c.banco,c.Numero_de_cheque,Nombre,c.Estado,c.consecutivoid, c.observacionesmotivo " +
+                           "c.sincronizado,c.banco,c.Numero_de_cheque,Nombre,c.Estado,c.consecutivoid, c.observacionesmotivo, c.consecutivo as consecutivo " +
                            "From recaudosPendientes c INNER JOIN clientes cli ON c.cod_cliente = cli.codigo " +
                            "LEFT JOIN recaudosRealizados r ON r.nro_Recibo = c.nro_Recibo " +
                            "LEFT JOIN recaudosAnulados ra ON c.nro_Recibo = ra.nro_Recibo " +
                            "WHERE (c.via_Pago = 'A' or c.via_Pago = 'B') AND r.nro_Recibo IS NULL AND ra.nro_Recibo IS NULL GROUP BY c.idPago)" +
-                           "GROUP BY nro_Recibo ";
+                           "GROUP BY nro_Recibo";
 
 
             Cursor cursor = db.rawQuery(query, null);
@@ -1408,6 +1417,7 @@ public class DataBaseBO {
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre"));
                     pendientes.status = cursor.getString(cursor.getColumnIndex("Estado"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
+                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
 
 
                     listaFacturasPendientes.add(pendientes);
@@ -6466,7 +6476,7 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT b.descripcion,b.codigo_causal  FROM MotivosAnulacion b ORDER BY b.descripcion DESC";
+            String query = "SELECT b.descripcion,b.codigo_causal  FROM MotivosAnulacion b ORDER BY b.codigo_causal ASC";
 
 
             Cursor cursor = db.rawQuery(query, null);
@@ -6982,10 +6992,32 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora,c.documento_Financiero," +
-                    "c.vendedor  FROM cartera c INNER JOIN clientes cli ON c.cliente = cli.codigo  " +
+//            String query = "SELECT c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora,c.documento_Financiero," +
+//                    "c.vendedor  FROM cartera c INNER JOIN clientes cli ON c.cliente = cli.codigo  " +
+//                    "LEFT JOIN RecaudosPendientes r ON r.docto_Financiero = c.Documento_Financiero " +
+//                    "LEFT JOIN RecaudosAnulados ra ON ra.nro_recibo = r.nro_Recibo " +
+//                    "WHERE c.cliente = '" + parametro + "'  AND (r.docto_Financiero IS NULL OR ra.docto_financiero IS NOT NULL) ORDER BY c.cliente DESC";
+
+            String query = "SELECT " +
+                    "c.documento, c.tipo, c.fechavecto, c.saldo, c.diasmora, " +
+                    "c.documento_Financiero, c.vendedor, ra.nro_recibo, r.nro_Recibo " +
+                    "FROM cartera c " +
+                    "INNER JOIN clientes cli ON c.cliente = cli.codigo  " +
                     "LEFT JOIN RecaudosPendientes r ON r.docto_Financiero = c.Documento_Financiero " +
-                    "WHERE c.cliente = '" + parametro + "'  AND r.docto_Financiero IS NULL ORDER BY c.cliente DESC";
+                    "LEFT JOIN RecaudosAnulados ra ON ra.nro_recibo = r.nro_Recibo " +
+                    "WHERE c.cliente = '" + parametro + "' " +
+                    "AND ( " +
+                    "(r.docto_Financiero IS NULL) " +
+                    "OR " +
+                    "( " +
+                    "r.docto_Financiero IS NOT NULL " +
+                    "AND ra.docto_financiero IS NOT NULL " +
+                    "AND NOT EXISTS ( " +
+                    "SELECT 1 FROM RecaudosPendientes r2 " +
+                    "LEFT JOIN RecaudosAnulados ra2 ON ra2.nro_recibo = r2.nro_Recibo " +
+                    "WHERE r2.docto_Financiero = c.Documento_Financiero " +
+                    "AND ra2.nro_recibo IS NULL ))) " +
+                    "GROUP BY c.Documento_Financiero ORDER BY c.cliente DESC";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -7212,7 +7244,7 @@ public class DataBaseBO {
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
                     "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid,consecutivo, observacionesmotivo  " +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid,consecutivo, observacionesmotivo, Fecha_recibo  " +
                     "FROM recaudosPendientes c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.via_Pago = 'A' " +
                     "order BY c.valor_Consignado DESC ";
 
@@ -7250,6 +7282,7 @@ public class DataBaseBO {
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre_del_propietario"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
                     pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
                     listaCartera.add(pendientes);
 
@@ -7300,7 +7333,7 @@ public class DataBaseBO {
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
                     "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid, observacionesmotivo  " +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,ifnull(consecutivoid,0) as consecutivoid, observacionesmotivo, ifnull(consecutivo,0) as consecutivo, Fecha_recibo  " +
                     "FROM recaudosPendientes c WHERE   c.nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') " +
                     "AND c.via_Pago = 'A' order BY c.valor_Consignado DESC";
 
@@ -7336,6 +7369,8 @@ public class DataBaseBO {
                     pendientes.numeroCheqe = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre_del_propietario"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
+                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
                     listaCartera.add(pendientes);
 
@@ -7524,7 +7559,8 @@ public class DataBaseBO {
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
                     "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid, consecutivo  FROM recaudosPendientes c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.via_Pago = 'B' order BY c.valor_Consignado DESC ";
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid, consecutivo, Fecha_recibo  " +
+                    "FROM recaudosPendientes c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.via_Pago = 'B' order BY c.valor_Consignado DESC ";
 
 
             Cursor cursor = db.rawQuery(query, null);
@@ -7559,6 +7595,7 @@ public class DataBaseBO {
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre_del_propietario"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
                     pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
                     listaCartera.add(pendientes);
 
@@ -7607,8 +7644,8 @@ public class DataBaseBO {
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado as valor_Consignado,saldo_favor,cuenta_Bancaria," +
-                    "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid, consecutivo  FROM recaudosPendientes c WHERE    c.nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') " +
+                    "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,observacionesmotivo,via_Pago," +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,ifnull(consecutivoid,0) as consecutivoid, ifnull(consecutivo,0) as consecutivo,Fecha_recibo  FROM recaudosPendientes c WHERE    c.nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') " +
                     "AND c.via_Pago = 'B' order BY c.valor_Consignado DESC";
 
             Cursor cursor = db.rawQuery(query, null);
@@ -7633,6 +7670,7 @@ public class DataBaseBO {
                     pendientes.doctoFinanciero = cursor.getString(cursor.getColumnIndex("docto_Financiero"));
                     pendientes.numeroRecibo = cursor.getString(cursor.getColumnIndex("nro_Recibo"));
                     pendientes.observaciones = cursor.getString(cursor.getColumnIndex("observaciones"));
+                    pendientes.observacionesMotivo = cursor.getString(cursor.getColumnIndex("observacionesmotivo"));
                     pendientes.viaPago = cursor.getString(cursor.getColumnIndex("via_Pago"));
                     pendientes.usuario = cursor.getString(cursor.getColumnIndex("usuario"));
                     pendientes.operacionCME = cursor.getString(cursor.getColumnIndex("operacion_Cme"));
@@ -7642,7 +7680,8 @@ public class DataBaseBO {
                     pendientes.numeroCheqe = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre_del_propietario"));
                     pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
-                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivoid"));
+                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
                     listaCartera.add(pendientes);
 
@@ -8074,7 +8113,7 @@ public class DataBaseBO {
             String query = "SELECT *,SUM(valorFinal) as valor_Consignado FROM (SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado AS valor_Pagado, valor_Consignado as valorFinal,cuenta_Bancaria," +
                     "moneda_Consig,NCF_Comprobante_Fiscal,docto_Financiero,nro_Recibo,observaciones,via_Pago," +
-                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario, observacionesmotivo  " +
+                    "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario, observacionesmotivo, consecutivo as consecutivo, consecutivoid as consecutivoid  " +
                     "FROM recaudosPendientes c WHERE c.nro_Recibo IN ('" + str1.substring(1, str1.length() - 2) + "')  " +
                     "and c.idPago NOT IN ('" + str2.substring(1, str2.length() - 2) + "')  GROUP BY c.via_Pago,idPago order BY c.valor_Pagado DESC) GROUP BY via_Pago";
 
@@ -8110,6 +8149,8 @@ public class DataBaseBO {
                     pendientes.banco = cursor.getString(cursor.getColumnIndex("banco"));
                     pendientes.numeroCheqe = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Nombre_del_propietario"));
+                    pendientes.consecutivo = cursor.getInt(cursor.getColumnIndex("consecutivo"));
+                    pendientes.consecutivoidFac = cursor.getString(cursor.getColumnIndex("consecutivoid"));
 
                     listaCartera.add(pendientes);
 
@@ -10859,7 +10900,6 @@ public class DataBaseBO {
                 dbTemp.close();
         }
 
-
         return resultado;
     }
 
@@ -10869,11 +10909,14 @@ public class DataBaseBO {
         boolean resultado = false;
 
         SQLiteDatabase dbTemp = null;
+        SQLiteDatabase db = null;
 
         try {
             File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File File = new File(Utilidades.dirApp(), "Database.db");
 
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+            db = SQLiteDatabase.openDatabase(File.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             for (int i = 0; i < clase_Documento.size(); i++) {
 
@@ -10891,10 +10934,14 @@ public class DataBaseBO {
                 facturasCartera.put("usuario", usuario);
                 facturasCartera.put("codigo_causal", codigoCausal);
                 facturasCartera.put("estado", estado);
-                facturasCartera.put("fecha_rechazo", fechaRechazado);
                 facturasCartera.put("Observacion", observacion);
 
+                db.insertOrThrow("Solicitudes_Anulaciones", null, facturasCartera);
+
+                facturasCartera.put("fecha_rechazo", fechaRechazado);
+
                 dbTemp.insertOrThrow("Solicitudes_Anulacion", null, facturasCartera);
+
                 resultado = true;
             }
 
@@ -11048,7 +11095,7 @@ public class DataBaseBO {
                                                     List<String> valor_Consignado, List<String> saldo_favor, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                     List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
                                                     List<String> operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                    String idenFoto, String numeroAnulacionId, int consec1Id, String observacionesMotivo) {
+                                                    String idenFoto, String numeroAnulacionId, int consec1Id, String observacionesMotivo, String fechRecibo) {
         boolean resultado = false;
         String empresa = cargarEmpresa();
         //   if (clase_Documento.size()>0) {
@@ -11075,11 +11122,16 @@ public class DataBaseBO {
                 facturasCartera.put("cod_Vendedor", cod_Vendedor);
                 facturasCartera.put("referencia", referencia.isEmpty() ? cod_Vendedor : referencia );
                 if (empresa.equals("AGUC"))
+                {
                     facturasCartera.put("fecha_Documento", Utilidades.ordenarFecha2(fecha_Documento.get(i)));
+                    facturasCartera.put("Fecha_recibo", Utilidades.ordenarFechaHora(fechRecibo.replaceAll("/","-")));
+                }
                 else
+                {
                     facturasCartera.put("fecha_Documento", fecha_Documento.get(i));
+                    facturasCartera.put("Fecha_recibo", fechRecibo);
+                }
                 facturasCartera.put("fecha_Consignacion", fecha_Consignacion);
-                facturasCartera.put("Fecha_recibo", Utilidades.fechaActual("yyyy-MM-dd HH:mm"));
                 facturasCartera.put("valor_Documento", valor_Documento.get(i));
                 facturasCartera.put("moneda", moneda);
                 facturasCartera.put("valor_Pagado", valor_Pagado.get(i));
@@ -11141,7 +11193,7 @@ public class DataBaseBO {
                                                              List<String> consignadoM, List<String> saldo_favor, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                              List<String> docto_Financiero, List<String> nro_Recibo, List<String> observaciones, List<String> via_Pago, String usuario,
                                                              List<String> operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                             String idenFoto, String numPaquete, String numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivosMultiples, List<String> observacionesMotivo) {
+                                                             String idenFoto, String numPaquete, String numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivosMultiples, List<String> observacionesMotivo, List<String> listaConsecutivoidFac, List<String> fechasRecibos) {
         boolean resultado = false;
         String empresa = cargarEmpresa();
         //   if (clase_Documento.size()>0) {
@@ -11169,11 +11221,16 @@ public class DataBaseBO {
                 facturasCartera.put("cod_Vendedor", cod_Vendedor);
                 facturasCartera.put("referencia", referencia.isEmpty() ? cod_Vendedor : referencia );
                 if (empresa.equals("AGUC"))
+                {
                     facturasCartera.put("fecha_Documento", Utilidades.ordenarFecha2(fecha_Documento.get(i)));
+                    facturasCartera.put("Fecha_recibo", Utilidades.ordenarFechaHora(fechasRecibos.get(i).replaceAll("/","-")));
+                }
                 else
+                {
                     facturasCartera.put("fecha_Documento", fecha_Documento.get(i));
+                    facturasCartera.put("Fecha_recibo", fechasRecibos.get(i));
+                }
                 facturasCartera.put("fecha_Consignacion", fecha_Consignacion);
-                facturasCartera.put("Fecha_recibo", Utilidades.fechaActual("yyyy-MM-dd HH:mm"));
                 facturasCartera.put("valor_Documento", valor_Documento.get(i));
                 facturasCartera.put("moneda", moneda);
                 facturasCartera.put("valor_Pagado", valor_Pagado.get(i));
@@ -11202,6 +11259,7 @@ public class DataBaseBO {
                 facturasCartera.put("Iden_Foto", idenFoto);
                 facturasCartera.put("nro_paquete", numPaquete);
                 facturasCartera.put("consecutivo", consecutivosMultiples.get(i));
+                facturasCartera.put("consecutivoid", listaConsecutivoidFac.get(i));
                 facturasCartera.put("envioCorreo", "1");
 
                 dbTemp.insertOrThrow("recaudos", null, facturasCartera);
@@ -11209,6 +11267,7 @@ public class DataBaseBO {
                 facturasCartera.remove("envioCorreo");
                 facturasCartera.remove("consignadoM");
                 facturasCartera.remove("nro_paquete");
+                facturasCartera.remove("consecutivoid");
                 facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente.get(i),cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i)));
 
                 db.insertOrThrow("recaudosRealizados", null, facturasCartera);
@@ -11241,7 +11300,7 @@ public class DataBaseBO {
                                                                         List<String> consignadoM, List<String> saldo_favor, List<String> cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                                         List<String> docto_Financiero, List<String> nro_Recibo, List<String> observaciones, List<String> via_Pago, String usuario,
                                                                         List<String> operacion_Cme, int sincronizado, List<String> banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                                        List<String> idenFoto, String numPaquete, List<String> numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivos) {
+                                                                        List<String> idenFoto, String numPaquete, List<String> numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivos, List<String> fechasRecibos, List<String> observacionesMotivo) {
         boolean resultado = false;
         String empresa = cargarEmpresa();
         //   if (clase_Documento.size()>0) {
@@ -11267,11 +11326,16 @@ public class DataBaseBO {
                 facturasCartera.put("cod_Vendedor", cod_Vendedor);
                 facturasCartera.put("referencia", referencia.get(i));
                 if (empresa.equals("AGUC"))
+                {
                     facturasCartera.put("fecha_Documento", Utilidades.ordenarFecha2(fecha_Documento.get(i)));
+                    facturasCartera.put("Fecha_recibo", Utilidades.ordenarFechaHora(fechasRecibos.get(i).replaceAll("/","-")));
+                }
                 else
+                {
                     facturasCartera.put("fecha_Documento", fecha_Documento.get(i));
+                    facturasCartera.put("Fecha_recibo", fechasRecibos.get(i));
+                }
                 facturasCartera.put("fecha_Consignacion", fecha_Consignacion);
-                facturasCartera.put("Fecha_recibo", Utilidades.fechaActual("yyyy-MM-dd HH:mm"));
                 facturasCartera.put("valor_Documento", valor_Documento.get(i));
                 facturasCartera.put("moneda", moneda);
                 facturasCartera.put("valor_Pagado", valor_Pagado.get(i));
@@ -11287,6 +11351,7 @@ public class DataBaseBO {
                 facturasCartera.put("docto_Financiero", docto_Financiero.get(i));
                 facturasCartera.put("nro_Recibo", nro_Recibo.get(i));
                 facturasCartera.put("observaciones", observaciones.get(i));
+                facturasCartera.put("observacionesmotivo", observacionesMotivo.get(i));
                 facturasCartera.put("via_Pago", via_Pago.get(i));
                 facturasCartera.put("banco", banco.get(i));
                 facturasCartera.put("usuario", usuario);
@@ -12896,8 +12961,8 @@ public class DataBaseBO {
 
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
-        int cantidad = 0;
-        String viaPago = "";
+        Double valorPagado = 0.0;
+        Double valorTotal = 0.0;
 
         try {
 
@@ -12907,19 +12972,19 @@ public class DataBaseBO {
             File tempFile = new File(Utilidades.dirApp(), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT COUNT(r.clase_Documento) as cantidad,via_Pago as viaPago FROM RecaudosPendientes r " +
-                    "where nro_Recibo = '" + numeroRecibo + "' ";
+            String query = "SELECT sum(valor_Pagado) as valorPagado,valor_Documento FROM RecaudosPendientes r " +
+                    "where nro_Recibo = '" + numeroRecibo + "' AND via_Pago ='6'";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
 
-                cantidad = cursor.getInt(cursor.getColumnIndex("cantidad"));
-                viaPago = cursor.getString(cursor.getColumnIndex("viaPago"));
+                valorPagado = cursor.getDouble(cursor.getColumnIndex("valorPagado"));
+                valorTotal = cursor.getDouble(cursor.getColumnIndex("valor_Documento"));
 
             }
             cursor.close();
 
-            if(cantidad == 1 && viaPago.equals("6"))
+            if((Utilidades.formatearDecimales(valorTotal,2).equals(Utilidades.formatearDecimales(valorPagado,2)) && (valorTotal != 0 && valorPagado != 0)))
             {
                 query = "DELETE FROM RecaudosPendientes " +
                         "where nro_Recibo = '" + numeroRecibo + "' ";
@@ -12936,7 +13001,7 @@ public class DataBaseBO {
 
                 query = "INSERT INTO recaudosPen " +
                         "SELECT clase_Documento, sociedad, cod_Cliente, cod_Vendedor, referencia, fecha_Documento, fecha_Consignacion, Fecha_recibo, valor_Documento, moneda, valor_Pagado, valor_Consignado, saldo_favor, cuenta_Bancaria, moneda_Consig, NCF_Comprobante_Fiscal, docto_Financiero, nro_Recibo, observaciones, observacionesmotivo, via_Pago, usuario, operacion_Cme, idPago, sincronizado, banco, Numero_de_cheque, Nombre_del_propietario, Estado, Iden_Foto, consecutivoid, consignadoM, consecutivo " +
-                        "FROM recaudos;";
+                        "FROM recaudos where nro_Recibo  = '" + numeroRecibo + "' AND via_Pago ='6'";
 
                 dbTemp.execSQL(query);
 
@@ -13099,6 +13164,47 @@ public class DataBaseBO {
             if (dbTemp != null)
                 dbTemp.close();
         }
+    }
+
+    public static List<String> cargarIdPagosNumeroRecibo(String numeroRecibo) {
+        String valor = "";
+        SQLiteDatabase db = null;
+
+        List<String> listaIdPago = new ArrayList<>();
+
+        try {
+
+            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
+            String query = "SELECT idPago FROM RecaudosPendientes r WHERE r.nro_Recibo = '" + numeroRecibo + "'";
+
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+
+                    String idPago = cursor.getString(cursor.getColumnIndex("idPago"));
+                    listaIdPago.add(idPago);
+
+
+                } while (cursor.moveToNext());
+
+
+            }
+            cursor.close();
+
+        } catch (Exception e) {
+            mensaje = e.getMessage();
+            Log.e("obtenerCarteraCliente", mensaje, e);
+
+        } finally {
+
+            if (db != null)
+                db.close();
+
+        }
+
+        return listaIdPago;
     }
 
 }

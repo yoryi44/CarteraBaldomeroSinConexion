@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,26 +21,19 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Vector;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.gson.Gson;
-
 import businessObject.DataBaseBO;
 import co.com.celuweb.carterabaldomero.AnuladosActivity;
-import co.com.celuweb.carterabaldomero.FacturasRealizadasSeleccionadasActivity;
-import co.com.celuweb.carterabaldomero.PendientesActivity;
-import co.com.celuweb.carterabaldomero.PrincipalActivity;
+import co.com.celuweb.carterabaldomero.MetodosDePagoPendientesActivity;
 import co.com.celuweb.carterabaldomero.R;
 import configuracion.Synchronizer;
 import dataobject.Bancos;
 import dataobject.FacturasRealizadas;
 import dataobject.Lenguaje;
-import dataobject.Pendientes;
 import dataobject.Usuario;
 import es.dmoral.toasty.Toasty;
 import servicio.Sync;
@@ -47,7 +41,6 @@ import sharedpreferences.PreferencesLenguaje;
 import sharedpreferences.PreferencesUsuario;
 import utilidades.Alert;
 import utilidades.Constantes;
-import utilidades.ProgressView;
 import utilidades.Utilidades;
 
 public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosAnulados.ViewHolder> implements View.OnClickListener, Synchronizer {
@@ -112,84 +105,241 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
 
     @Override
     public void respSync(boolean ok, String respuestaServer, String msg, int codeRequest) {
+        try {
+
+            switch (codeRequest) {
+
+                case Constantes.ENVIARINFORMACION:
+                    enviarInfo(ok, respuestaServer, msg);
+                    break;
+
+                case Constantes.DESCARGARINFO:
+                    descargarInfo(ok, respuestaServer, msg);
+                    break;
+
+            }
+
+        } catch (Exception exception) {
+            System.out.println("Error en el repSync en el modulo Metodos de pago" + exception);
+        }
+    }
+
+    private void descargarInfo(boolean ok, String respuestaServer, String msg) {
+
+        if(progressDoalog != null)
+            progressDoalog.cancel();
+
+        if(ok)
+        {
+            Intent login = new Intent(context.getApplicationContext(), AnuladosActivity.class);
+            context.startActivity(login);
+            ((AnuladosActivity) context).finish();
+
+            if (Alert.dialogo != null)
+                Alert.dialogo.cancel();
+        }
+        else
+        {
+            if (lenguajeElegido == null) {
+
+            } else if (lenguajeElegido != null) {
+                if (lenguajeElegido.lenguaje.equals("USA")) {
+                    Alert.alertGeneral(context, null, "Error", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Alert.dialogo.cancel();
+                        }
+                    }, null);
+                }
+                else if (lenguajeElegido.lenguaje.equals("ESP")) {
+                    Alert.alertGeneral(context, null, "Error", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Alert.dialogo.cancel();
+                        }
+                    }, null);
+                }
+
+            }
+        }
+
+
+    }
+
+    private void enviarInfo(boolean ok, String respuestaServer, String msg) {
+
+        Gson gson2 = new Gson();
+        String stringJsonObject2 = PreferencesLenguaje.obtenerLenguajeSeleccionada(context);
+        lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
+
+        Gson gson = new Gson();
+        String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
+        usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
 
         ((AnuladosActivity) context).runOnUiThread(new Runnable() {
             public void run() {
                 if (respuestaServer.equals("listo")) {
-
 
                     if (respuestaServer.equals("listo") || respuestaServer.equals("ok")) {
 
                         progressDoalog = new ProgressDialog(context);
                         progressDoalog.setMax(100);
 
-                        Alert.alertGeneral(context, null, "Se registro correctamente la información", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
 
-                                Intent login = new Intent(context.getApplicationContext(), AnuladosActivity.class);
-                                context.startActivity(login);
-                                ((AnuladosActivity) context).finish();
+                        if (lenguajeElegido == null) {
 
-                                Alert.dialogo.cancel();
+                        } else if (lenguajeElegido != null) {
+                            if (lenguajeElegido.lenguaje.equals("USA")) {
 
+                                Alert.alertGeneral(context, null, "The information is correctly recorded", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
-                            }
-                        }, null);
+                                        Alert.dialogo.cancel();
 
-                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
-                        sync1.user = usuarioApp.codigo;
-                        sync1.password = usuarioApp.contrasena;
-                        sync1.start();
-                        envioInformacion = true;
+                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                        sync1.user = usuarioApp.codigo;
+                                        sync1.password = usuarioApp.contrasena;
+                                        sync1.start();
+                                        envioInformacion = true;
 
+                                        progressDoalog = new ProgressDialog(context);
+                                        progressDoalog.setMessage("Downloading information....");
+                                        progressDoalog.setTitle("Downloading");
+                                        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                        progressDoalog.show();
 
-                        progressDoalog.setMessage("Descargando informacion....");
-                        progressDoalog.setTitle("Descargando");
-                        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        progressDoalog.show();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    while (progressDoalog.getProgress() <= progressDoalog
-                                            .getMax()) {
-                                        Thread.sleep(200);
-                                        handle.sendMessage(handle.obtainMessage());
-                                        if (progressDoalog.getProgress() == progressDoalog
-                                                .getMax()) {
-                                            progressDoalog.dismiss();
-                                        }
                                     }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                }, null);
+
+                            } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                                Alert.alertGeneral(context, null, "Se registro correctamente la información", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Alert.dialogo.cancel();
+
+                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                        sync1.user = usuarioApp.codigo;
+                                        sync1.password = usuarioApp.contrasena;
+                                        sync1.start();
+                                        envioInformacion = true;
+
+                                    }
+                                }, null);
+
+
                             }
-                        }).start();
+                        }
 
                     } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
 
+                        if (lenguajeElegido == null) {
+
+                        } else if (lenguajeElegido != null) {
+                            if (lenguajeElegido.lenguaje.equals("USA")) {
+
+                                Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        if (context instanceof Activity) {
+                                            ((Activity) context).recreate();
+                                        }
+
+                                    }
+                                }, null);
+
+                            } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                                Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        if (context instanceof Activity) {
+                                            ((Activity) context).recreate();
+                                        }
+
+                                    }
+                                }, null);
+
+                            }
+                        }
                     }
 
 
                 } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
 
-                    Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if (lenguajeElegido == null) {
 
+                    } else if (lenguajeElegido != null) {
+                        if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                            Alert.dialogo.cancel();
+                            Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
+                                    if (context instanceof Activity) {
+                                        ((Activity) context).recreate();
+                                    }
+
+                                }
+                            }, null);
+
+                        } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                            Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (context instanceof Activity) {
+                                        ((Activity) context).recreate();
+                                    }
+
+                                }
+                            }, null);
 
                         }
-                    }, null);
+                    }
+                }
+                else {
+                    if (lenguajeElegido == null) {
 
+                    } else if (lenguajeElegido != null) {
+                        if (lenguajeElegido.lenguaje.equals("USA")) {
+
+                            Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    if (context instanceof Activity) {
+                                        ((Activity) context).recreate();
+                                    }
+
+
+                                }
+                            }, null);
+
+                        } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                            Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (context instanceof Activity) {
+                                        ((Activity) context).recreate();
+                                    }
+
+                                }
+                            }, null);
+
+                        }
+                    }
                 }
             }
         });
-
-
     }
 
     Handler handle = new Handler() {
@@ -373,29 +523,26 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
                                                             , numeroRecibo, null, causal, null, null, null, textoObservacion);
 
-                                                    DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
-                                                    final String empresa;
-                                                    empresa = DataBaseBO.cargarCodigo();
-                                                    Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
-                                                    sync.user = empresa;
-                                                    sync.start();
-                                                    Alert.dialogo.cancel();
+                                                    if (Utilidades.verificarNetwork(context)) {
 
-                                                    envioInformacion = true;
+                                                        Alert.dialogo.cancel();
 
-                                                    Gson gson = new Gson();
-                                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-                                                    usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-                                                    // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                                        final String empresa;
+                                                        empresa = DataBaseBO.cargarCodigo();
+                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        sync.user = empresa;
+                                                        sync.start();
 
-                                                    Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                                        envioInformacion = true;
 
-                                                    sync1.user = usuarioApp.codigo;
-                                                    sync1.password = usuarioApp.contrasena;
-                                                    sync1.start();
-                                                    envioInformacion = true;
-                                                    Alert.dialogo.cancel();
-                                                    Alert.dialogo.cancel();
+                                                    }
+                                                    else
+                                                    {
+                                                        Alert.dialogo.cancel();
+                                                        enviarInfo(false, "", "");
+                                                    }
+
 
                                                 }
                                             }, new View.OnClickListener() {
@@ -478,29 +625,24 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
                                                             , numeroRecibo, null, causal, null, null, null, textoObservacion);
 
-                                                    DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
-                                                    final String empresa;
-                                                    empresa = DataBaseBO.cargarCodigo();
-                                                    Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
-                                                    sync.user = empresa;
-                                                    sync.start();
-                                                    Alert.dialogo.cancel();
+                                                    if (Utilidades.verificarNetwork(context)) {
 
-                                                    envioInformacion = true;
+                                                        Alert.dialogo.cancel();
 
-                                                    Gson gson = new Gson();
-                                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-                                                    usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-                                                    // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                                        final String empresa;
+                                                        empresa = DataBaseBO.cargarCodigo();
+                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        sync.user = empresa;
+                                                        sync.start();
 
-                                                    Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                                        envioInformacion = true;
 
-                                                    sync1.user = usuarioApp.codigo;
-                                                    sync1.password = usuarioApp.contrasena;
-                                                    sync1.start();
-                                                    envioInformacion = true;
-                                                    Alert.dialogo.cancel();
-                                                    Alert.dialogo.cancel();
+                                                    }
+                                                    else
+                                                    {  Alert.dialogo.dismiss();
+                                                        enviarInfo(false, "", "");
+                                                    }
 
                                                 }
                                             }, new View.OnClickListener() {
@@ -579,26 +721,25 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                             DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
                                     , numeroRecibo, null, causal, null, null, null, textoObservacion);
 
-                            DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
-                            final String empresa;
-                            empresa = DataBaseBO.cargarCodigo();
-                            Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
-                            sync.user = empresa;
-                            sync.start();
+                            if (Utilidades.verificarNetwork(context)) {
 
-                            envioInformacion = true;
+                                Alert.dialogo.cancel();
 
-                            Gson gson = new Gson();
-                            String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-                            usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-                            // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+                                DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                final String empresa;
+                                empresa = DataBaseBO.cargarCodigo();
+                                Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                sync.user = empresa;
+                                sync.start();
 
-                            Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                envioInformacion = true;
 
-                            sync1.user = usuarioApp.codigo;
-                            sync1.password = usuarioApp.contrasena;
-                            sync1.start();
-                            envioInformacion = true;
+                            }
+                            else
+                            {
+                                Alert.dialogo.cancel();
+                                enviarInfo(false, "", "");
+                            }
 
                         }
                     }

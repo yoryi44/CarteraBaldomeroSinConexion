@@ -5,6 +5,7 @@ public class Pendientes {
     public String numeroRecibo;
     public String codigoCliente;
     public String fechaCreacion;
+    public String fechaRecibo;
     public String fechaCierre;
     public double montoPendientes;
     public String status;
@@ -50,7 +51,7 @@ public class Pendientes {
     public Pendientes() {
     }
 
-    public Pendientes(String numeroRecibo, String codigoCliente, String fechaCreacion, String fechaCierre, double montoPendientes, String status, String claseDocumento, String sociedad, String cod_vendedor, String referencia, double valorDocumento, double valorConsignado,  double consignadoM,String cuentaBancaria, String monedaConsiganada, String moneda, String comprobanteFiscal, String doctoFinanciero, String observaciones, String viaPago, String usuario, String operacionCME, String idPago, String sincronizado, String banco, String numeroCheqe, String nombrePropietario, String observacionesMotivo) {
+    public Pendientes(String numeroRecibo, String codigoCliente, String fechaCreacion, String fechaCierre, double montoPendientes, String status, String claseDocumento, String sociedad, String cod_vendedor, String referencia, double valorDocumento, double valorConsignado,  double consignadoM,String cuentaBancaria, String monedaConsiganada, String moneda, String comprobanteFiscal, String doctoFinanciero, String observaciones, String viaPago, String usuario, String operacionCME, String idPago, String sincronizado, String banco, String numeroCheqe, String nombrePropietario, String observacionesMotivo, String fechaRecibo) {
         this.numeroRecibo = numeroRecibo;
         this.codigoCliente = codigoCliente;
         this.fechaCreacion = fechaCreacion;
@@ -79,6 +80,7 @@ public class Pendientes {
         this.banco = banco;
         this.numeroCheqe = numeroCheqe;
         this.nombrePropietario = nombrePropietario;
+        this.fechaRecibo = fechaRecibo;
     }
 
     public boolean isFacturaSeleccionadaGestion() {
@@ -143,6 +145,14 @@ public class Pendientes {
 
     public void setFechaCreacion(String fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getFechaRecibo() {
+        return fechaRecibo;
+    }
+
+    public void setFechaRecibo(String fechaRecibo) {
+        this.fechaRecibo = fechaRecibo;
     }
 
     public String getFechaCierre() {

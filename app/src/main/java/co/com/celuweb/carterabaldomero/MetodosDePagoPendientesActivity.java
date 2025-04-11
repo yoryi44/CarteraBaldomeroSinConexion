@@ -238,7 +238,6 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             }
             listaFacturas = DataBaseBO.cargarFacturasParametroPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
 
-
         }
 
 
@@ -554,8 +553,8 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                idPago = pendientes.getIdPago();
-                                idPagos.add(idPago);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                idPagos.addAll(idPagosNumeroRecibo);
 
 
                                 precioTotal += pendientes.getMontoPendientes();
@@ -575,8 +574,9 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                idPago = pendientes.getIdPago();
-                                idPagos.add(idPago);
+
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                idPagos.addAll(idPagosNumeroRecibo);
 
                             }
 
@@ -653,8 +653,8 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                idPago = pendientes.getIdPago();
-                                idPagos.add(idPago);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                idPagos.addAll(idPagosNumeroRecibo);
 
 
                                 precioTotal += pendientes.getMontoPendientes();
@@ -674,8 +674,8 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                idPago = pendientes.getIdPago();
-                                idPagos.add(idPago);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                idPagos.addAll(idPagosNumeroRecibo);
 
 
                             }
@@ -780,70 +780,9 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (lenguajeElegido == null) {
-
-        } else if (lenguajeElegido != null) {
-
-            if (lenguajeElegido.lenguaje.equals("USA")) {
-
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoPendientesActivity.this, "¿Are you sure you want to cancel the collection?", "Cancel Collection", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-
-                        executor.execute(() -> {
-
-                            CancelarPago();
-                        });
-
-                        executor.shutdown();
-
-                        Alert.dialogo.cancel();
-
-                    }
-                }, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Alert.dialogo.cancel();
-
-                    }
-                });
-
-
-            } else if (lenguajeElegido.lenguaje.equals("ESP")) {
-
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoPendientesActivity.this, "¿Esta seguro que desea cancelar el recaudo?", "Cancelar Recaudo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-
-                        executor.execute(() -> {
-
-                            CancelarPago();
-                        });
-
-                        executor.shutdown();
-
-                        Alert.dialogo.cancel();
-
-
-                    }
-                }, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Alert.dialogo.cancel();
-
-                    }
-                });
-
-            }
-        }
-
-
+    public void onBackPressed()
+    {
+        CancelarPendientes(textTotalRecaudos);
     }
 
     @Override
@@ -1013,9 +952,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                     } else {
                                                         Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
                                                     }
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     volverPantallaPrincipal();
                                                 }
                                             }
@@ -1105,9 +1042,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                         Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
 
                                                     }
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     volverPantallaPrincipal();
                                                 }
 
@@ -1231,9 +1166,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                     } else {
                                                         Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
                                                     }
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     volverPantallaPrincipal();
                                                 }
                                             }
@@ -1319,9 +1252,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                         Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
 
                                                     }
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     volverPantallaPrincipal();
                                                 }
                                             }

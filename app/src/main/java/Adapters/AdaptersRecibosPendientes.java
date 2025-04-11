@@ -387,7 +387,14 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
             cbCarteraFacturaPendientes.setVisibility(View.GONE);
             numeroRecibo.setText(item.getNumeroRecibo());
             codigoCliente.setText(item.getCodigoCliente() + " - " + item.getNombrePropietario());
-            fechaCreacion.setText(item.getFechaCreacion());
+
+            if (finalEmpresa23.equals("AGUC")) {
+                fechaCreacion.setText(Utilidades.ordenarFechaHora(item.getFechaCreacion().replace("/","-")));
+            }
+            else
+            {
+                fechaCreacion.setText(item.getFechaCreacion());
+            }
 
             try {
                 String fechacierreFecha = item.getFechaCierre();

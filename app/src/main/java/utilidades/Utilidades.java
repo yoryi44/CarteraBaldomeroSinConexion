@@ -2549,14 +2549,22 @@ public class Utilidades {
 //
 //        return fechaFormato;
 //    }
-//
-//    public static String ordenarFechaHora(String fecha) {
-//
-//        String[] arrOfStr = fecha.split("-");
-//        String[] arrOfStrHora = arrOfStr[2].split(" ");
-//
-//        String fechaFormato = arrOfStrHora[0] + "-" + arrOfStr[1] + "-" + arrOfStr[0] + " " + arrOfStrHora[1];
-//
-//        return fechaFormato;
-//    }
+
+    public static String ordenarFechaHora(String fecha) {
+
+        String[] arrOfStr = fecha.split("-");
+        String[] arrOfStrHora = arrOfStr[2].split(" ");
+        String fechaFormato;
+
+        if(arrOfStr[0].length() > 2)
+        {
+            fechaFormato = fecha;
+        }
+        else
+        {
+            fechaFormato = arrOfStrHora[0] + "-" + arrOfStr[0] + "-" + arrOfStr[1] + " " + arrOfStrHora[1];
+        }
+
+        return fechaFormato;
+    }
 }
