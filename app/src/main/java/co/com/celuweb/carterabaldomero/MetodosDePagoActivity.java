@@ -2565,8 +2565,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -2580,8 +2578,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
 
@@ -2611,8 +2607,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -2625,9 +2619,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -2652,8 +2643,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -2667,8 +2656,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -2693,8 +2680,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -2708,8 +2693,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3081,8 +3064,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -3096,8 +3077,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3122,8 +3101,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -3137,8 +3114,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -3164,8 +3139,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -3179,8 +3152,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3206,8 +3177,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -3221,8 +3190,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3263,8 +3230,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -3290,8 +3255,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                final String empresa;
-
                 final String fecha = Utilidades.fechaActual("yyyy-MM-dd");
                 String consec = "";
                 String negocio = "";
@@ -3305,8 +3268,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
                 DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                empresa = DataBaseBO.cargarCodigo();
-                obtenerCoordenadas(empresa);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -5140,6 +5101,9 @@ imprimirSewooLKP20(macImpresora);*/
     private void continuarMetodoDePago() {
 
         DataBaseBO.verificarPagoCompletoPorTransferencia(nroRecibo);
+
+        String empresa = DataBaseBO.cargarCodigo();
+        obtenerCoordenadas(empresa);
 
         switch (METODO_PAGO) {
 
