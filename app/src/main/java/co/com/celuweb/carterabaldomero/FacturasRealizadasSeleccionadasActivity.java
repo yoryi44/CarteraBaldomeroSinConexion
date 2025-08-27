@@ -202,14 +202,14 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
             }
         }
 
-        vendedor = DataBaseBO.cargarUsuarioApp();
-        empresa = DataBaseBO.cargarEmpresaRazonSocial();
+        vendedor = DataBaseBO.cargarUsuarioApp(FacturasRealizadasSeleccionadasActivity.this);
+        empresa = DataBaseBO.cargarEmpresaRazonSocial(FacturasRealizadasSeleccionadasActivity.this);
 
-        cliente1 = DataBaseBO.cargarCliente(codigoCliente);
+        cliente1 = DataBaseBO.cargarCliente(codigoCliente, FacturasRealizadasSeleccionadasActivity.this);
 
         //EJEMPLO DE LA DESCRIPCION
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
         final String finalEmpresa = empresa;
 
         if(finalEmpresa.equals("ADHB"))
@@ -286,7 +286,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
                 item.setEnabled(false);
 
-                String empresas = DataBaseBO.cargarEmpresa();
+                String empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -466,10 +466,10 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         String fechaDocumento = Utilidades.fechaActual("yyyyMMdd");
         String fecha = Utilidades.fechaActual("dd/MM/yyyy");
         String fechaRecibo = "";
-        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo);
+        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         String fechaRealizadosRecibo = " ";
         double salfoAFA;
-        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
+        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
 
         if (fechaRecibo != null) {
@@ -485,7 +485,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         // Creamos el documento.
         Document documento = new Document();
         String empresas = "";
-        empresas = DataBaseBO.cargarEmpresa();
+        empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
 
         try {
 
@@ -729,7 +729,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                         NumberFormat formatoNumero = NumberFormat.getInstance(new Locale("es"));
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
 
                         if (cartera1.valorDocumento < 0) {
@@ -804,7 +804,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                         if (cartera1.valorDocumento < 0) {
                             tabla.addCell(String.valueOf(Utilidades.formatearDecimales(0.0, 2)));
@@ -985,7 +985,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
             listaFacturasRealizadas = new ArrayList<>();
-            listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo);
+            listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
             PdfPTable tabla1 = new PdfPTable(2);
             table1.setWidthPercentage(100);
@@ -1158,10 +1158,10 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         String fechaDocumento = Utilidades.fechaActual("yyyyMMdd");
         String fecha = Utilidades.fechaActual("dd/MM/yyyy");
         String fechaRecibo = "";
-        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo);
+        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         String fechaRealizadosRecibo = " ";
         double salfoAFA;
-        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
+        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         int i = 0;
 
 
@@ -1178,7 +1178,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         // Creamos el documento.
         Document documento = new Document();
         String empresas = "";
-        empresas = DataBaseBO.cargarEmpresa();
+        empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
 
         try {
 
@@ -1446,7 +1446,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                         NumberFormat formatoNumero = NumberFormat.getInstance(new Locale("es"));
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
 
                         if (cartera1.valorDocumento < 0) {
@@ -1521,7 +1521,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                         /**     if (salfoAFA < 0) {
 
@@ -1746,11 +1746,11 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
             if(empresas.equals("AGUC"))
             {
-                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPagoAGUC(numeroRecibo);
+                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPagoAGUC(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
             }
             else
             {
-                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo);
+                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
             }
 
             PdfPTable tabla1 = new PdfPTable(4);
@@ -1913,7 +1913,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                 for (FacturasRealizadas factura : facCollection) {
 
                     //CARGA LA INFORMACION DE LA FIRMA SEGUNDO EL ID PAGO
-                    FirmaNombre firmaNombre = DataBaseBO.cargarFirmaNombre(factura.numeroRecibo);
+                    FirmaNombre firmaNombre = DataBaseBO.cargarFirmaNombre(factura.numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                     //CARGAR LA IMAGEN DE LA FIRMA
                     Bitmap bitmap = BitmapFactory.decodeByteArray(firmaNombre.firma, 0, firmaNombre.firma.length);
@@ -2029,10 +2029,10 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         String fechaDocumento = Utilidades.fechaActual("yyyyMMdd");
         String fecha = Utilidades.fechaActual("dd/MM/yyyy");
         String fechaRecibo = "";
-        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo);
+        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         String fechaRealizadosRecibo = " ";
         double salfoAFA;
-        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
+        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
 
         if (fechaRecibo != null) {
@@ -2048,7 +2048,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         // Creamos el documento.
         Document documento = new Document();
         String empresas = "";
-        empresas = DataBaseBO.cargarEmpresa();
+        empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
 
 //        double DiferenciaFormasPagoE = Utilidades.totalFormasPagoFacRealizadas(getApplicationContext(), numeroRecibo);
 
@@ -2306,7 +2306,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                         NumberFormat formatoNumero = NumberFormat.getInstance(new Locale("es"));
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
 
                         if (cartera1.valorDocumento < 0) {
@@ -2393,7 +2393,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                         if (cartera1.valorDocumento < 0) {
                             tabla.addCell(String.valueOf(Utilidades.formatearDecimales(0.0, 2)));
@@ -2578,7 +2578,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
             listaFacturasRealizadas = new ArrayList<>();
-            listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo);
+            listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
             PdfPTable tabla1 = new PdfPTable(2);
             table1.setWidthPercentage(100);
@@ -2757,10 +2757,10 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         String fechaDocumento = Utilidades.fechaActual("yyyyMMdd");
         String fecha = Utilidades.fechaActual("dd/MM/yyyy");
         String fechaRecibo = "";
-        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo);
+        fechaRecibo = DataBaseBO.cargarFechaMaxReciboRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         String fechaRealizadosRecibo = " ";
         double salfoAFA;
-        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
+        salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
         int i = 0;
 
 
@@ -2777,7 +2777,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
         // Creamos el documento.
         Document documento = new Document();
         String empresas = "";
-        empresas = DataBaseBO.cargarEmpresa();
+        empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
 
 //        double DiferenciaFormasPagoE = Utilidades.totalFormasPagoFacRealizadas(getApplicationContext(), numeroRecibo);
 
@@ -3054,7 +3054,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                         NumberFormat formatoNumero = NumberFormat.getInstance(new Locale("es"));
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo,FacturasRealizadasSeleccionadasActivity.this);
 
 
                         if (cartera1.valorDocumento < 0) {
@@ -3141,7 +3141,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
                         tabla.addCell(String.valueOf(formatoNumero.format(Utilidades.formatearDecimales(cartera1.valorDocumento, 2))));
-                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+                        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                         /**********************************
                          *TOTAL CANCELADO                 *
@@ -3391,11 +3391,11 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
             if(empresas.equals("AGUC"))
             {
-                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPagoAGUC(numeroRecibo);
+                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPagoAGUC(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
             }
             else
             {
-                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo);
+                listaFacturasRealizadas = DataBaseBO.cargarFacturasViaPago(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
             }
 
             PdfPTable tabla1 = new PdfPTable(4);
@@ -3564,7 +3564,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                 for (FacturasRealizadas factura : facCollection) {
 
                     //CARGA LA INFORMACION DE LA FIRMA SEGUNDO EL ID PAGO
-                    FirmaNombre firmaNombre = DataBaseBO.cargarFirmaNombre(factura.numeroRecibo);
+                    FirmaNombre firmaNombre = DataBaseBO.cargarFirmaNombre(factura.numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
                     if(firmaNombre.firmaNombre != null)
                     {
@@ -3813,8 +3813,8 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
     private void ImprimirTirilla(final String macAddress) {
 
-        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosRealizados(numeroRecibo);
-        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudosRealizados(numeroRecibo);
+        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
+        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudosRealizados(numeroRecibo, FacturasRealizadasSeleccionadasActivity.this);
 
         List<Facturas> listaFacturas3 = new ArrayList<>();
 
@@ -3839,7 +3839,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
                     //
                     zebraPrinter.getPrinterControlLanguage();
                     String empresas = "";
-                    empresas = DataBaseBO.cargarEmpresa();
+                    empresas = DataBaseBO.cargarEmpresa(FacturasRealizadasSeleccionadasActivity.this);
                     String cpclData = "";
 
                     if (empresas.equals("ADHB")) {
@@ -3852,7 +3852,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
 
 
                     } else {
-                        cpclData = PrinterBO.formatoTirillaEntrega2(listaFacturasRealizadas.get(0).codigoCliente, listaFacturas3);
+                        cpclData = PrinterBO.formatoTirillaEntrega2(listaFacturasRealizadas.get(0).codigoCliente, listaFacturas3, FacturasRealizadasSeleccionadasActivity.this);
 
                     }
 
@@ -3909,7 +3909,7 @@ public class FacturasRealizadasSeleccionadasActivity extends AppCompatActivity i
             if (progressDoalog != null)
                 progressDoalog.cancel();
 
-            DataBaseBO.borrarInfoTemp();
+            DataBaseBO.borrarInfoTemp(FacturasRealizadasSeleccionadasActivity.this);
 
             guardarVista();
             Intent vistaInforme = new Intent(FacturasRealizadasSeleccionadasActivity.this, PrincipalActivity.class);

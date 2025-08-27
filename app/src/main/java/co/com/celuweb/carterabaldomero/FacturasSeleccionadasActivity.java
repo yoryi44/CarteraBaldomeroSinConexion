@@ -83,7 +83,7 @@ public class FacturasSeleccionadasActivity extends AppCompatActivity implements 
 
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(FacturasSeleccionadasActivity.this);
         final String finalEmpresa = empresa;
         TextView simboloCheq = findViewById(R.id.simboloformas1);
 

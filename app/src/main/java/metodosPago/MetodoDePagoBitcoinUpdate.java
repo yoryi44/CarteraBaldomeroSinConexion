@@ -122,7 +122,7 @@ public class MetodoDePagoBitcoinUpdate {
 
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -152,9 +152,9 @@ public class MetodoDePagoBitcoinUpdate {
         double DiferenciaFormasPago;
         double DiferenciaFormasPagoE = 0;
         double DiferenciaFormasPagoPEN = 0;
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
 
         final Spinner spinner2 = dialogo.findViewById(R.id.spinnerEstatus);
@@ -185,7 +185,7 @@ public class MetodoDePagoBitcoinUpdate {
         }
 
 
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems);
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items2 = new String[listaItems.size()];
@@ -360,7 +360,7 @@ public class MetodoDePagoBitcoinUpdate {
             idesPago.add(idsPagos);
         }
 
-        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos);
+        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos, contexto);
 
         if (anticipo != null) {
             if (anticipo.estado == true) {
@@ -662,9 +662,9 @@ public class MetodoDePagoBitcoinUpdate {
         String vendedorId1 = "";
         String consecutivoid = "";
 
-        consecId1 = DataBaseBO.cargarConsecutivoId();
-        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
         int consec1Id = Integer.parseInt(consecId1);
         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -672,7 +672,7 @@ public class MetodoDePagoBitcoinUpdate {
         consec1Id = consec1Id + contadorId;
         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
         consecutivoid = String.valueOf(negocioId1+ vendedorsumId+ consec1Id);
 
 
@@ -3553,7 +3553,7 @@ public class MetodoDePagoBitcoinUpdate {
                                     NCF_Comprobante_fiscal, finalDocumentoFinanciero, consecutivo1,
                                     descripcion, via_Pago,
                                     usuario, operacion_Cme, sincronizado, "0", "0",
-                                    "0",fotos.idenFoto,finalConsecutivoid)) {
+                                    "0",fotos.idenFoto,finalConsecutivoid, contexto)) {
 
                                 if (lenguajeElegido == null) {
 
@@ -3611,7 +3611,7 @@ public class MetodoDePagoBitcoinUpdate {
                                     NCF_Comprobante_fiscal, finalDocumentoFinanciero, consecutivo1,
                                     descripcion, via_Pago,
                                     usuario, operacion_Cme, sincronizado, "0", "0",
-                                    "0",fotos.idenFoto,finalConsecutivoid)) {
+                                    "0",fotos.idenFoto,finalConsecutivoid, contexto)) {
 
                                 if (lenguajeElegido == null) {
 
@@ -3673,7 +3673,7 @@ public class MetodoDePagoBitcoinUpdate {
                                         NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                         descripcion, via_Pago,
                                         usuario, operacion_Cme, sincronizado, "0", "0",
-                                        "0",fotos.idenFoto,finalConsecutivoid)) {
+                                        "0",fotos.idenFoto,finalConsecutivoid, contexto)) {
 
                                     if (lenguajeElegido == null) {
 
@@ -3723,7 +3723,7 @@ public class MetodoDePagoBitcoinUpdate {
                                         NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                         descripcion, via_Pago,
                                         usuario, operacion_Cme, sincronizado, "0", "0",
-                                        "0",fotos.idenFoto,finalConsecutivoid)) {
+                                        "0",fotos.idenFoto,finalConsecutivoid, contexto)) {
 
                                     if (lenguajeElegido == null) {
 
@@ -3812,8 +3812,8 @@ public class MetodoDePagoBitcoinUpdate {
                     documentoFacturas.add(nroRecibo);
                 }
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
 
                 dialogo.cancel();
             }

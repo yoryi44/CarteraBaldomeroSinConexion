@@ -61,7 +61,7 @@ public class InformeRutaFragment extends Fragment  {
 
         String empresa = "";
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(InformeRutaFragment.this.getContext());
 
         if (empresa.equals("AGCO")) {
 
@@ -2945,13 +2945,13 @@ public class InformeRutaFragment extends Fragment  {
         //emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
 
 
-        File file = new File(Utilidades.dirApp(), "/informes/informes.pdf");
+        File file = new File(Utilidades.dirApp(requireContext()), "/informes/informes.pdf");
         if (!file.exists() || !file.canRead()) {
             return;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID + ".provider", file);
+            Uri uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file);
             emailIntent.setData(uri);
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Seleccione la app"));

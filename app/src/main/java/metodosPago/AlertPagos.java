@@ -104,7 +104,7 @@ public class AlertPagos {
 
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(contexto);
 
         final String finalEmpresa = empresa;
 
@@ -483,7 +483,7 @@ public class AlertPagos {
 
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(contexto);
 
 
         final String finalEmpresa = empresa;

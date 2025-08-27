@@ -181,7 +181,7 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
         final RadioButton rbReciboPago = findViewById(R.id.rbReciboPago);
 
         String empresa23 = "";
-        empresa23 = DataBaseBO.cargarEmpresa();
+        empresa23 = DataBaseBO.cargarEmpresa(ReciboDineroActivity.this);
         final String finalEmpresa23 = empresa23;
 
         if (empresa23.equals("AGUC")) {
@@ -235,14 +235,14 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
         String consecutivoVendedor = "";
         String empresaAguc = "";
 
-        empresa = DataBaseBO.cargarRazonSocial();
-        empresaAguc = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarRazonSocial(ReciboDineroActivity.this);
+        empresaAguc = DataBaseBO.cargarEmpresa(ReciboDineroActivity.this);
         txtCompaReciboDinero.setText(empresa);
-        nombreUsuario = DataBaseBO.cargarUsuarioApp();
+        nombreUsuario = DataBaseBO.cargarUsuarioApp(ReciboDineroActivity.this);
         tvNombreUsuario.setText(nombreUsuario);
-        consecutivo = DataBaseBO.cargarConsecutivo();
-        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo();
-        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo();
+        consecutivo = DataBaseBO.cargarConsecutivo(ReciboDineroActivity.this);
+        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(ReciboDineroActivity.this);
+        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(ReciboDineroActivity.this);
 
         String strDate = sdf.format(c.getTime());
 

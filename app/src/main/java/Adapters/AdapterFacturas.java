@@ -165,7 +165,7 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
             lenguajeElegido = gson223.fromJson(stringJsonObject223, Lenguaje.class);
 
             String tipoUsuario="";
-            tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+            tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(context);
 
             if (lenguajeElegido == null) {
 
@@ -199,7 +199,7 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
 
             listaIds.add(item.idPago);
 
-            listaIdenFotos = DataBaseBO.cargaridFotos(listaIds);
+            listaIdenFotos = DataBaseBO.cargaridFotos(listaIds, context);
 
             for (Facturas facturas: listaIdenFotos) {
                 identiFotos = facturas.idenFoto;
@@ -232,7 +232,7 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
                     input = String.valueOf(item.getValor());
                     double valor = 0;
                     String empresa = "";
-                    empresa = DataBaseBO.cargarEmpresa();
+                    empresa = DataBaseBO.cargarEmpresa(context);
                     final String finalEmpresa = empresa;
 
 
@@ -255,7 +255,7 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
                     input = String.valueOf(item.getValor());
                     double valor = 0;
                     String empresa = "";
-                    empresa = DataBaseBO.cargarEmpresa();
+                    empresa = DataBaseBO.cargarEmpresa(context);
                     final String finalEmpresa = empresa;
 
                     if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -279,7 +279,7 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
                 input = String.valueOf(item.getValor());
                 double valor = 0;
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
                 if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -383,12 +383,12 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
                                 public void onClick(View v) {
                                     String vendedor = "";
 
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
 
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
-                                    DataBaseBO.eliminarRecaudos(item.idPago);
-                                    DataBaseBO.eliminarFotoID(finalListaIdenFotos1);
-                                    DataBaseBO.eliminarRecaudosPendientes(item.idPago);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
+                                    DataBaseBO.eliminarRecaudos(item.idPago, context);
+                                    DataBaseBO.eliminarFotoID(finalListaIdenFotos1, context);
+                                    DataBaseBO.eliminarRecaudosPendientes(item.idPago, context);
                                     Intent login = new Intent(context.getApplicationContext(), MetodosDePagoActivity.class);
                                     context.startActivity(login);
                                     ((MetodosDePagoActivity) context).finish();
@@ -411,11 +411,11 @@ public class AdapterFacturas extends RecyclerView.Adapter<AdapterFacturas.ViewHo
                                 public void onClick(View v) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
-                                    DataBaseBO.eliminarRecaudos(item.idPago);
-                                    DataBaseBO.eliminarFotoID(finalListaIdenFotos1);
-                                    DataBaseBO.eliminarRecaudosPendientes(item.idPago);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
+                                    DataBaseBO.eliminarRecaudos(item.idPago, context);
+                                    DataBaseBO.eliminarFotoID(finalListaIdenFotos1, context);
+                                    DataBaseBO.eliminarRecaudosPendientes(item.idPago, context);
                                     Intent login = new Intent(context.getApplicationContext(), MetodosDePagoActivity.class);
                                     context.startActivity(login);
                                     ((MetodosDePagoActivity) context).finish();

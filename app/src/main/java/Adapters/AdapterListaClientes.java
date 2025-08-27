@@ -120,7 +120,7 @@ public class AdapterListaClientes extends RecyclerView.Adapter<AdapterListaClien
             lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
 
             String empresas = "";
-            empresas = DataBaseBO.cargarEmpresa();
+            empresas = DataBaseBO.cargarEmpresa(context);
 
             if (empresas.equals("AGUC")) {
                 textrazonsocialClientes.setVisibility(View.GONE);

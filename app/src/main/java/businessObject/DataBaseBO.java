@@ -2,6 +2,7 @@ package businessObject;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -52,7 +53,7 @@ public class DataBaseBO {
 
 
     @SuppressLint("LongLogTag")
-    public static List<ClienteSincronizado> obtenerListaClientesSincronizadosAux(int opcionOrden) {
+    public static List<ClienteSincronizado> obtenerListaClientesSincronizadosAux(int opcionOrden, Context context) {
 
         SQLiteDatabase db = null;
         List<ClienteSincronizado> listaClientes = new Vector<>();
@@ -60,7 +61,8 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String queryDiasMora = "SELECT max( " +
@@ -187,7 +189,7 @@ public class DataBaseBO {
                     cliente.NumeroRuta = orden;
 
                     // SE AGREGA LA LOGICA DE CARTERA POR CLIENTE
-                    cliente.totalCartera = Utilidades.separarMilesSinDecimal(String.valueOf(DataBaseBO.obtenerCarteraCliente(cliente.codigo)));
+                    cliente.totalCartera = Utilidades.separarMilesSinDecimal(String.valueOf(DataBaseBO.obtenerCarteraCliente(cliente.codigo, context)), context);
 
                     orden++;
                     listaClientes.add(cliente);
@@ -211,14 +213,14 @@ public class DataBaseBO {
         Main.listaClientes = listaClientes;
 
         if (opcionOrden == 4) {
-            obtenerListaDiasMoraNull();
+            obtenerListaDiasMoraNull(context);
         }
 
         return listaClientes;
     }
 
     @SuppressLint("LongLogTag")
-    private static void obtenerListaDiasMoraNull() {
+    private static void obtenerListaDiasMoraNull(Context context) {
 
         SQLiteDatabase db = null;
 
@@ -226,7 +228,7 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String queryDiasMora = "SELECT max( " +
@@ -297,7 +299,7 @@ public class DataBaseBO {
                     cliente.NumeroRuta = Main.listaClientes.size() + 1;
 
                     // SE AGREGA LA LOGICA DE CARTERA POR CLIENTE
-                    cliente.totalCartera = Utilidades.separarMilesSinDecimal(String.valueOf(DataBaseBO.obtenerCarteraCliente(cliente.codigo)));
+                    cliente.totalCartera = Utilidades.separarMilesSinDecimal(String.valueOf(DataBaseBO.obtenerCarteraCliente(cliente.codigo, context)), context);
 
 
                     Main.listaClientes.add(cliente);
@@ -320,15 +322,15 @@ public class DataBaseBO {
 
     }
 
-    public static boolean bannerUsu(String empresa) {
+    public static boolean bannerUsu(String empresa, Context context) {
 
         boolean respuesta = false;
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -359,12 +361,12 @@ public class DataBaseBO {
         return respuesta;
     }
 
-    public static String cargarEmpresa() {
+    public static String cargarEmpresa(Context context) {
         String empresa = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT empresa  FROM usuario ";
@@ -389,7 +391,7 @@ public class DataBaseBO {
         return empresa;
     }
 
-    public static boolean ExisteDocumento(List<String> param2) {
+    public static boolean ExisteDocumento(List<String> param2, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -400,7 +402,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT  docto_Financiero FROM (SELECT docto_Financiero FROM recaudos  WHERE  docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') UNION ALL SELECT docto_Financiero FROM recaudosPen WHERE  docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')) T";
@@ -432,12 +434,12 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarRazonSocial() {
+    public static String cargarRazonSocial(Context context) {
         String descripcion = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT descripcion  FROM razonsocial ";
@@ -463,12 +465,12 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarNroRecibo(String parametro, String param, String param2, String param3, String param4, String param5, String param6) {
+    public static String cargarNroRecibo(String parametro, String param, String param2, String param3, String param4, String param5, String param6, Context context) {
         String nro_Recibo = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT nro_Recibo  FROM recaudos where operacion_Cme ='" + parametro + "' and cod_Cliente = '" + param + "' and via_Pago = '" + param2 + "' or via_Pago = '" + param3 + "' or via_Pago = '" + param4 + "' or via_Pago = '" + param5 + "' or via_Pago = '" + param6 + "'";
@@ -492,7 +494,7 @@ public class DataBaseBO {
         return nro_Recibo;
     }
 
-    public static List<FacturasRealizadas> cargarFacturasRealizadasDif(String param) {
+    public static List<FacturasRealizadas> cargarFacturasRealizadasDif(String param, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
@@ -500,7 +502,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT r.clase_Documento,r.sociedad,r.cod_Cliente,r.cod_Vendedor,r.referencia,r.fecha_Documento,r.fecha_Consignacion, " +
@@ -564,7 +566,7 @@ public class DataBaseBO {
         return listaFacturasRealizadas;
     }
 
-    public static List<FacturasRealizadas> cargarFacturasRealizadas() {
+    public static List<FacturasRealizadas> cargarFacturasRealizadas(Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
@@ -572,7 +574,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT r.clase_Documento,r.sociedad,r.Documento,r.cod_Cliente,r.cod_Vendedor,r.referencia,r.fecha_Documento," +
@@ -639,7 +641,7 @@ public class DataBaseBO {
     }
 
 
-    public static boolean eliminarFotoID(List<Facturas> param2) {
+    public static boolean eliminarFotoID(List<Facturas> param2, Context context) {
 
         String str = "";
         for (Facturas fruit : param2) {
@@ -652,7 +654,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "DELETE FROM fotos WHERE Iden_Foto IN('" + str.substring(1, str.length() - 2) + "')";
@@ -673,7 +675,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean eliminarFotoIDFac(List<String> param2) {
+    public static boolean eliminarFotoIDFac(List<String> param2, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -686,7 +688,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM fotos WHERE Iden_Foto IN('" + str.substring(1, str.length() - 2) + "')");
@@ -706,7 +708,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean eliminarFoto(List<String> param2) {
+    public static boolean eliminarFoto(List<String> param2, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -719,7 +721,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM fotos WHERE Idfoto IN(" + str + "'')");
@@ -778,13 +780,13 @@ public class DataBaseBO {
      * }
      **/
 
-    public static List<String> listarString() {
+    public static List<String> listarString(Context context) {
         List<String> listaFotos = new ArrayList<>();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT * From fotos ";
@@ -813,7 +815,7 @@ public class DataBaseBO {
         return listaFotos;
     }
 
-    public static List<Fotos> cargarFotos() {
+    public static List<Fotos> cargarFotos(Context context) {
 
         List<Fotos> listaFotos = new ArrayList<>();
 
@@ -821,7 +823,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT * From fotos ";
@@ -851,7 +853,7 @@ public class DataBaseBO {
         return listaFotos;
     }
 
-    public static List<FacturasRealizadas> cargarFacturasRealizadasCompletaInformes(String numeroRecibo) {
+    public static List<FacturasRealizadas> cargarFacturasRealizadasCompletaInformes(String numeroRecibo, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
@@ -859,7 +861,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT rr.clase_Documento,rr.sociedad,rr.Documento,rr.cod_Cliente,rr.cod_Vendedor,rr.referencia,rr.fecha_Documento,rr.fecha_Consignacion," +
@@ -923,7 +925,7 @@ public class DataBaseBO {
         return listaFacturasRealizadas;
     }
 
-    public static List<FacturasRealizadas> cargarFacturasRealizadasCompleta(String numeroRecibo) {
+    public static List<FacturasRealizadas> cargarFacturasRealizadasCompleta(String numeroRecibo, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
@@ -931,7 +933,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -994,14 +996,14 @@ public class DataBaseBO {
         return listaFacturasRealizadas;
     }
 
-    public static String cargarEmpresaRazonSocial() {
+    public static String cargarEmpresaRazonSocial(Context context) {
         String empresa = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1028,7 +1030,7 @@ public class DataBaseBO {
         return empresa;
     }
 
-    public static List<Pendientes> cargarFacturasPendientesCompletaPorid(String numeroRecibo) {
+    public static List<Pendientes> cargarFacturasPendientesCompletaPorid(String numeroRecibo, Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
 
@@ -1036,7 +1038,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -1104,7 +1106,7 @@ public class DataBaseBO {
         return listaFacturasPendientes;
     }
 
-    public static List<Pendientes> cargarFacturasPendientesCompletaPoridMultiples(List<String> numeroRecibo) {
+    public static List<Pendientes> cargarFacturasPendientesCompletaPoridMultiples(List<String> numeroRecibo, Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
         String str = "";
@@ -1116,7 +1118,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -1187,7 +1189,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasPendientesCompleta(String numeroRecibo) {
+    public static List<Pendientes> cargarFacturasPendientesCompleta(String numeroRecibo, Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
 
@@ -1195,7 +1197,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -1262,7 +1264,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasPendientesAnulacion() {
+    public static List<Pendientes> cargarFacturasPendientesAnulacion(Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
 
@@ -1270,7 +1272,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor," +
@@ -1314,7 +1316,7 @@ public class DataBaseBO {
         return listaFacturasPendientes;
     }
 
-    public static List<Pendientes> cargarSumasPendientesViaPago() {
+    public static List<Pendientes> cargarSumasPendientesViaPago(Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
 
@@ -1322,7 +1324,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT SUM(valor_Pagado) AS valor_Pagado From recaudosPendientes WHERE via_Pago = 'A' or via_Pago = 'B' GROUP BY nro_Recibo  ";
@@ -1358,7 +1360,7 @@ public class DataBaseBO {
         return listaFacturasPendientes;
     }
 
-    public static List<Pendientes> cargarFacturasPendientes() {
+    public static List<Pendientes> cargarFacturasPendientes(Context context) {
 
         List<Pendientes> listaFacturasPendientes = new ArrayList<>();
 
@@ -1366,7 +1368,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT *,sum(valor_Final) as valor_Pagado " +
@@ -1442,13 +1444,13 @@ public class DataBaseBO {
         return listaFacturasPendientes;
     }
 
-    public static Bitmap buscarImagen(String id) {
+    public static Bitmap buscarImagen(String id, Context context) {
         SQLiteDatabase dbTemp = null;
         Bitmap bitmap = null;
 
         try {
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String sql = "SELECT * FROM fotos WHERE idFoto ='" + id + "'";
@@ -1491,7 +1493,7 @@ public class DataBaseBO {
         return bitmap;
     }
 
-    public static void guardarImagen(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos) {
+    public static void guardarImagen(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -1507,7 +1509,7 @@ public class DataBaseBO {
             byte[] b = bos.toByteArray();
 
             // aqui tenemos el byte[] con el imagen comprimido, ahora lo guardemos en SQLite
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String sql = "INSERT INTO fotos (IdFoto, Nombre, IdPago,Empresa,Iden_Foto) VALUES(?,?,?,?,?)";
@@ -1532,7 +1534,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void guardarImagenMutilples(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos, String metodoPago) {
+    public static void guardarImagenMutilples(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos, String metodoPago, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -1548,7 +1550,7 @@ public class DataBaseBO {
             byte[] b = bos.toByteArray();
 
             // aqui tenemos el byte[] con el imagen comprimido, ahora lo guardemos en SQLite
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String sql = "INSERT INTO fotos (IdFoto, Nombre, IdPago,Empresa,Iden_Foto) VALUES(?,?,?,?,?)";
@@ -1556,7 +1558,7 @@ public class DataBaseBO {
 
             for (int i = 0; i < param2.size(); i++) {
 
-                if (DataBaseBO.ValidarMetodoDePagoPorRecibo(param2.get(i), metodoPago)) {
+                if (DataBaseBO.ValidarMetodoDePagoPorRecibo(param2.get(i), metodoPago, context)) {
                     insert.clearBindings();
                     insert.bindString(1, idFoto);
                     insert.bindBlob(2, b);
@@ -1574,7 +1576,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void guardarImagenes(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos) {
+    public static void guardarImagenes(String idFoto, Bitmap bitmap, List<String> param2, String empresa, String idenFotos, Context context) {
 
         String str = "";
         for (String fruit : param2) {
@@ -1591,7 +1593,7 @@ public class DataBaseBO {
             byte[] b = bos.toByteArray();
 
             // aqui tenemos el byte[] con el imagen comprimido, ahora lo guardemos en SQLite
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1619,12 +1621,12 @@ public class DataBaseBO {
     }
 
 
-    public static boolean guardarFotos(String idFoto, String nombreFoto, String idPagoFoto, String empresa) {
+    public static boolean guardarFotos(String idFoto, String nombreFoto, String idPagoFoto, String empresa, Context context) {
         boolean resultado = false;
         SQLiteDatabase dbTemp = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             ContentValues fotos = new ContentValues();
@@ -1653,7 +1655,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean hayInformacionFotos() {
+    public static boolean hayInformacionFotos(Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -1664,7 +1666,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT COUNT(*) FROM fotos";
@@ -1703,7 +1705,7 @@ public class DataBaseBO {
     }
 
 
-    public static boolean hayInformacionRecaudos() {
+    public static boolean hayInformacionRecaudos(Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -1714,7 +1716,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT COUNT(*) FROM recaudos ";
@@ -1752,7 +1754,7 @@ public class DataBaseBO {
 
     }
 
-    public static boolean hayInformacionPendientes() {
+    public static boolean hayInformacionPendientes(Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -1763,7 +1765,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT COUNT(*) FROM recaudosPen ";
@@ -1802,12 +1804,12 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarCodigo() {
+    public static String cargarCodigo(Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT usuario  FROM usuario ";
@@ -1831,14 +1833,14 @@ public class DataBaseBO {
         return nombre;
     }
 
-    public static String cargarUsuarioApp() {
+    public static String cargarUsuarioApp(Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1865,14 +1867,14 @@ public class DataBaseBO {
         return nombre;
     }
 
-    public static String cargarTipoUsuarioApp() {
+    public static String cargarTipoUsuarioApp(Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1899,7 +1901,7 @@ public class DataBaseBO {
         return nombre;
     }
 
-    public static String cargarNegocioConsecutivoUpdate() {
+    public static String cargarNegocioConsecutivoUpdate(Context context) {
         String negocio = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -1907,7 +1909,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1935,7 +1937,7 @@ public class DataBaseBO {
         return negocio;
     }
 
-    public static String cargarNegocioConsecutivo() {
+    public static String cargarNegocioConsecutivo(Context context) {
         String negocio = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -1943,10 +1945,10 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -1985,7 +1987,7 @@ public class DataBaseBO {
         return negocio;
     }
 
-    public static String cargarNegocioConsecutivoId() {
+    public static String cargarNegocioConsecutivoId(Context context) {
         String negocio = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -1993,7 +1995,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2021,7 +2023,7 @@ public class DataBaseBO {
         return negocio;
     }
 
-    public static String cargarNegocioConsecutivoPaquete() {
+    public static String cargarNegocioConsecutivoPaquete(Context context) {
         String negocio = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2029,7 +2031,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2057,7 +2059,7 @@ public class DataBaseBO {
         return negocio;
     }
 
-    public static String cargarVendedorConsecutivoUpdate() {
+    public static String cargarVendedorConsecutivoUpdate(Context context) {
         String vendedor = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2065,7 +2067,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT vendedor  FROM consecutivorecibos  ORDER BY vendedor DESC ";
@@ -2092,7 +2094,7 @@ public class DataBaseBO {
         return vendedor;
     }
 
-    public static String cargarDocumentoFinanciero(List<String> parametro) {
+    public static String cargarDocumentoFinanciero(List<String> parametro, Context context) {
         String docu = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2106,7 +2108,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT Documento_Financiero  FROM cartera WHERE documento  IN ('" + str.substring(1, str.length() - 2) + "')";
@@ -2133,7 +2135,7 @@ public class DataBaseBO {
         return docu;
     }
 
-    public static String cargarVendedorConsecutivo() {
+    public static String cargarVendedorConsecutivo(Context context) {
         String vendedor = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2141,10 +2143,10 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT vendedor  FROM consecutivorecibos  ORDER BY vendedor DESC ";
@@ -2181,7 +2183,7 @@ public class DataBaseBO {
         return vendedor;
     }
 
-    public static String cargarVendedorConsecutivoId() {
+    public static String cargarVendedorConsecutivoId(Context context) {
         String vendedor = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2189,7 +2191,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2217,7 +2219,7 @@ public class DataBaseBO {
         return vendedor;
     }
 
-    public static String cargarVendedorConsecutivoPaquete() {
+    public static String cargarVendedorConsecutivoPaquete(Context context) {
         String vendedor = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2225,7 +2227,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2254,7 +2256,7 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarConsecutivoUpdate(String parametro) {
+    public static String cargarConsecutivoUpdate(String parametro, Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2262,7 +2264,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT nro_Recibo  FROM recaudos WHERE idPago = '" + parametro + "' ";
@@ -2290,7 +2292,7 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarFechaMaxReciboRealizados(String parametro) {
+    public static String cargarFechaMaxReciboRealizados(String parametro, Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2298,7 +2300,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT MAX(Fecha_recibo)As Fecha_recibo  FROM recaudosRealizados WHERE nro_Recibo = '" + parametro + "' ";
@@ -2326,7 +2328,7 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarConsecutivo() {
+    public static String cargarConsecutivo(Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2334,10 +2336,10 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT consecutivo  FROM consecutivorecibos ORDER BY  consecutivo DESC ";
@@ -2362,7 +2364,7 @@ public class DataBaseBO {
             }
 
             if (!consecutivo.isEmpty())
-                consecutivo = validarUltimoConsecutivo(consecutivo);
+                consecutivo = validarUltimoConsecutivo(consecutivo, context);
 
         } catch (Exception e) {
             mensaje = e.getMessage();
@@ -2378,15 +2380,16 @@ public class DataBaseBO {
         return consecutivo;
     }
 
-    public static String cargarConsecutivoId() {
+    public static String cargarConsecutivoId(Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
-        SQLiteDatabase dbtemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
-            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
+
+            if(dbFile.exists())
+                db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
             String query = "SELECT consecutivo  FROM consecutivoID ORDER BY  consecutivo DESC  ";
@@ -2399,7 +2402,7 @@ public class DataBaseBO {
             cursor.close();
 
             if (consecutivo.isEmpty()) {
-                dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+                dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2428,14 +2431,14 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarConsecutivoIdDataBase() {
+    public static String cargarConsecutivoIdDataBase(Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2449,7 +2452,7 @@ public class DataBaseBO {
             cursor.close();
 
             if (consecutivo.isEmpty()) {
-                dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+                dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2478,7 +2481,7 @@ public class DataBaseBO {
     }
 
 
-    public static String cargarConsecutivoPaquete() {
+    public static String cargarConsecutivoPaquete(Context context) {
         String consecutivo = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -2486,7 +2489,7 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -2515,7 +2518,7 @@ public class DataBaseBO {
     }
 
     @NonNull
-    public static List<Facturas> cargarFacParTotal(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotal(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2531,7 +2534,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')) T GROUP BY docto_Financiero  ORDER BY CASE docto_Financiero WHEN docto_Financiero THEN docto_Financiero End ASC";
@@ -2573,7 +2576,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarFacParTotalHechas(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalHechas(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2589,7 +2592,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and idPago IN ('" + str.substring(1, str.length() - 2) + "') UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and idPago IN ('" + str.substring(1, str.length() - 2) + "')) T GROUP BY docto_Financiero  ORDER BY CASE docto_Financiero WHEN docto_Financiero THEN docto_Financiero End ASC";
@@ -2630,7 +2633,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalEfec(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalEfec(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2646,7 +2649,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado  FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B'  UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B' ) T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -2686,7 +2689,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalEfecCantidadFacturas(String param, List<String> param2, List<String> ides) {
+    public static List<Facturas> cargarFacParTotalEfecCantidadFacturas(String param, List<String> param2, List<String> ides, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2707,7 +2710,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado  FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = 'A'  UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = 'A' ) T GROUP BY docto_Financiero  ORDER BY CASE docto_Financiero WHEN docto_Financiero THEN docto_Financiero End ASC";
@@ -2746,7 +2749,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalEfecTarjeta(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalEfecTarjeta(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2762,7 +2765,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado  FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O'  UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O' ) T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -2802,7 +2805,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalEfecTransferencia(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalEfecTransferencia(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2818,7 +2821,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado  FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6'  UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6' ) T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -2859,7 +2862,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarFacParTotalCheq(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalCheq(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2875,7 +2878,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -2916,7 +2919,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalCheqTarjeta(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalCheqTarjeta(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2932,7 +2935,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -2973,7 +2976,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalTransf(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalTransf(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -2989,7 +2992,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3030,7 +3033,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalTransfCheque(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalTransfCheque(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3046,7 +3049,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3087,7 +3090,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalTarjeta(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalTarjeta(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3103,7 +3106,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3145,7 +3148,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarFacParTotalBitcoin(String param, List<String> param2) {
+    public static List<Facturas> cargarFacParTotalBitcoin(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3161,7 +3164,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,SUM(valor_Pagado) AS valor_Pagado,idPago FROM(SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O' UNION ALL SELECT fecha_Documento,docto_Financiero,valor_Pagado,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3203,7 +3206,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarIDEfectivo(String param, List<String> param2) {
+    public static List<Facturas> cargarIDEfectivo(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3219,7 +3222,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A' UNION ALL SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3264,7 +3267,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarListaEfectivo(String param, List<String> param2, List<String> ids) {
+    public static List<Facturas> cargarListaEfectivo(String param, List<String> param2, List<String> ids, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3286,7 +3289,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = 'A'" +
@@ -3330,7 +3333,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarListaCheque(String param, List<String> param2, List<String> ids) {
+    public static List<Facturas> cargarListaCheque(String param, List<String> param2, List<String> ids, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3352,7 +3355,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = 'B'" +
@@ -3396,7 +3399,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarListaTransferencia(String param, List<String> param2, List<String> ids) {
+    public static List<Facturas> cargarListaTransferencia(String param, List<String> param2, List<String> ids, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3418,7 +3421,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = '6'" +
@@ -3462,7 +3465,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarListaTarjeta(String param, List<String> param2, List<String> ids) {
+    public static List<Facturas> cargarListaTarjeta(String param, List<String> param2, List<String> ids, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3484,7 +3487,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "')and idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and via_Pago = 'O'" +
@@ -3528,7 +3531,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIDCheq(String param, List<String> param2) {
+    public static List<Facturas> cargarIDCheq(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3544,7 +3547,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,clase_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Numero_de_cheque,Iden_Foto FROM(SELECT fecha_Documento,clase_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Numero_de_cheque,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B' UNION ALL SELECT fecha_Documento,clase_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Numero_de_cheque,Iden_Foto FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3590,7 +3593,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIDTransfe(String param, List<String> param2) {
+    public static List<Facturas> cargarIDTransfe(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3606,7 +3609,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM(SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6' UNION ALL SELECT fecha_Documento,docto_Financiero,idPago,referencia,banco,cuenta_Bancaria,Iden_Foto FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3650,7 +3653,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIDTarjeta(String param, List<String> param2) {
+    public static List<Facturas> cargarIDTarjeta(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3666,7 +3669,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,referencia,idPago,Nombre_del_propietario,cuenta_Bancaria FROM(SELECT fecha_Documento,docto_Financiero,referencia,idPago,Nombre_del_propietario,cuenta_Bancaria FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O' UNION ALL SELECT fecha_Documento,docto_Financiero,referencia,idPago,Nombre_del_propietario,cuenta_Bancaria FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3709,7 +3712,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIDBitcoin(String param, List<String> param2) {
+    public static List<Facturas> cargarIDBitcoin(String param, List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3725,7 +3728,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  fecha_Documento,docto_Financiero,idPago FROM(SELECT fecha_Documento,docto_Financiero,idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '4' UNION ALL SELECT fecha_Documento,docto_Financiero,idPago FROM recaudosPen WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '4') T GROUP BY docto_Financiero  ORDER BY CASE fecha_Documento WHEN fecha_Documento THEN fecha_Documento End ASC";
@@ -3767,7 +3770,7 @@ public class DataBaseBO {
 
 
     @NonNull
-    public static List<Facturas> cargaridFotos(List<String> param2) {
+    public static List<Facturas> cargaridFotos(List<String> param2, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3783,7 +3786,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
                 String query = "SELECT  Iden_Foto FROM(SELECT foto_buzon as Iden_Foto FROM recaudos  WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') UNION ALL SELECT Iden_Foto FROM recaudosPen WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "')) T ";
@@ -3819,7 +3822,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacParTotalPen(String param, List<String> param2, Vector<String> listaItems) {
+    public static List<Facturas> cargarFacParTotalPen(String param, List<String> param2, Vector<String> listaItems, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3837,7 +3840,7 @@ public class DataBaseBO {
 
             try {
 
-                dbFile = new File(Utilidades.dirApp(), "Temp.db");
+                dbFile = new File(Utilidades.dirApp(context), "Temp.db");
                 db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -3911,7 +3914,7 @@ public class DataBaseBO {
     }
 
     @NonNull
-    public static List<Pendientes> cargarFacParTotalPendientes(String param, List<String> param2, Vector<String> listaItems) {
+    public static List<Pendientes> cargarFacParTotalPendientes(String param, List<String> param2, Vector<String> listaItems, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3926,7 +3929,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT docto_Financiero,SUM(valor_Pagado) AS valor_Pagado FROM recaudosPendientes  WHERE nro_Recibo = '" + param + "' and docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY docto_Financiero ";
@@ -3964,7 +3967,7 @@ public class DataBaseBO {
         return listaCarteraPendientes;
     }
 
-    public static List<Fotos> cargarIdPagoFoto() {
+    public static List<Fotos> cargarIdPagoFoto(Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -3972,7 +3975,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT Idfoto FROM fotos";
@@ -4008,7 +4011,7 @@ public class DataBaseBO {
         return listaFotos;
     }
 
-    public static List<Facturas> cargarIdPago(String param, String param2, Vector<String> listaItems) {
+    public static List<Facturas> cargarIdPago(String param, String param2, Vector<String> listaItems, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4016,7 +4019,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM recaudos  WHERE nro_Recibo = '" + param + "' and via_Pago = 'A' or via_Pago = 'B' or via_Pago = 'O'  or via_Pago = '6'";
@@ -4053,7 +4056,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOG(String param) {
+    public static List<Facturas> cargarIdPagoOG(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4061,7 +4064,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT idPago FROM( SELECT r.idPago FROM recaudos r WHERE r.nro_Recibo = '" + param + "' and (r.via_Pago = 'A' or r.via_Pago = 'B' or r.via_Pago = 'O'  or r.via_Pago = '6') " +
@@ -4100,7 +4103,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGRecaudosRealizados(String param) {
+    public static List<Facturas> cargarIdPagoOGRecaudosRealizados(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4108,7 +4111,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT idPago FROM( SELECT r.idPago FROM recaudos r WHERE r.nro_Recibo = '" + param + "' and (r.via_Pago = 'A' or r.via_Pago = 'B' or r.via_Pago = 'O'  or r.via_Pago = '6')" +
@@ -4147,7 +4150,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGRecaudosPendientes(String param) {
+    public static List<Facturas> cargarIdPagoOGRecaudosPendientes(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4155,7 +4158,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT idPago FROM( SELECT r.idPago FROM recaudos r WHERE r.nro_Recibo = '" + param + "' and r.via_Pago = 'A' or r.via_Pago = 'B' or r.via_Pago = 'O'  or r.via_Pago = '6'\n" +
@@ -4194,7 +4197,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGRecaudosPendientesDatabase(String param) {
+    public static List<Facturas> cargarIdPagoOGRecaudosPendientesDatabase(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4202,7 +4205,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT idPago FROM( SELECT r.idPago FROM recaudos r WHERE r.nro_Recibo = '" + param + "' and r.via_Pago = 'A' or r.via_Pago = 'B' or r.via_Pago = 'O'  or r.via_Pago = '6'\n" +
@@ -4241,7 +4244,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGRealizados(String param) {
+    public static List<Facturas> cargarIdPagoOGRealizados(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4249,7 +4252,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT r.idPago FROM recaudosRealizados r WHERE r.nro_Recibo = '" + param + "'";
@@ -4288,7 +4291,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarIdPagoOGPendientes(String param) {
+    public static List<Facturas> cargarIdPagoOGPendientes(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4296,7 +4299,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM recaudosPen  WHERE nro_Recibo = '" + param + "' and via_Pago = 'A' or via_Pago = 'B' or via_Pago = 'O'  or via_Pago = '6'";
@@ -4334,7 +4337,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarIdPagoOGPendientesRecaudosRealizados(String param) {
+    public static List<Facturas> cargarIdPagoOGPendientesRecaudosRealizados(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4342,7 +4345,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM recaudosRealizados  WHERE nro_Recibo = '" + param + "' and (via_Pago = 'A' or via_Pago = 'B' or via_Pago = 'O'  or via_Pago = '6')";
@@ -4379,7 +4382,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGPendientesRecaudos(String param) {
+    public static List<Facturas> cargarIdPagoOGPendientesRecaudos(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4387,7 +4390,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM recaudosPen  WHERE nro_Recibo = '" + param + "' and (via_Pago = 'A' or via_Pago = 'B' or via_Pago = 'O'  or via_Pago = '6')";
@@ -4424,7 +4427,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarIdPagoOGPendientesRecaudosDataBase(String param) {
+    public static List<Facturas> cargarIdPagoOGPendientesRecaudosDataBase(String param, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -4432,7 +4435,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM recaudosPen  WHERE nro_Recibo = '" + param + "' and (via_Pago = 'A' or via_Pago = 'B' or via_Pago = 'O'  or via_Pago = '6')";
@@ -4469,14 +4472,13 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static double TotalValoresNegativos(String numeroRecibo) {
+    public static double TotalValoresNegativos(String numeroRecibo, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
 
-
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT SUM(DISTINCT rr.valor_Documento)AS valor_documento,rr.docto_Financiero,rr.nro_Recibo,rr.via_Pago,tp.denominacion From recaudosRealizados rr inner join tiposdocumentos tp  on tp.documento = rr.clase_Documento  WHERE rr.nro_Recibo ='" + numeroRecibo + "' AND rr.valor_documento < 0";
@@ -4502,14 +4504,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalValoresNegativosRecaudosPendientes(String numeroRecibo) {
+    public static double TotalValoresNegativosRecaudosPendientes(String numeroRecibo, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
 
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT SUM(DISTINCT rr.valor_Documento)AS valor_documento,rr.docto_Financiero,rr.nro_Recibo,rr.via_Pago,tp.denominacion From recaudosPendientes rr inner join tiposdocumentos tp  on tp.documento = rr.clase_Documento  WHERE rr.nro_Recibo ='" + numeroRecibo + "' AND rr.valor_documento < 0";
@@ -4535,7 +4537,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoEfectivo(List<String> codigo, String parametro) {
+    public static double TotalFormasPagoEfectivo(List<String> codigo, String parametro, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
 
@@ -4547,7 +4549,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT cod_Cliente,SUM(DISTINCT valor_Consignado)AS valor_Consignado FROM recaudos  WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') AND via_Pago='" + parametro + "' GROUP BY idPago HAVING idPago ";
@@ -4573,7 +4575,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoEfectivoDatabase(List<String> codigo, String parametro) {
+    public static double TotalFormasPagoEfectivoDatabase(List<String> codigo, String parametro, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
 
@@ -4585,7 +4587,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT cod_Cliente,SUM(DISTINCT valor_Consignado)AS valor_Consignado FROM recaudos  WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') AND via_Pago='" + parametro + "' GROUP BY idPago HAVING idPago ";
@@ -4611,14 +4613,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRR(String str, String parametro) {
+    public static double TotalFormasPagoAnticipoRR(String str, String parametro, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4645,7 +4647,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoPendientesEfectivo(List<String> id) {
+    public static double TotalFormasPagoPendientesEfectivo(List<String> id, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4657,7 +4659,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4684,7 +4686,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoPendientesEfectivoMultiples(List<String> id, List<String> id2) {
+    public static double TotalFormasPagoPendientesEfectivoMultiples(List<String> id, List<String> id2, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4701,7 +4703,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4731,7 +4733,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoPendientesChequesData(List<String> id) {
+    public static double TotalFormasPagoPendientesChequesData(List<String> id, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4743,7 +4745,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4769,7 +4771,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoPendientesTransferenciaMultiples(List<String> id, List<String> id2) {
+    public static double TotalFormasPagoPendientesTransferenciaMultiples(List<String> id, List<String> id2, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4786,7 +4788,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4815,7 +4817,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoPendientesChequesDataMultiples(List<String> id, List<String> id2) {
+    public static double TotalFormasPagoPendientesChequesDataMultiples(List<String> id, List<String> id2, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4832,7 +4834,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4862,7 +4864,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoPendientes(List<String> id, String numeroRecibo, List<String> id2) {
+    public static double TotalFormasPagoPendientes(List<String> id, String numeroRecibo, List<String> id2, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4879,7 +4881,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4907,7 +4909,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoPendientesMultiples(List<String> id, List<String> numeroRecibo, List<String> id2) {
+    public static double TotalFormasPagoPendientesMultiples(List<String> id, List<String> numeroRecibo, List<String> id2, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4929,7 +4931,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -4958,7 +4960,7 @@ public class DataBaseBO {
     }
 
 
-    public static double DiferenciaFormasPagoPendientes(List<String> id, List<Double> valorPagado) {
+    public static double DiferenciaFormasPagoPendientes(List<String> id, List<Double> valorPagado, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -4975,7 +4977,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5002,14 +5004,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGPendientes(String str) {
+    public static double TotalFormasPagoAnticipoRROGPendientes(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5038,14 +5040,14 @@ public class DataBaseBO {
     }
 
 
-    public static double SumaViasPagoPendientes() {
+    public static double SumaViasPagoPendientes(Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5073,14 +5075,14 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoAnticipoRROG(String str, String nroRecibo) {
+    public static double TotalFormasPagoAnticipoRROG(String str, String nroRecibo, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5114,14 +5116,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGRealizados(String str) {
+    public static double TotalFormasPagoAnticipoRROGRealizados(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5150,14 +5152,14 @@ public class DataBaseBO {
     }
 
 
-    public static double TDiferenciaSumadelTotalDelDOcumento(String str) {
+    public static double TDiferenciaSumadelTotalDelDOcumento(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5190,14 +5192,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotaDifeAfav(String str) {
+    public static double TotaDifeAfav(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5230,14 +5232,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double SaldoAfavor(String str) {
+    public static double SaldoAfavor(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5266,14 +5268,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double SaldoAfavorRecaudosPendientes(String str) {
+    public static double SaldoAfavorRecaudosPendientes(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5302,14 +5304,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalValorConsignado(String str) {
+    public static double TotalValorConsignado(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5341,14 +5343,14 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalValorConsignadoRealizados(String str) {
+    public static double TotalValorConsignadoRealizados(String str, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5378,7 +5380,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGEFec(String str) {
+    public static double TotalFormasPagoAnticipoRROGEFec(String str, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5387,7 +5389,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5417,7 +5419,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGEFecCantidadFac(String str, List<String> idPagos) {
+    public static double TotalFormasPagoAnticipoRROGEFecCantidadFac(String str, List<String> idPagos, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5432,7 +5434,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5462,7 +5464,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double countMetodEfec(String str) {
+    public static double countMetodEfec(String str, Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -5473,7 +5475,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT idPago) FROM recaudosPen WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A'";
@@ -5511,7 +5513,7 @@ public class DataBaseBO {
 
     }
 
-    public static int cuantasEfectivo(List<String> params) {
+    public static int cuantasEfectivo(List<String> params, Context context) {
         int totalFacturas = 0;
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
@@ -5523,7 +5525,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT nro_Recibo) FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'A'";
@@ -5552,7 +5554,7 @@ public class DataBaseBO {
         return totalFacturas;
     }
 
-    public static int cuantasCheque(List<String> params) {
+    public static int cuantasCheque(List<String> params, Context context) {
         int totalFacturas = 0;
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
@@ -5564,7 +5566,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT nro_Recibo) FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B'";
@@ -5594,7 +5596,7 @@ public class DataBaseBO {
     }
 
 
-    public static double countMetodCheq(String str) {
+    public static double countMetodCheq(String str, Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -5605,7 +5607,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT idPago) FROM recaudosPen WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'B'";
@@ -5643,7 +5645,7 @@ public class DataBaseBO {
 
     }
 
-    public static double countMetodTarjeta(String str) {
+    public static double countMetodTarjeta(String str, Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -5654,7 +5656,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT idPago) FROM recaudos WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = 'O'";
@@ -5692,7 +5694,7 @@ public class DataBaseBO {
 
     }
 
-    public static double countMetodTransferencia(String str) {
+    public static double countMetodTransferencia(String str, Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -5703,7 +5705,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT count(DISTINCT idPago) FROM recaudos WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') and via_Pago = '6'";
@@ -5741,7 +5743,7 @@ public class DataBaseBO {
 
     }
 
-    public static double TotalFormasPagoAnticipoRROGCheq(String str) {
+    public static double TotalFormasPagoAnticipoRROGCheq(String str, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5750,7 +5752,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5780,7 +5782,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGTarje(String str) {
+    public static double TotalFormasPagoAnticipoRROGTarje(String str, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5789,7 +5791,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5819,7 +5821,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGTrasnf(String str) {
+    public static double TotalFormasPagoAnticipoRROGTrasnf(String str, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5828,7 +5830,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5858,7 +5860,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static double TotalFormasPagoAnticipoRROGBit(String str) {
+    public static double TotalFormasPagoAnticipoRROGBit(String str, Context context) {
         double valor = 0;
         String viaPago = "";
         String idPago = "";
@@ -5867,7 +5869,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5898,7 +5900,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPagoAnticipo(List<Facturas> codigo, String parametro) {
+    public static double TotalFormasPagoAnticipo(List<Facturas> codigo, String parametro, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
         double precioTotal = 0;
@@ -5911,7 +5913,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -5939,7 +5941,7 @@ public class DataBaseBO {
     }
 
 
-    public static double TotalFormasPago(List<String> codigo, String parametro) {
+    public static double TotalFormasPago(List<String> codigo, String parametro, Context context) {
         double valor = 0;
         SQLiteDatabase db = null;
 
@@ -5950,7 +5952,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT cod_Cliente,SUM(valor_Consignado)AS valor_Consignado FROM recaudos  WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') AND via_Pago='" + parametro + "' GROUP BY docto_Financiero ";
@@ -5976,7 +5978,7 @@ public class DataBaseBO {
         return valor;
     }
 
-    public static List<Cartera> cargarCarteraTipoParametroBusqueda(String parametro, String param, Vector<String> listaItems) {
+    public static List<Cartera> cargarCarteraTipoParametroBusqueda(String parametro, String param, Vector<String> listaItems, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -5985,7 +5987,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -6033,7 +6035,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Cartera> cargarCarteraParametroBusqueda(String parametro, String param, Vector<String> listaItems) {
+    public static List<Cartera> cargarCarteraParametroBusqueda(String parametro, String param, Vector<String> listaItems, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -6042,7 +6044,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora,c.documento_Financiero," +
@@ -6091,7 +6093,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static Vector<MotivosAbono> cargarMotivosAbono(Vector<String> listaItems) {
+    public static Vector<MotivosAbono> cargarMotivosAbono(Vector<String> listaItems, Context context) {
 
 
         Vector<MotivosAbono> listamotivos = new Vector<>();
@@ -6100,7 +6102,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT  Nombre  FROM motivosabono";
@@ -6137,12 +6139,12 @@ public class DataBaseBO {
         return listamotivos;
     }
 
-    public static String cargarCodigobanco(String parametro) {
+    public static String cargarCodigobanco(String parametro, Context context) {
         String codigo = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT Codigo FROM bancos where Nombre ='" + parametro + "' ";
@@ -6150,9 +6152,7 @@ public class DataBaseBO {
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
 
-
                 codigo = cursor.getString(cursor.getColumnIndex("Codigo"));
-
 
             }
             cursor.close();
@@ -6171,19 +6171,17 @@ public class DataBaseBO {
         return codigo;
     }
 
-    public static Vector<FacturasRealizadas> cargarFechaCarteraAnulados(String initialDate, String finalDate, String param) {
-
+    public static Vector<FacturasRealizadas> cargarFechaCarteraAnulados(String initialDate, String finalDate, String param, Context context) {
 
         Vector<FacturasRealizadas> listaCartera = new Vector<>();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,Fecha_recibo,SUM(valor_Pagado) AS valor_Pagado,nro_Recibo FROM recaudosAnulados  WHERE fecha_Consignacion BETWEEN '" + initialDate + "' AND '" + finalDate + "' AND cod_Cliente = '" + param + "'  GROUP BY nro_Recibo";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6197,9 +6195,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6219,7 +6215,7 @@ public class DataBaseBO {
     }
 
 
-    public static Vector<FacturasRealizadas> cargarFechaCarteraRealizados(String initialDate, String finalDate) {
+    public static Vector<FacturasRealizadas> cargarFechaCarteraRealizados(String initialDate, String finalDate, Context context) {
 
 
         Vector<FacturasRealizadas> listaCartera = new Vector<>();
@@ -6227,11 +6223,10 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,cod_Cliente,fecha_Consignacion,SUM(valor_Pagado) AS valor_Pagado,SUM(DISTINCT valor_Consignado) AS valor_Consignado,nro_Recibo FROM recaudosRealizados  WHERE fecha_Consignacion BETWEEN '" + initialDate + "' AND '" + finalDate + "' GROUP BY nro_Recibo";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6247,9 +6242,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6268,8 +6261,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static Vector<Cartera> cargarFechaCartera(String parametro, Vector<String> listaItems, String initialDate, String finalDate) {
-
+    public static Vector<Cartera> cargarFechaCartera(String parametro, Vector<String> listaItems, String initialDate, String finalDate, Context context) {
 
         Vector<Cartera> listaCartera = new Vector<>();
         initialDate = initialDate.replace("-", "");
@@ -6277,7 +6269,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT  c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora,c.documento_Financiero," +
@@ -6285,7 +6277,6 @@ public class DataBaseBO {
                     "LEFT JOIN RecaudosPendientes r ON r.docto_Financiero = c.Documento_Financiero " +
                     "WHERE c.cliente = '" + parametro + "' AND c.fechavecto BETWEEN '" + initialDate + "' AND '" + finalDate + "' " +
                     " AND r.docto_Financiero IS NULL ORDER BY c.fechavecto ASC";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6304,9 +6295,7 @@ public class DataBaseBO {
                     listaItems.add(cartera.documento + "-" + cartera.concepto + "-" + cartera.fechaVencto + "-" +
                             cartera.saldo + "-" + cartera.dias + "-");
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6326,20 +6315,17 @@ public class DataBaseBO {
     }
 
 
-    public static Vector<Cartera> cargarTipoCartera(Vector<String> listaItems) {
-
+    public static Vector<Cartera> cargarTipoCartera(Vector<String> listaItems, Context context) {
 
         Vector<Cartera> listaCartera = new Vector<>();
-
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT DISTINCT  c.tipo  FROM cartera c INNER JOIN clientes cli ON c.cliente = cli.codigo WHERE c.cliente = cli.codigo ";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6354,7 +6340,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -6372,21 +6357,18 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static Vector<CuentasBanco> cargarCuentasBancos(Vector<String> listaItems, String parametro) {
-
+    public static Vector<CuentasBanco> cargarCuentasBancos(Vector<String> listaItems, String parametro, Context context) {
 
         Vector<CuentasBanco> listaCuentasBancos = new Vector<>();
-
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT NumeroCuenta  FROM CuentasBancarias  WHERE CodigoBanco = '" + parametro + "'";
 
-
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -6397,9 +6379,7 @@ public class DataBaseBO {
                     listaCuentasBancos.add(bancos);
                     listaItems.add(bancos.NombreCuenta);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6418,21 +6398,18 @@ public class DataBaseBO {
         return listaCuentasBancos;
     }
 
-    public static Vector<CuentasBanco> cargarCuentasBancosSolo(Vector<String> listaItems) {
-
+    public static Vector<CuentasBanco> cargarCuentasBancosSolo(Vector<String> listaItems, Context context) {
 
         Vector<CuentasBanco> listaCuentasBancos = new Vector<>();
-
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT b.NumeroCuenta  FROM CuentasBancarias b ORDER BY b.NumeroCuenta DESC";
 
-
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -6445,7 +6422,6 @@ public class DataBaseBO {
 
 
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6464,20 +6440,17 @@ public class DataBaseBO {
         return listaCuentasBancos;
     }
 
-    public static Vector<Bancos> cargarMotivosAnulacion(Vector<String> listaItems) {
-
+    public static Vector<Bancos> cargarMotivosAnulacion(Vector<String> listaItems, Context context) {
 
         Vector<Bancos> listaBancos = new Vector<>();
-
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT b.descripcion,b.codigo_causal  FROM MotivosAnulacion b ORDER BY b.codigo_causal ASC";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6490,9 +6463,7 @@ public class DataBaseBO {
                     listaBancos.add(bancos);
                     listaItems.add(bancos.nombre_Banco);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6511,20 +6482,17 @@ public class DataBaseBO {
         return listaBancos;
     }
 
-    public static Vector<Bancos> cargarTipoBancos(Vector<String> listaItems) {
-
+    public static Vector<Bancos> cargarTipoBancos(Vector<String> listaItems, Context context) {
 
         Vector<Bancos> listaBancos = new Vector<>();
-
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT b.Nombre  FROM bancos b ORDER BY b.Nombre DESC";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6539,7 +6507,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -6557,8 +6524,7 @@ public class DataBaseBO {
         return listaBancos;
     }
 
-    public static List<FacturasRealizadas> cargarClientesBusquedaFacRealizadas(String parametro) {
-
+    public static List<FacturasRealizadas> cargarClientesBusquedaFacRealizadas(String parametro, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
         String parametro2 = "";
@@ -6566,7 +6532,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -6575,7 +6541,6 @@ public class DataBaseBO {
                     "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado " +
                     "From recaudosRealizados WHERE cod_Cliente LIKE '" + '%' + parametro + '%' + "'  OR nro_Recibo LIKE '" + '%' + parametro + '%' + "' GROUP BY nro_Recibo ";
 
-
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -6630,8 +6595,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<FacturasRealizadas> cargarClientesBusquedaFacAnulados(String parametro) {
-
+    public static List<FacturasRealizadas> cargarClientesBusquedaFacAnulados(String parametro, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
         String parametro2 = "";
@@ -6639,7 +6603,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
@@ -6648,7 +6612,6 @@ public class DataBaseBO {
                     "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,Estado " +
                     "From recaudosAnulados WHERE cod_Cliente LIKE '" + '%' + parametro + '%' + "'  OR nro_Recibo LIKE '" + '%' + parametro + '%' + "' GROUP BY nro_Recibo ";
 
-
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -6681,9 +6644,7 @@ public class DataBaseBO {
                     pendientes.status = cursor.getString(cursor.getColumnIndex("Estado"));
                     listaFacturasRealizadas.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6703,8 +6664,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<ClienteSincronizado> cargarClientesBusqueda(String parametro, Vector<String> listaItems) {
-
+    public static List<ClienteSincronizado> cargarClientesBusqueda(String parametro, Vector<String> listaItems, Context context) {
 
         List<ClienteSincronizado> listaClientes = new ArrayList<>();
         String parametro2 = "";
@@ -6712,11 +6672,10 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT codigo,nombre,razonsocial,nit,email,telefono,a.Balance,a.ProBalance,c.cupo,c.condicionpago FROM clientes  c LEFT JOIN AccountManagement a ON c.codigo = a.cliente  WHERE nombre LIKE '" + '%' + parametro + '%' + "' OR codigo LIKE '" + '%' + parametro + '%' + "'  ";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6740,7 +6699,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -6758,12 +6716,12 @@ public class DataBaseBO {
         return listaClientes;
     }
 
-    public static String cargarMoneda() {
+    public static String cargarMoneda(Context context) {
         String descripcion = "";
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT descripcion,empresa  FROM moneda ";
@@ -6771,9 +6729,7 @@ public class DataBaseBO {
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
 
-
                 descripcion = cursor.getString(cursor.getColumnIndex("descripcion"));
-
 
             }
             cursor.close();
@@ -6792,7 +6748,7 @@ public class DataBaseBO {
         return descripcion;
     }
 
-    public static List<String> cargarViaFormasdePago(List<String> documento, String numeroRecibo) {
+    public static List<String> cargarViaFormasdePago(List<String> documento, String numeroRecibo, Context context) {
 
         List<String> listaviaPagos = new ArrayList<>();
 
@@ -6805,7 +6761,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT r.via_Pago  FROM recaudosPendientes r  WHERE r.nro_Recibo =  '" + numeroRecibo + "' AND r.via_Pago IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY r.via_Pago ORDER BY r.via_Pago DESC ";
@@ -6839,13 +6795,13 @@ public class DataBaseBO {
         return listaviaPagos;
     }
 
-    public static String cargarViaFormasdePagoEmpresa(String busqeda) {
+    public static String cargarViaFormasdePagoEmpresa(String busqeda, Context context) {
         String via = "";
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT LetraInicial  FROM MetodosDePago  WHERE LetraInicial = '" + busqeda + "'";
@@ -6853,9 +6809,7 @@ public class DataBaseBO {
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
 
-
                 via = cursor.getString(cursor.getColumnIndex("LetraInicial"));
-
 
             }
             cursor.close();
@@ -6875,19 +6829,17 @@ public class DataBaseBO {
     }
 
 
-    public static List<ClienteSincronizado> cargarClientes(Vector<String> listaItems) {
-
+    public static List<ClienteSincronizado> cargarClientes(Vector<String> listaItems, Context context) {
 
         List<ClienteSincronizado> listaClientes = new ArrayList<>();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT codigo,nombre,razonsocial,nit,email,telefono,condicionpago,vendedor1,a.Balance,a.ProBalance,c.cupo  FROM clientes c LEFT JOIN AccountManagement a ON c.codigo = a.cliente ";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6913,7 +6865,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -6931,7 +6882,7 @@ public class DataBaseBO {
         return listaClientes;
     }
 
-    public static List<Cartera> cargarCartera(Vector<String> listaItems) {
+    public static List<Cartera> cargarCartera(Vector<String> listaItems, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -6939,11 +6890,10 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT documento,tipo,fechavecto,saldo,diasmora  FROM cartera";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -6959,9 +6909,7 @@ public class DataBaseBO {
                     listaItems.add(cartera.documento + "-" + cartera.concepto + "-" + cartera.fechaVencto + "-" +
                             cartera.saldo + "-" + cartera.dias + "-");
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -6981,7 +6929,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Cartera> cargarCarteraCompleta(String parametro, Vector<String> listaItems) {
+    public static List<Cartera> cargarCarteraCompleta(String parametro, Vector<String> listaItems, Context context) {
 
         int idUnico = 0;
         List<Cartera> listaCartera = new ArrayList<>();
@@ -6989,7 +6937,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 //            String query = "SELECT c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora,c.documento_Financiero," +
@@ -7056,7 +7004,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Cartera> cargarCarteraParametro(String parametro, String param, Vector<String> listaItems) {
+    public static List<Cartera> cargarCarteraParametro(String parametro, String param, Vector<String> listaItems, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -7064,7 +7012,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT c.documento,c.tipo,c.fechavecto,c.saldo,c.diasmora  FROM cartera c INNER JOIN clientes cli ON c.cliente = cli.codigo  WHERE c.cliente = '" + param + "'ORDER BY  c.'" + parametro + "' DESC";
@@ -7087,7 +7035,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -7104,11 +7051,9 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacturasParametroReciboPendientes(String param, List<Facturas> idpago, Vector<String> listaItems, String consecutivo) {
-
+    public static List<Facturas> cargarFacturasParametroReciboPendientes(String param, List<Facturas> idpago, Vector<String> listaItems, String consecutivo, Context context) {
 
         List<Facturas> listaCartera = new ArrayList<>();
-
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -7118,13 +7063,11 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query = "SELECT c.cod_Cliente,c.clase_Documento," +
                     "c.valor_Consignado,c.via_Pago,c.idPago, banco, cuenta_Bancaria, Iden_Foto  FROM recaudosPen c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.cod_Cliente = '" + param + "' AND c.nro_recibo = '" + consecutivo + "' GROUP BY c.idPago ";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -7148,7 +7091,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -7166,11 +7108,9 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarFacturasParametroRecibo(String param, List<Facturas> idpago, Vector<String> listaItems) {
-
+    public static List<Facturas> cargarFacturasParametroRecibo(String param, List<Facturas> idpago, Vector<String> listaItems, Context context) {
 
         List<Facturas> listaCartera = new ArrayList<>();
-
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -7180,13 +7120,12 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
             String query = "SELECT c.cod_Cliente,c.clase_Documento," +
                     "c.valor_Consignado,c.via_Pago,c.idPago  FROM recaudos c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.cod_Cliente = '" + param + "' GROUP BY c.idPago ";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -7207,7 +7146,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -7224,8 +7162,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Pendientes> cargarFacturasParametroPendientesEfectivo(List<String> parametro) {
-
+    public static List<Pendientes> cargarFacturasParametroPendientesEfectivo(List<String> parametro, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -7237,9 +7174,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query = "SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado,saldo_favor,cuenta_Bancaria," +
@@ -7247,7 +7183,6 @@ public class DataBaseBO {
                     "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid,consecutivo, observacionesmotivo, Fecha_recibo  " +
                     "FROM recaudosPendientes c WHERE  c.idPago IN ('" + str.substring(1, str.length() - 2) + "') AND c.via_Pago = 'A' " +
                     "order BY c.valor_Consignado DESC ";
-
 
             Cursor cursor = db.rawQuery(query, null);
 
@@ -7286,9 +7221,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7306,8 +7239,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Pendientes> cargarFacturasParametroPendientesEfectivoMultiples(List<String> parametro) {
-
+    public static List<Pendientes> cargarFacturasParametroPendientesEfectivoMultiples(List<String> parametro, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -7319,7 +7251,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7374,9 +7306,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7394,7 +7324,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static Double cargarFacturasParametroPendientesEfectivoMultiplesValorPendiente(List<String> parametro) {
+    public static Double cargarFacturasParametroPendientesEfectivoMultiplesValorPendiente(List<String> parametro, Context context) {
 
         Double preciosPendientesMultiples = 0.0;
 
@@ -7406,9 +7336,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query = "SELECT *,sum(valorFinal) as valor_Consignado FROM (SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado,valor_Consignado as valorFinal,saldo_favor,cuenta_Bancaria," +
@@ -7423,7 +7352,6 @@ public class DataBaseBO {
                 do {
                     preciosPendientesMultiples += cursor.getDouble(cursor.getColumnIndex("valor_Consignado"));
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7441,7 +7369,7 @@ public class DataBaseBO {
         return preciosPendientesMultiples;
     }
 
-    public static Double cargarFacturasParametroPendientesTransferenciaMultiplesValorPendiente(List<String> parametro) {
+    public static Double cargarFacturasParametroPendientesTransferenciaMultiplesValorPendiente(List<String> parametro, Context context) {
 
         Double preciosPendientesMultiples = 0.0;
 
@@ -7453,7 +7381,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7488,8 +7416,7 @@ public class DataBaseBO {
         return preciosPendientesMultiples;
     }
 
-    public static List<Pendientes> cargarRazon(List<String> parametro) {
-
+    public static List<Pendientes> cargarRazon(List<String> parametro, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -7501,12 +7428,10 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-
             String query = "SELECT Razonsocial FROM recaudosPendientes c INNER JOIN clientes cli ON c.cod_cliente = cli.codigo where cli.codigo  IN ('" + str.substring(1, str.length() - 2) + "') GROUP by c.cod_cliente";
-
 
             Cursor cursor = db.rawQuery(query, null);
 
@@ -7515,12 +7440,9 @@ public class DataBaseBO {
                     Pendientes pendientes = new Pendientes();
                     pendientes.nombrePropietario = cursor.getString(cursor.getColumnIndex("Razonsocial"));
 
-
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7539,7 +7461,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasParametroPendientesCheque(List<String> parametro) {
+    public static List<Pendientes> cargarFacturasParametroPendientesCheque(List<String> parametro, Context context) {
 
 
         List<Pendientes> listaCartera = new ArrayList<>();
@@ -7552,7 +7474,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7619,8 +7541,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Pendientes> cargarFacturasParametroPendientesChequeMultiples(List<String> parametro) {
-
+    public static List<Pendientes> cargarFacturasParametroPendientesChequeMultiples(List<String> parametro, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -7632,9 +7553,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
 //            String query = "SELECT *,sum(valorFinal) as valor_Consignado FROM (SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
 //                    "valor_Documento,moneda,valor_Pagado,valor_Consignado as valorFinal,saldo_favor,cuenta_Bancaria," +
@@ -7685,9 +7605,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7705,7 +7623,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static Double cargarFacturasParametroPendientesChequeMultiplesValorPendiente(List<String> parametro) {
+    public static Double cargarFacturasParametroPendientesChequeMultiplesValorPendiente(List<String> parametro, Context context) {
 
         Double preciosPendientesMultiples = 0.0;
 
@@ -7717,7 +7635,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7727,7 +7645,6 @@ public class DataBaseBO {
                     "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario,consecutivoid, consecutivo  FROM recaudosPendientes c WHERE    c.nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') " +
                     "AND c.via_Pago = 'B' GROUP BY idPago order BY c.valor_Consignado DESC) GROUP BY idPago";
 
-
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
@@ -7735,7 +7652,6 @@ public class DataBaseBO {
                     preciosPendientesMultiples += cursor.getDouble(cursor.getColumnIndex("valor_Consignado"));
 
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7754,7 +7670,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasParametroPendientesEnRecaudos(List<String> parametro, String numeroRecibo) {
+    public static List<Pendientes> cargarFacturasParametroPendientesEnRecaudos(List<String> parametro, String numeroRecibo, Context context) {
 
 
         List<Pendientes> listaCartera = new ArrayList<>();
@@ -7767,7 +7683,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7832,8 +7748,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasParametroPendientes(List<String> parametro, String numeroRecibo, List<String> parametro2) {
-
+    public static List<Pendientes> cargarFacturasParametroPendientes(List<String> parametro, String numeroRecibo, List<String> parametro2, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -7841,7 +7756,6 @@ public class DataBaseBO {
         for (String fruit : parametro) {
             str += "\'" + fruit + "\',";
         }
-
 
         String str1 = "";
         for (String fruit : parametro2) {
@@ -7851,9 +7765,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query = "SELECT *,SUM(valorFinal) as valor_Consignado FROM (SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado AS valor_Pagado,valor_Consignado as valorFinal,cuenta_Bancaria," +
@@ -7862,9 +7775,7 @@ public class DataBaseBO {
                     "FROM recaudosPendientes c WHERE nro_Recibo ='" + numeroRecibo + "' AND  c.idPago IN ('" + str.substring(1, str.length() - 2) + "')" +
                     " and c.idPago NOT IN ('" + str1.substring(1, str1.length() - 2) + "') and valor_Pagado != 0  group by idPago order BY c.valor_Consignado DESC) group by idPago";
 
-
             Cursor cursor = db.rawQuery(query, null);
-
 
             if (cursor.moveToFirst()) {
                 do {
@@ -7897,9 +7808,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -7917,7 +7826,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Pendientes> cargarFacturasParametroPendientesTemporal(List<String> parametro) {
+    public static List<Pendientes> cargarFacturasParametroPendientesTemporal(List<String> parametro, Context context) {
 
 
         List<Pendientes> listaCartera = new ArrayList<>();
@@ -7930,7 +7839,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -7997,7 +7906,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasParametroPendientesTemporalVarias(List<String> parametro, List<String> numeroRecibo) {
+    public static List<Pendientes> cargarFacturasParametroPendientesTemporalVarias(List<String> parametro, List<String> numeroRecibo, Context context) {
 
 
         List<Pendientes> listaCartera = new ArrayList<>();
@@ -8016,7 +7925,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8084,8 +7993,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Pendientes> cargarFacturasParametroPendientesMultiples(List<String> parametro, List<String> numeroRecibo, List<String> parametro2) {
-
+    public static List<Pendientes> cargarFacturasParametroPendientesMultiples(List<String> parametro, List<String> numeroRecibo, List<String> parametro2, Context context) {
 
         List<Pendientes> listaCartera = new ArrayList<>();
 
@@ -8106,9 +8014,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query = "SELECT *,SUM(valorFinal) as valor_Consignado FROM (SELECT clase_Documento,sociedad,cod_Cliente,cod_Vendedor,referencia,fecha_Documento,fecha_Consignacion," +
                     "valor_Documento,moneda,valor_Pagado AS valor_Pagado, valor_Consignado as valorFinal,cuenta_Bancaria," +
@@ -8116,7 +8023,6 @@ public class DataBaseBO {
                     "usuario,operacion_Cme,idPago,sincronizado,banco,Numero_de_cheque,Nombre_del_propietario, observacionesmotivo, consecutivo as consecutivo, consecutivoid as consecutivoid  " +
                     "FROM recaudosPendientes c WHERE c.nro_Recibo IN ('" + str1.substring(1, str1.length() - 2) + "')  " +
                     "and c.idPago NOT IN ('" + str2.substring(1, str2.length() - 2) + "')  GROUP BY c.via_Pago,idPago order BY c.valor_Pagado DESC) GROUP BY via_Pago";
-
 
             System.out.println("ffff" + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -8154,9 +8060,7 @@ public class DataBaseBO {
 
                     listaCartera.add(pendientes);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -8175,8 +8079,7 @@ public class DataBaseBO {
     }
 
 
-    public static List<Facturas> cargarFacturasParametroIDSPen(List<String> parametro) {
-
+    public static List<Facturas> cargarFacturasParametroIDSPen(List<String> parametro, Context context) {
 
         List<Facturas> listaCartera = new ArrayList<>();
 
@@ -8188,12 +8091,10 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-
             String query = "SELECT referencia,fecha_Consignacion,cuenta_Bancaria,observaciones,banco,Numero_de_cheque From recaudosPen WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "')";
-
 
             Cursor cursor = db.rawQuery(query, null);
 
@@ -8210,9 +8111,7 @@ public class DataBaseBO {
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     listaCartera.add(cartera);
 
-
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -8230,8 +8129,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacturasParametroIDS(List<String> parametro) {
-
+    public static List<Facturas> cargarFacturasParametroIDS(List<String> parametro, Context context) {
 
         List<Facturas> listaCartera = new ArrayList<>();
 
@@ -8243,7 +8141,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8286,8 +8184,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Facturas> cargarFacturasParametro(List<Facturas> parametro, Vector<String> listaItems, String consecutivo) {
-
+    public static List<Facturas> cargarFacturasParametro(List<Facturas> parametro, Vector<String> listaItems, String consecutivo, Context context) {
 
         List<Facturas> listaCartera = new ArrayList<>();
 
@@ -8299,7 +8196,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8330,7 +8227,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -8347,19 +8243,17 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Cartera> cargarCarteraFacturaParametro(String parametro, Vector<String> listaItems) {
-
+    public static List<Cartera> cargarCarteraFacturaParametro(String parametro, Vector<String> listaItems, Context context) {
 
         List<Cartera> listaCartera = new ArrayList<>();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT c.documento,c.valor  FROM recaudos_formapago c WHERE c.documento =  c.'" + parametro + "' DESC";
-
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -8377,7 +8271,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -8394,19 +8287,18 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static void eliminarFacturaCartera(List<String> documentoFactura) {
+    public static void eliminarFacturaCartera(List<String> documentoFactura, Context context) {
 
         String str = "";
         for (String fruit : documentoFactura) {
             str += "\'" + fruit + "\',";
         }
 
-
         SQLiteDatabase db = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM cartera WHERE documento IN('" + str.substring(1, str.length() - 2) + "')");
@@ -8425,7 +8317,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalAnticiPenD(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalAnticiPenD(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8435,7 +8327,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8455,7 +8347,7 @@ public class DataBaseBO {
     }
 
 
-    public static void eliminarRecaudosTotalAntici(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalAntici(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8465,7 +8357,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8484,7 +8376,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalPendientesRecaudos(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalPendientesRecaudos(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8494,7 +8386,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8513,7 +8405,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarConsecutivoId(String documentoFactura) {
+    public static void eliminarConsecutivoId(String documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8521,7 +8413,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM consecutivoID WHERE vendedor ='" + documentoFactura + "'");
@@ -8540,15 +8432,14 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarConsecutivoPaquete(String documentoFactura) {
+    public static void eliminarConsecutivoPaquete(String documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
 
-
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM consecutivopaquete WHERE vendedor ='" + documentoFactura + "'");
@@ -8567,7 +8458,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosRealziadosNumRe(List<String> documentoFactura) {
+    public static void eliminarRecaudosRealziadosNumRe(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8577,7 +8468,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8597,7 +8488,7 @@ public class DataBaseBO {
     }
 
 
-    public static void eliminarRecaudosTotalPendientesNumRe(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalPendientesNumRe(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8607,7 +8498,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8626,7 +8517,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalPendientes(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalPendientes(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8636,7 +8527,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8655,7 +8546,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalPendiente(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalPendiente(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8665,7 +8556,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8685,7 +8576,7 @@ public class DataBaseBO {
     }
 
 
-    public static void eliminarRecaudosTotal(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotal(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8695,7 +8586,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8714,7 +8605,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalAnticipo(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalAnticipo(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8724,7 +8615,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8743,7 +8634,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosTotalPen(List<String> documentoFactura) {
+    public static void eliminarRecaudosTotalPen(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -8753,7 +8644,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -8773,17 +8664,17 @@ public class DataBaseBO {
     }
 
 
-    public static void eliminarRecaudosPendientes(String documentoFactura) {
+    public static void eliminarRecaudosPendientes(String documentoFactura, Context context) {
 
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudosPen WHERE idPago = '" + documentoFactura + "'");
@@ -8809,17 +8700,17 @@ public class DataBaseBO {
     }
 
 
-    public static void eliminarRecaudos(String documentoFactura) {
+    public static void eliminarRecaudos(String documentoFactura, Context context) {
 
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudos WHERE idPago = '" + documentoFactura + "'");
@@ -8841,7 +8732,7 @@ public class DataBaseBO {
         }
     }
 
-    public static Cliente cargarCliente(String cod_cliente) {
+    public static Cliente cargarCliente(String cod_cliente, Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -8849,7 +8740,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8884,7 +8775,7 @@ public class DataBaseBO {
         return cliente;
     }
 
-    public static Cartera cargarCarteraClienteRecaudosRealizados(List<String> cod_cliente) {
+    public static Cartera cargarCarteraClienteRecaudosRealizados(List<String> cod_cliente, Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -8902,7 +8793,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8930,7 +8821,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static Cartera cargarCarteraClienteRecaudosPendientes(List<String> cod_cliente) {
+    public static Cartera cargarCarteraClienteRecaudosPendientes(List<String> cod_cliente, Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -8948,7 +8839,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -8976,7 +8867,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static Cartera cargarCarteraCliente(List<String> cod_cliente) {
+    public static Cartera cargarCarteraCliente(List<String> cod_cliente, Context context) {
         String nombre = "";
         SQLiteDatabase db = null;
         SQLiteDatabase dbtemp = null;
@@ -8994,7 +8885,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -9022,7 +8913,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static Facturas getImpresionClienteRecaudosRealizados(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static Facturas getImpresionClienteRecaudosRealizados(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
         SQLiteDatabase db = null;
         Facturas cartera = null;
 
@@ -9033,8 +8924,7 @@ public class DataBaseBO {
 
         try {
 
-
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT  cod_Cliente,clase_Documento,valor_Consignado,via_Pago,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,SUM(valor_Documento) as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,docto_Financiero,Fecha_recibo " +
@@ -9042,7 +8932,6 @@ public class DataBaseBO {
                     "FROM recaudos WHERE cod_Cliente = '" + param + "' UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,via_Pago,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,docto_Financiero,Fecha_recibo " +
                     "FROM recaudosRealizados WHERE cod_Cliente = '" + param + "')T WHERE nro_Recibo = '" + numeroRecibo + "'  GROUP BY docto_Financiero";
 
-
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -9061,7 +8950,6 @@ public class DataBaseBO {
                     cartera.fecha = cursor.getString(cursor.getColumnIndex("fecha_Documento"));
                     cartera.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
-
                 }
                 while (cursor.moveToNext());
             }
@@ -9075,7 +8963,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static Facturas getImpresionClienteRecaudosPendientes(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static Facturas getImpresionClienteRecaudosPendientes(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
         SQLiteDatabase db = null;
         Facturas cartera = null;
 
@@ -9086,8 +8974,7 @@ public class DataBaseBO {
 
         try {
 
-
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT  cod_Cliente,clase_Documento,valor_Consignado,via_Pago,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,SUM(valor_Documento) as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,docto_Financiero, Fecha_recibo \n" +
@@ -9095,7 +8982,6 @@ public class DataBaseBO {
                     "FROM recaudos WHERE cod_Cliente = '" + param + "' UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,via_Pago,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,docto_Financiero,Fecha_recibo \n" +
                     "FROM recaudosPendientes WHERE cod_Cliente = '" + param + "')T WHERE nro_Recibo = '" + numeroRecibo + "' GROUP BY docto_Financiero";
 
-
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -9114,7 +9000,6 @@ public class DataBaseBO {
                     cartera.fecha = cursor.getString(cursor.getColumnIndex("fecha_Documento"));
                     cartera.fechaRecibo = cursor.getString(cursor.getColumnIndex("Fecha_recibo"));
 
-
                 }
                 while (cursor.moveToNext());
             }
@@ -9128,7 +9013,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static Facturas getImpresionCliente(String param, List<Facturas> idpago) {
+    public static Facturas getImpresionCliente(String param, List<Facturas> idpago, Context context) {
         SQLiteDatabase db = null;
         Facturas cartera = null;
 
@@ -9139,8 +9024,7 @@ public class DataBaseBO {
 
         try {
 
-
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT  cod_Cliente,clase_Documento,valor_Consignado,via_Pago,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,SUM(valor_Documento) as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,docto_Financiero \n" +
@@ -9166,7 +9050,6 @@ public class DataBaseBO {
                     cartera.documentoFinanciero = cursor.getString(cursor.getColumnIndex("docto_Financiero"));
                     cartera.fecha = cursor.getString(cursor.getColumnIndex("fecha_Documento"));
 
-
                 }
                 while (cursor.moveToNext());
             }
@@ -9179,7 +9062,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static ArrayList<Facturas> getImpresionFactura(String param, List<Facturas> idpago) {
+    public static ArrayList<Facturas> getImpresionFactura(String param, List<Facturas> idpago, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9189,7 +9072,7 @@ public class DataBaseBO {
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             String query = "SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento,SUM(DISTINCT valor_consignado) as valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
@@ -9231,7 +9114,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Facturas> getImpresionFacturaRealizados(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static ArrayList<Facturas> getImpresionFacturaRealizados(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9241,8 +9124,9 @@ public class DataBaseBO {
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento,SUM(DISTINCT valor_consignado) as valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
@@ -9269,7 +9153,6 @@ public class DataBaseBO {
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     cartera.fechaConsignacion = cursor.getString(cursor.getColumnIndex("fecha_Documento"));
 
-
                     listaCabecera.add(cartera);
                 }
                 while (cursor.moveToNext());
@@ -9284,7 +9167,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Facturas> getImpresionFacturaPendientes(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static ArrayList<Facturas> getImpresionFacturaPendientes(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9294,13 +9177,13 @@ public class DataBaseBO {
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento,SUM(DISTINCT valor_consignado) as valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM recaudosPendientes WHERE cod_Cliente = '" + param + "') T WHERE nro_Recibo = '" + numeroRecibo + "' GROUP BY idPago,via_Pago";
-
 
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -9322,7 +9205,6 @@ public class DataBaseBO {
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     cartera.fechaConsignacion = cursor.getString(cursor.getColumnIndex("fecha_Documento"));
 
-
                     listaCabecera.add(cartera);
                 }
                 while (cursor.moveToNext());
@@ -9337,7 +9219,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Facturas> getImpresionFacturaHechasRecaudosRealizados(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static ArrayList<Facturas> getImpresionFacturaHechasRecaudosRealizados(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9347,13 +9229,13 @@ public class DataBaseBO {
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT DISTINCT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero,observaciones " +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero,observaciones " +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero,observaciones " +
                     "FROM recaudosRealizados WHERE cod_Cliente = '" + param + "') T WHERE nro_Recibo = '" + numeroRecibo + "' GROUP BY docto_Financiero,valor_Documento ORDER BY valor_Documento DESC ";
-
 
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -9377,7 +9259,6 @@ public class DataBaseBO {
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     cartera.observaciones = cursor.getString(cursor.getColumnIndex("observaciones"));
 
-
                     listaCabecera.add(cartera);
                 }
                 while (cursor.moveToNext());
@@ -9392,7 +9273,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Facturas> getImpresionFacturaHechasRecaudosPendientes(String param, List<Facturas> idpago, String numeroRecibo) {
+    public static ArrayList<Facturas> getImpresionFacturaHechasRecaudosPendientes(String param, List<Facturas> idpago, String numeroRecibo, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9402,8 +9283,9 @@ public class DataBaseBO {
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT DISTINCT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero, observaciones \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero, observaciones \n" +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero, observaciones \n" +
@@ -9432,7 +9314,6 @@ public class DataBaseBO {
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
                     cartera.observaciones = cursor.getString(cursor.getColumnIndex("observaciones"));
 
-
                     listaCabecera.add(cartera);
                 }
                 while (cursor.moveToNext());
@@ -9447,7 +9328,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Facturas> getImpresionFacturaHechas(String param, List<Facturas> idpago) {
+    public static ArrayList<Facturas> getImpresionFacturaHechas(String param, List<Facturas> idpago, Context context) {
 
         String str = "";
         for (Facturas fruit : idpago) {
@@ -9456,14 +9337,15 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         Facturas cartera = null;
         ArrayList<Facturas> listaCabecera = new ArrayList<Facturas>();
+
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT DISTINCT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento as valor_Documento,SUM(valor_Pagado) as valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero \n" +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque,docto_Financiero \n" +
                     "FROM recaudosPen WHERE cod_Cliente = '" + param + "') T GROUP BY docto_Financiero,valor_Documento ORDER BY valor_Documento DESC ";
-
 
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -9486,7 +9368,6 @@ public class DataBaseBO {
                     cartera.banco = cursor.getString(cursor.getColumnIndex("banco"));
                     cartera.numeroCheque = cursor.getString(cursor.getColumnIndex("Numero_de_cheque"));
 
-
                     listaCabecera.add(cartera);
                 }
                 while (cursor.moveToNext());
@@ -9500,7 +9381,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Cartera> getImpresionCarteraRecaudosRealizados(List<String> idpago) {
+    public static ArrayList<Cartera> getImpresionCarteraRecaudosRealizados(List<String> idpago, Context context) {
 
         String str = "";
         for (String fruit : idpago) {
@@ -9510,10 +9391,10 @@ public class DataBaseBO {
         Cartera cartera = null;
         ArrayList<Cartera> listaCabecera = new ArrayList<Cartera>();
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-            String query = "SELECT Documento FROM recaudosRealizados where docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY valor_Documento ORDER BY valor_Documento Desc ";
 
+            String query = "SELECT Documento FROM recaudosRealizados where docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY valor_Documento ORDER BY valor_Documento Desc ";
 
             System.out.println("Impresion infoCliente Recaudos Realizados---> " + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -9544,7 +9425,7 @@ public class DataBaseBO {
         }
     }
 
-    public static ArrayList<Cartera> getImpresionCarteraRecaudosPendientes(List<String> idpago) {
+    public static ArrayList<Cartera> getImpresionCarteraRecaudosPendientes(List<String> idpago, Context context) {
 
         String str = "";
         for (String fruit : idpago) {
@@ -9553,9 +9434,12 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         Cartera cartera = null;
         ArrayList<Cartera> listaCabecera = new ArrayList<Cartera>();
+
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
             String query = "SELECT Documento FROM recaudosPendientes where docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY valor_Documento ORDER BY valor_Documento Desc ";
 
 
@@ -9581,7 +9465,7 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static ArrayList<Cartera> getImpresionCartera(List<String> idpago) {
+    public static ArrayList<Cartera> getImpresionCartera(List<String> idpago, Context context) {
 
         String str = "";
         for (String fruit : idpago) {
@@ -9590,11 +9474,13 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         Cartera cartera = null;
         ArrayList<Cartera> listaCabecera = new ArrayList<Cartera>();
-        try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
-            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-            String query = "SELECT Documento FROM cartera where Documento_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY saldo ORDER BY saldo Desc ";
 
+        try {
+
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
+            String query = "SELECT Documento FROM cartera where Documento_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY saldo ORDER BY saldo Desc ";
 
             System.out.println("Impresion infoCliente---> " + query);
             Cursor cursor = db.rawQuery(query, null);
@@ -9617,21 +9503,20 @@ public class DataBaseBO {
         return listaCabecera;
     }
 
-    public static List<Dias> cargarDias(String parametro, Vector<String> listaItems) {
-
+    public static List<Dias> cargarDias(String parametro, Vector<String> listaItems, Context context) {
 
         List<Dias> listadias = new ArrayList<>();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT r.codigo,r.diavisita,c.codigo,c.nombre,c.razonsocial,c.nit,c.email,c.telefono,c.condicionpago,c.vendedor1,a.Balance,a.ProBalance From clientes c INNER JOIN rutero r ON c.codigo = r.codigo LEFT JOIN AccountManagement a ON c.codigo = a.cliente WHERE r.DIAVISITA = '" + parametro + "'";
 
-
             Cursor cursor = db.rawQuery(query, null);
+
             if (cursor.moveToFirst()) {
                 do {
                     Dias dias = new Dias();
@@ -9653,7 +9538,6 @@ public class DataBaseBO {
 
                 } while (cursor.moveToNext());
 
-
             }
             cursor.close();
 
@@ -9670,13 +9554,13 @@ public class DataBaseBO {
         return listadias;
     }
 
-    public static void eliminarCliente(String codigoClienteAEliminar) {
+    public static void eliminarCliente(String codigoClienteAEliminar, Context context) {
 
         SQLiteDatabase db = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM clientes WHERE Codigo = '" + codigoClienteAEliminar + "'");
@@ -9700,15 +9584,15 @@ public class DataBaseBO {
      *
      * @param documento documento del cobro programado a eliminar
      */
-    public static boolean eliminarCobroProgramado(String documento) {
+    public static boolean eliminarCobroProgramado(String documento, Context context) {
 
         boolean respuesta = false;
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -9746,13 +9630,13 @@ public class DataBaseBO {
      * @param codigo codigo del cliente al cual se le calcula la cartera
      * @return valor de la cartera del cliente
      */
-    public static double obtenerCarteraCliente(String codigo) {
+    public static double obtenerCarteraCliente(String codigo, Context context) {
 
         double cartera = 0;
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT SUM(saldo) AS valorCartera FROM cartera WHERE cliente='" + codigo + "'";
@@ -9777,7 +9661,7 @@ public class DataBaseBO {
         return cartera;
     }
 
-    public static List<String> obtenerListaVendedorCartera(String codigoCliente) {
+    public static List<String> obtenerListaVendedorCartera(String codigoCliente, Context context) {
 
         String vendedor;
         SQLiteDatabase db = null;
@@ -9785,7 +9669,7 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
@@ -9831,12 +9715,12 @@ public class DataBaseBO {
      *
      * @param codCliente codigo del cliente al cual se desea el saldo de la cartera  vencida del cliente
      */
-    public static double getTotalCarteraVencidaCliente(String codCliente) {
+    public static double getTotalCarteraVencidaCliente(String codCliente, Context context) {
         double valorCarteraVencido = 0;
         SQLiteDatabase db = null;
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = " SELECT SUM(cartera.saldo) AS saldo, " +
@@ -9867,7 +9751,7 @@ public class DataBaseBO {
                                                           String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                           List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                           String docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid) {
+                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -9881,7 +9765,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -9952,7 +9836,7 @@ public class DataBaseBO {
                                                  String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                  List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                  String docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                 String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid) {
+                                                 String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -9966,7 +9850,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10031,7 +9915,7 @@ public class DataBaseBO {
                                                     String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                     List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                     List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                    String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid) {
+                                                    String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -10049,7 +9933,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10119,7 +10003,7 @@ public class DataBaseBO {
                                                           String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                           List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                           List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto) {
+                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -10137,7 +10021,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10203,7 +10087,7 @@ public class DataBaseBO {
                                           String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                           List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                           List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid) {
+                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -10221,7 +10105,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10281,7 +10165,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean updateFacturas(List<String> valor_Documento, List<String> docto_Financiero) {
+    public static boolean updateFacturas(List<String> valor_Documento, List<String> docto_Financiero, Context context) {
 
         boolean resultado = false;
         List<Facturas> listaCartera = new ArrayList<>();
@@ -10297,7 +10181,7 @@ public class DataBaseBO {
         }
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10335,7 +10219,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean guardarConsecutivo(String negocio, int vendedor, int consecutivo, String fecha) {
+    public static boolean guardarConsecutivo(String negocio, int vendedor, int consecutivo, String fecha, Context context) {
 
         boolean resultado = false;
         String negocioCon = "";
@@ -10343,12 +10227,11 @@ public class DataBaseBO {
         //SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            //   File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            //   File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
 
             //  db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-
 
             String query1 = " SElECT negocio FROM consecutivorecibos";
 
@@ -10357,10 +10240,12 @@ public class DataBaseBO {
             if (cursor.moveToFirst()) {
                 negocioCon = cursor.getString(cursor.getColumnIndex("negocio"));
             }
+
             cursor.close();
 
 
             if (negocioCon.isEmpty()) {
+
                 ContentValues facturasCartera1 = new ContentValues();
 
                 facturasCartera1.put("negocio", negocio);
@@ -10371,6 +10256,7 @@ public class DataBaseBO {
                 dbTemp.insertOrThrow("consecutivorecibos", null, facturasCartera1);
                 dbTemp.close();
                 resultado = true;
+
             } else if (!negocioCon.isEmpty()) {
                 String query = " UPDATE consecutivorecibos SET  negocio = '" + negocio + "' ,vendedor = '" + vendedor + "',consecutivo ='" + consecutivo + "'," +
                         "fecha = '" + fecha + "'  WHERE vendedor = '" + vendedor + "'";
@@ -10390,7 +10276,6 @@ public class DataBaseBO {
                 resultado = true;
             }
 
-
         } catch (Exception e) {
 
             mensaje = e.getMessage();
@@ -10409,7 +10294,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean guardarConsecutivoId(String negocio, int vendedor, int consecutivo, String fecha) {
+    public static boolean guardarConsecutivoId(String negocio, int vendedor, int consecutivo, String fecha, Context context) {
 
         boolean resultado = false;
         String negocioCon = "";
@@ -10417,8 +10302,8 @@ public class DataBaseBO {
         //SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            //   File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            //   File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
 
             //  db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -10483,7 +10368,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean guardarConsecutivoPaquete(String negocio, int vendedor, int consecutivo, String fecha) {
+    public static boolean guardarConsecutivoPaquete(String negocio, int vendedor, int consecutivo, String fecha, Context context) {
 
         boolean resultado = false;
         String negocioCon = "";
@@ -10491,8 +10376,8 @@ public class DataBaseBO {
         //SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            //   File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            //   File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
 
             //  db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -10562,25 +10447,28 @@ public class DataBaseBO {
                                                           String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                           List<String> valor_Consignado, double saldo_favor, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                           List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String identFoto, String consecutivoid, int consecId1, String observacionesMotivo) {
+                                                          String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String identFoto, String consecutivoid, int consecId1, String observacionesMotivo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
-        List<Pendientes> excluidos = DataBaseBO.cargarDocumentosRecaudosPendientesExcluidos(docto_Financiero,nro_Recibo);
+        List<Pendientes> excluidos = DataBaseBO.cargarDocumentosRecaudosPendientesExcluidos(docto_Financiero,nro_Recibo, context);
         if (excluidos.size() == 0)
-            excluidos = DataBaseBO.cargarDocumentosRecaudosExcluidos(docto_Financiero,nro_Recibo);
+            excluidos = DataBaseBO.cargarDocumentosRecaudosExcluidos(docto_Financiero,nro_Recibo, context);
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
-            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-            dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+            if(dbFile.exists())
+                db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+
+            if(tempFile.exists())
+                dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             for (int i = 0; i < clase_Documento.size(); i++) {
 
@@ -10622,7 +10510,7 @@ public class DataBaseBO {
                 facturasCartera.put("Iden_Foto", identFoto);
                 facturasCartera.put("consecutivoid", consecutivoid);
                 facturasCartera.put("consecutivo", consecId1);
-                facturasCartera.put("observacionesMotivo", observacionesMotivo);
+                facturasCartera.put("observacionesmotivo", observacionesMotivo);
 
                 db.insertOrThrow("recaudosPendientes", null, facturasCartera);
                 dbTemp.insertOrThrow("recaudosPen", null, facturasCartera);
@@ -10678,7 +10566,7 @@ public class DataBaseBO {
                 facturasCartera.put("Estado", 0);
                 facturasCartera.put("Iden_Foto", identFoto);
                 facturasCartera.put("consecutivoid", consecutivoid);
-                facturasCartera.put("observacionesMotivo", observacionesMotivo);
+                facturasCartera.put("observacionesmotivo", observacionesMotivo);
                 //   db.insertOrThrow("cobrosrealizados", null, valuesCobroRealizado);
                 dbTemp.insertOrThrow("recaudosPen", null, facturasCartera);
                 resultado = true;
@@ -10692,20 +10580,19 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+                db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
-        }
 
+        }
 
         return resultado;
     }
 
-    public static List<Pendientes> cargarDocumentosRecaudosPendientesExcluidos(List<String> docto_Financiero, String nro_recibo) {
+    public static List<Pendientes> cargarDocumentosRecaudosPendientesExcluidos(List<String> docto_Financiero, String nro_recibo, Context context) {
 
-        SQLiteDatabase db = null;
         Pendientes pendientes;
         List<Pendientes> listaCartera = new ArrayList<>();
         SQLiteDatabase dbTemp = null;
@@ -10714,7 +10601,7 @@ public class DataBaseBO {
 
         try {
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -10809,8 +10696,8 @@ public class DataBaseBO {
 
         } finally {
 
-            if (db != null)
-                db.close();
+            if (dbTemp != null)
+                dbTemp.close();
         }
 
         return listaCartera;
@@ -10821,9 +10708,9 @@ public class DataBaseBO {
                                                                       String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                                       List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                                       List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                                      String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String identFoto, String consecutivoid, String observacionesMotivo) {
+                                                                      String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String identFoto, String consecutivoid, String observacionesMotivo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -10831,8 +10718,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -10893,8 +10780,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+               if (db != null)
+                 db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -10905,15 +10792,15 @@ public class DataBaseBO {
 
 
     public static boolean guardarFormaPagAnuladosSolicitud(List<String> clase_Documento, String sociedad, String cod_Cliente, String cod_Vendedor, List<String> docto_Financiero,
-                                                           List<String> valor_Documento, String nro_Recibo, String numeroAnulacion, String codigoCausal, String usuario, String estado, String fechaRechazado, String observacion) {
+                                                           List<String> valor_Documento, String nro_Recibo, String numeroAnulacion, String codigoCausal, String usuario, String estado, String fechaRechazado, String observacion, Context context) {
         boolean resultado = false;
 
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File File = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File File = new File(Utilidades.dirApp(context), "DataBase.db");
 
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             db = SQLiteDatabase.openDatabase(File.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -10954,6 +10841,9 @@ public class DataBaseBO {
 
         } finally {
 
+            if (db != null)
+                db.close();
+
             if (dbTemp != null)
                 dbTemp.close();
         }
@@ -10962,15 +10852,15 @@ public class DataBaseBO {
     }
 
     public static boolean guardarFormaPagAnulados(List<String> clase_Documento, String sociedad, String cod_Cliente, String cod_Vendedor, List<String> docto_Financiero,
-                                                  List<String> valor_Documento, String nro_Recibo, String numeroAnulacion, String codigoCausal, String observaciones) {
+                                                  List<String> valor_Documento, String nro_Recibo, String numeroAnulacion, String codigoCausal, String observaciones, Context context) {
         boolean resultado = false;
 
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11005,6 +10895,9 @@ public class DataBaseBO {
 
         } finally {
 
+            if (db != null)
+                db.close();
+
             if (dbTemp != null)
                 dbTemp.close();
         }
@@ -11017,14 +10910,14 @@ public class DataBaseBO {
                                                        String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                        List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                        List<String> docto_Financiero, String nro_Recibo, String observaciones, List<String> via_Pago, String usuario,
-                                                       String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, int status) {
+                                                       String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, int status, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
 
         SQLiteDatabase dbTemp = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
@@ -11095,9 +10988,9 @@ public class DataBaseBO {
                                                     List<String> valor_Consignado, List<String> saldo_favor, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                     List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
                                                     List<String> operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                    String idenFoto, String numeroAnulacionId, int consec1Id, String observacionesMotivo, String fechRecibo) {
+                                                    String idenFoto, String numeroAnulacionId, int consec1Id, String observacionesMotivo, String fechRecibo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11105,8 +10998,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11161,7 +11054,7 @@ public class DataBaseBO {
 
                 facturasCartera.remove("consecutivoid");
                 facturasCartera.remove("envioCorreo");
-                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente,cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i)));
+                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente,cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i), context));
 
                 db.insertOrThrow("recaudosRealizados", null, facturasCartera);
                 resultado = true;
@@ -11176,8 +11069,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+               db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11193,9 +11086,9 @@ public class DataBaseBO {
                                                              List<String> consignadoM, List<String> saldo_favor, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                              List<String> docto_Financiero, List<String> nro_Recibo, List<String> observaciones, List<String> via_Pago, String usuario,
                                                              List<String> operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                             String idenFoto, String numPaquete, String numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivosMultiples, List<String> observacionesMotivo, List<String> listaConsecutivoidFac, List<String> fechasRecibos) {
+                                                             String idenFoto, String numPaquete, String numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivosMultiples, List<String> observacionesMotivo, List<String> listaConsecutivoidFac, List<String> fechasRecibos, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11203,8 +11096,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11268,7 +11161,7 @@ public class DataBaseBO {
                 facturasCartera.remove("consignadoM");
                 facturasCartera.remove("nro_paquete");
                 facturasCartera.remove("consecutivoid");
-                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente.get(i),cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i)));
+                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente.get(i),cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i), context));
 
                 db.insertOrThrow("recaudosRealizados", null, facturasCartera);
                 resultado = true;
@@ -11283,8 +11176,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+                db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11300,9 +11193,9 @@ public class DataBaseBO {
                                                                         List<String> consignadoM, List<String> saldo_favor, List<String> cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                                         List<String> docto_Financiero, List<String> nro_Recibo, List<String> observaciones, List<String> via_Pago, String usuario,
                                                                         List<String> operacion_Cme, int sincronizado, List<String> banco, String Numero_de_cheque, String Nombre_del_propietario,
-                                                                        List<String> idenFoto, String numPaquete, List<String> numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivos, List<String> fechasRecibos, List<String> observacionesMotivo) {
+                                                                        List<String> idenFoto, String numPaquete, List<String> numPaqueteId, List<String> valor_Consignado, List<Integer> consecutivos, List<String> fechasRecibos, List<String> observacionesMotivo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11310,8 +11203,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11375,7 +11268,7 @@ public class DataBaseBO {
                 facturasCartera.remove("consignadoM");
                 facturasCartera.remove("nro_paquete");
                 facturasCartera.remove("consecutivoid");
-                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente.get(i),cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i)));
+                facturasCartera.put("Documento", DataBaseBO.cargarDocumentoCartera(cod_Cliente.get(i),cod_Vendedor,docto_Financiero.get(i),valor_Documento.get(i), context));
 
                 db.insertOrThrow("recaudosRealizados", null, facturasCartera);
                 resultado = true;
@@ -11390,8 +11283,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+                db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11406,9 +11299,9 @@ public class DataBaseBO {
                                                  String fecha_Consignacion, List<String> valor_Documento, double saldo_favor, String moneda, List<String> valor_Pagado,
                                                  List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                  List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                 String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, int consecutivo2, String observacionesMotivo) {
+                                                 String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, int consecutivo2, String observacionesMotivo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11416,13 +11309,13 @@ public class DataBaseBO {
         List<Pendientes> excluidos = new ArrayList<>();
         SQLiteDatabase db = null;
 
-        excluidos = DataBaseBO.cargarDocumentosRecaudosPendientesExcluidos(docto_Financiero, nro_Recibo);
+        excluidos = DataBaseBO.cargarDocumentosRecaudosPendientesExcluidos(docto_Financiero, nro_Recibo, context);
         if (excluidos.size() == 0)
-            excluidos = DataBaseBO.cargarDocumentosRecaudosExcluidos(docto_Financiero, nro_Recibo);
+            excluidos = DataBaseBO.cargarDocumentosRecaudosExcluidos(docto_Financiero, nro_Recibo, context);
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11466,7 +11359,7 @@ public class DataBaseBO {
                 facturasCartera.put("Iden_Foto", idenFoto);
                 facturasCartera.put("consecutivoid", consecutivoid);
                 facturasCartera.put("consecutivo", consecutivo2);
-                facturasCartera.put("observacionesMotivo", observacionesMotivo);
+                facturasCartera.put("observacionesmotivo", observacionesMotivo);
 
                 db.insertOrThrow("recaudosPendientes", null, facturasCartera);
                 dbTemp.insertOrThrow("recaudos", null, facturasCartera);
@@ -11521,7 +11414,7 @@ public class DataBaseBO {
                 facturasCartera.put("Estado", 0);
                 facturasCartera.put("Iden_Foto", idenFoto);
                 facturasCartera.put("consecutivoid", consecutivoid);
-                facturasCartera.put("observacionesMotivo", observacionesMotivo);
+                facturasCartera.put("observacionesmotivo", observacionesMotivo);
 
                 db.insertOrThrow("recaudosPendientes", null, facturasCartera);
                 dbTemp.insertOrThrow("recaudos", null, facturasCartera);
@@ -11544,8 +11437,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+               db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11555,7 +11448,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static List<Pendientes> cargarDocumentosRecaudosExcluidos(List<String> docto_Financiero, String nro_recibo) {
+    public static List<Pendientes> cargarDocumentosRecaudosExcluidos(List<String> docto_Financiero, String nro_recibo, Context context) {
 
         SQLiteDatabase db = null;
         Pendientes pendientes;
@@ -11566,7 +11459,7 @@ public class DataBaseBO {
 
         try {
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -11619,8 +11512,8 @@ public class DataBaseBO {
 
         } finally {
 
-            if (db != null)
-                db.close();
+            if (dbTemp != null)
+                dbTemp.close();
         }
 
         return listaCartera;
@@ -11632,9 +11525,9 @@ public class DataBaseBO {
                                                              String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                                              List<String> valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                                              List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                                             String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, String observacionesMotivo) {
+                                                             String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFoto, String consecutivoid, String observacionesMotivo, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11642,8 +11535,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11686,7 +11579,7 @@ public class DataBaseBO {
                 facturasCartera.put("Estado", 0);
                 facturasCartera.put("Iden_Foto", idenFoto);
                 facturasCartera.put("consecutivoid", consecutivoid);
-                facturasCartera.put("observacionesMotivo", observacionesMotivo);
+                facturasCartera.put("observacionesmotivo", observacionesMotivo);
 
                 db.insertOrThrow("recaudosPendientes", null, facturasCartera);
                 dbTemp.insertOrThrow("recaudos", null, facturasCartera);
@@ -11711,8 +11604,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+               db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11728,9 +11621,9 @@ public class DataBaseBO {
                                            String fecha_Consignacion, List<String> valor_Documento, String moneda, List<String> valor_Pagado,
                                            double valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
                                            List<String> docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario,
-                                           String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFotos, String consecutivoid, int consecutivo2) {
+                                           String operacion_Cme, int sincronizado, String banco, String Numero_de_cheque, String Nombre_del_propietario, String idenFotos, String consecutivoid, int consecutivo2, Context context) {
         boolean resultado = false;
-        String empresa = cargarEmpresa();
+        String empresa = cargarEmpresa(context);
         //   if (clase_Documento.size()>0) {
         // resultados = valor_Pagado/ clase_Documento.size();
         // }
@@ -11738,8 +11631,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11804,8 +11697,8 @@ public class DataBaseBO {
 
         } finally {
 
-            //   if (db != null)
-            //     db.close();
+            if (db != null)
+               db.close();
 
             if (dbTemp != null)
                 dbTemp.close();
@@ -11817,15 +11710,15 @@ public class DataBaseBO {
 
     public static boolean guardarFormaPagoTotal(String idPago, String clase_Documento, String sociedad, String cod_Cliente, String cod_Vendedor, String referencia, String fecha_Documento,
                                                 String fecha_Consignacion, double valor_Documento, String moneda, double valor_Pagado, double valor_Consignado, String cuenta_Bancaria, String moneda_Consig, String NCF_Comprobante_fiscal,
-                                                String docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario, String operacion_Cme, int sincronizado) {
+                                                String docto_Financiero, String nro_Recibo, String observaciones, String via_Pago, String usuario, String operacion_Cme, int sincronizado, Context context) {
         boolean resultado = false;
 
         SQLiteDatabase dbTemp = null;
         //SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            //   File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            //   File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
 
             //  db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -11839,7 +11732,7 @@ public class DataBaseBO {
             facturasCartera.put("referencia", referencia);
             facturasCartera.put("fecha_Documento", Utilidades.fechaActual("yyyy-MM-dd"));
             facturasCartera.put("fecha_Consignacion", Utilidades.fechaActual("yyyy-MM-dd"));
-            facturasCartera.put("valor_Documento", Utilidades.separarMilesSinDecimal(String.valueOf(valor_Documento)));
+            facturasCartera.put("valor_Documento", Utilidades.separarMilesSinDecimal(String.valueOf(valor_Documento), context));
             facturasCartera.put("moneda", moneda);
             facturasCartera.put("valor_Pagado", valor_Pagado);
             facturasCartera.put("valor_Consignado", valor_Consignado);
@@ -11887,7 +11780,7 @@ public class DataBaseBO {
      *
      * @return true si hay información por enviar y false si no la hay
      */
-    public static boolean hayInformacionXEnviar() {
+    public static boolean hayInformacionXEnviar(Context context) {
 
         mensaje = "";
         SQLiteDatabase db = null;
@@ -11898,7 +11791,7 @@ public class DataBaseBO {
         try {
 
 
-            File dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             if (dbFile.exists()) {
 
@@ -11965,7 +11858,7 @@ public class DataBaseBO {
      * @param ocCartera     calculos de la cartera
      * @return retorna la lista de carteras de un cliente el cual ya se le realizo el recaudo
      */
-    public static List<Cartera> cargarCarteraClienteGestionadaRecaudo(String codigoCliente, ObjetoCalculoCartera ocCartera) {
+    public static List<Cartera> cargarCarteraClienteGestionadaRecaudo(String codigoCliente, ObjetoCalculoCartera ocCartera, Context context) {
 
         SQLiteDatabase db = null;
         Cartera cartera;
@@ -11977,7 +11870,7 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
                     SQLiteDatabase.OPEN_READWRITE);
 
@@ -12050,7 +11943,7 @@ public class DataBaseBO {
         return listaCartera;
     }
 
-    public static List<Cartera> cargarCarteraClienteGestionada(String codigoCliente, ObjetoCalculoCartera ocCartera) {
+    public static List<Cartera> cargarCarteraClienteGestionada(String codigoCliente, ObjetoCalculoCartera ocCartera, Context context) {
 
         SQLiteDatabase db = null;
         Cartera cartera;
@@ -12062,7 +11955,7 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
                     SQLiteDatabase.OPEN_READWRITE);
 
@@ -12148,13 +12041,13 @@ public class DataBaseBO {
     /**
      * Método para borrar la información de la base de datos temporal, que se encuentra en el dispositivo
      */
-    public static void borrarInfoTemp() {
+    public static void borrarInfoTemp(Context context) {
 
         SQLiteDatabase dbTemp = null;
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             if (dbFile.exists()) {
 
@@ -12200,13 +12093,13 @@ public class DataBaseBO {
         }
     }
 
-    public static void borrarInfoDatabase() {
+    public static void borrarInfoDatabase(Context context) {
 
         SQLiteDatabase dbTemp = null;
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             if (dbFile.exists()) {
 
@@ -12252,18 +12145,18 @@ public class DataBaseBO {
         }
     }
 
-    public static boolean ExisteDataBase() {
-        File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+    public static boolean ExisteDataBase(Context context) {
+        File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
         return dbFile.exists();
     }
 
-    public static Usuario obtenerUsuario() {
+    public static Usuario obtenerUsuario(Context context) {
         Usuario usuario = null;
         SQLiteDatabase db = null;
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
                     SQLiteDatabase.OPEN_READWRITE);
 
@@ -12291,14 +12184,14 @@ public class DataBaseBO {
         return usuario;
     }
 
-    public static void borrarDatos(String numDoc, String nunFactura) {
+    public static void borrarDatos(String numDoc, String nunFactura, Context context) {
 
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
 
         try {
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -12325,13 +12218,14 @@ public class DataBaseBO {
 
             if (db != null)
                 db.close();
+
             if (dbTemp != null)
                 dbTemp.close();
         }
 
     }
 
-    public static List<Cartera> cargarCarteraTipoParametroBusqueda2(String parametroBusqueda2, String parametro, Vector<String> listaItems) {
+    public static List<Cartera> cargarCarteraTipoParametroBusqueda2(String parametroBusqueda2, String parametro, Vector<String> listaItems, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -12340,7 +12234,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
 
@@ -12383,15 +12277,15 @@ public class DataBaseBO {
 
     }
 
-    public static List<FacturasRealizadas> cargarFacturasViaPago(String numeroRecibo) {
+    public static List<FacturasRealizadas> cargarFacturasViaPago(String numeroRecibo, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
-
         SQLiteDatabase db = null;
+
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT sum(valorPagado) as valorPagado,sum(valor_Consignado) as valor_Consignado,via_Pago as via_Pago, banco, Numero_de_cheque FROM " +
@@ -12430,7 +12324,7 @@ public class DataBaseBO {
         return listaFacturasRealizadas;
     }
 
-    public static List<FacturasRealizadas> cargarFacturasViaPagoAGUC(String numeroRecibo) {
+    public static List<FacturasRealizadas> cargarFacturasViaPagoAGUC(String numeroRecibo, Context context) {
 
         List<FacturasRealizadas> listaFacturasRealizadas = new ArrayList<>();
 
@@ -12438,7 +12332,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT sum(valorPagado) as valorPagado,sum(valor_Consignado) as valor_Consignado,via_Pago as via_Pago, banco, Numero_de_cheque FROM " +
@@ -12477,15 +12371,15 @@ public class DataBaseBO {
         return listaFacturasRealizadas;
     }
 
-    public static Boolean ValidarMetodoDePagoPorRecibo(String numeroRecibo, String metodoPago) {
+    public static Boolean ValidarMetodoDePagoPorRecibo(String numeroRecibo, String metodoPago, Context context) {
 
         boolean existe = false;
 
-
         SQLiteDatabase db = null;
+
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT * FROM recaudosPendientes WHERE nro_Recibo = '" + numeroRecibo + "' AND via_Pago = '" + metodoPago + "'";
@@ -12496,7 +12390,6 @@ public class DataBaseBO {
                     existe = true;
 
                 } while (cursor.moveToNext());
-
 
             }
             cursor.close();
@@ -12515,7 +12408,7 @@ public class DataBaseBO {
     }
 
     @SuppressLint("Range")
-    public static boolean actualizarFotoBuzon(String idPago) {
+    public static boolean actualizarFotoBuzon(String idPago, Context context) {
 
         boolean resultado = false;
         String Iden_Foto = "";
@@ -12523,8 +12416,8 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -12564,10 +12457,11 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean actualizarFotoBuzonMultiples(List<String> idPagos) {
+    public static boolean actualizarFotoBuzonMultiples(List<String> idPagos, Context context) {
 
         boolean resultado = false;
         String Iden_Foto = "";
+
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
@@ -12577,8 +12471,8 @@ public class DataBaseBO {
             Set<String> conjuntoSinDuplicados = new LinkedHashSet<>(idPagos);
             List<String> idPagosFinal = new ArrayList<>(conjuntoSinDuplicados);
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -12620,10 +12514,11 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static boolean actualizarNumeroChequePrecargado(List<String> idPagos) {
+    public static boolean actualizarNumeroChequePrecargado(List<String> idPagos, Context context) {
 
         boolean resultado = false;
         String numeroCheque = "";
+
         SQLiteDatabase dbTemp = null;
         SQLiteDatabase db = null;
 
@@ -12633,8 +12528,8 @@ public class DataBaseBO {
             Set<String> conjuntoSinDuplicados = new LinkedHashSet<>(idPagos);
             List<String> idPagosFinal = new ArrayList<>(conjuntoSinDuplicados);
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
 
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -12684,17 +12579,17 @@ public class DataBaseBO {
      * @param vendedor
      * @param nombreFirma
      */
-    public static void guardarFirma(String IdPAgo, byte[] bitmap, String empresa, String vendedor, String nombreFirma) {
+    public static void guardarFirma(String IdPAgo, byte[] bitmap, String empresa, String vendedor, String nombreFirma, Context context) {
 
         try {
             // tamaño del baos depende del tamaño de tus imagenes en promedio
             SQLiteDatabase dbTemp = null;
             SQLiteDatabase db = null;
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            File dbFile = new File(Utilidades.dirApp(), "Database.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String sql = "INSERT INTO firmas (IdPago, Foto, Empresa, Vendedor, Firma) VALUES(?,?,?,?,?)";
@@ -12727,14 +12622,14 @@ public class DataBaseBO {
         }
     }
 
-    public static FirmaNombre cargarFirmaNombre(String numeroRecibo) {
+    public static FirmaNombre cargarFirmaNombre(String numeroRecibo, Context context) {
 
         FirmaNombre firmaNombre = new FirmaNombre();
 
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Database.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT Foto as Foto, Firma as Firma FROM firmas_vendedor " +
@@ -12768,7 +12663,7 @@ public class DataBaseBO {
         return firmaNombre;
     }
 
-    public static String validarUltimoConsecutivo(String consecutivo) {
+    public static String validarUltimoConsecutivo(String consecutivo, Context context) {
         int ultimoConsecutivoReacudosPen = 0;
         int ultimoConsecutivoReacudosRe = 0;
         int ultimoConsecutivoReacudosReTemp = 0;
@@ -12781,10 +12676,10 @@ public class DataBaseBO {
         try {
 
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbtemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             //TRAER ULTIMO CONSECUTIVO RECAUDOSPEN
@@ -12852,6 +12747,9 @@ public class DataBaseBO {
 
         } finally {
 
+            if (dbtemp != null)
+                dbtemp.close();
+
             if (db != null)
                 db.close();
 
@@ -12860,13 +12758,13 @@ public class DataBaseBO {
         return consecutivo;
     }
 
-    public static void eliminarFotosSinDocumentosAsociados() {
+    public static void eliminarFotosSinDocumentosAsociados(Context context) {
 
         SQLiteDatabase dbTemp = null;
 
         try {
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM fotos WHERE Idfoto IN(SELECT f.Idfoto FROM fotos f " +
@@ -12887,14 +12785,14 @@ public class DataBaseBO {
         }
     }
 
-    public static String cargarFotosSinDocumentosAsociados(String numeroRecibo) {
+    public static String cargarFotosSinDocumentosAsociados(String numeroRecibo, Context context) {
 
         SQLiteDatabase dbTemp = null;
         String idenFoto = null;
 
         try {
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT Iden_Foto as Foto FROM fotos " +
@@ -12919,16 +12817,17 @@ public class DataBaseBO {
 
             if (dbTemp != null)
                 dbTemp.close();
+
             return idenFoto;
         }
     }
 
-    public static boolean guardarCoordenadas(Double latitud, Double longitud, String codigo, String nroRecibo) {
+    public static boolean guardarCoordenadas(Double latitud, Double longitud, String codigo, String nroRecibo, Context context) {
         boolean resultado = false;
         SQLiteDatabase dbTemp = null;
 
         try {
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             ContentValues fotos = new ContentValues();
@@ -12957,7 +12856,7 @@ public class DataBaseBO {
         return resultado;
     }
 
-    public static void verificarPagoCompletoPorTransferencia(String numeroRecibo) {
+    public static void verificarPagoCompletoPorTransferencia(String numeroRecibo, Context context) {
 
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
@@ -12966,13 +12865,18 @@ public class DataBaseBO {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            File tempFile = new File(Utilidades.dirApp(), "Temp.db");
+            File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT sum(valor_Pagado) as valorPagado,valor_Documento FROM RecaudosPendientes r " +
+            String query = "SELECT " +
+                    "SUM(r.valor_Pagado) as valorPagado, " +
+                    "(SELECT SUM(valor_Documento) " +
+                    "FROM (SELECT DISTINCT valor_Documento  " +
+                    "FROM RecaudosPendientes " +
+                    "WHERE nro_Recibo = '" + numeroRecibo + "' AND via_Pago = '6') as doc) as valor_Documento FROM RecaudosPendientes r " +
                     "where nro_Recibo = '" + numeroRecibo + "' AND via_Pago ='6'";
 
             Cursor cursor = db.rawQuery(query, null);
@@ -13020,10 +12924,14 @@ public class DataBaseBO {
 
             if (db != null)
                 db.close();
+
+            if (dbTemp != null)
+                dbTemp.close();
+
         }
     }
 
-    public static String cargarDocumentoCartera(String cliente, String vendedor, String docto_financiero, String saldo) {
+    public static String cargarDocumentoCartera(String cliente, String vendedor, String docto_financiero, String saldo, Context context) {
 
 
         List<Cartera> listaCartera = new ArrayList<>();
@@ -13031,7 +12939,7 @@ public class DataBaseBO {
         SQLiteDatabase db = null;
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT c.Documento as documento FROM Cartera c where c.cliente = '" + cliente + "' AND c.vendedor = '" + vendedor + "' " +
@@ -13054,7 +12962,7 @@ public class DataBaseBO {
         return documento;
     }
 
-    public static void eliminarRecaudosPendientesDataBase(List<String> documentoFactura) {
+    public static void eliminarRecaudosPendientesDataBase(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -13064,7 +12972,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -13083,7 +12991,7 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosRealizadosPendientesRecaudos(List<String> documentoFactura) {
+    public static void eliminarRecaudosRealizadosPendientesRecaudos(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
@@ -13093,7 +13001,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -13112,17 +13020,18 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosRealizadosDataBase(List<String> documentoFactura) {
+    public static void eliminarRecaudosRealizadosDataBase(List<String> documentoFactura, Context context) {
 
         SQLiteDatabase db = null;
         String str = "";
+
         for (String fruit : documentoFactura) {
             str += "\'" + fruit + "\',";
         }
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
@@ -13141,13 +13050,13 @@ public class DataBaseBO {
         }
     }
 
-    public static void eliminarRecaudosFinalizados() {
+    public static void eliminarRecaudosFinalizados(Context context) {
 
         SQLiteDatabase dbTemp = null;
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            dbFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudosPen WHERE nro_Recibo IN (SELECT DISTINCT re.nro_Recibo FROM recaudos re)");
@@ -13166,7 +13075,7 @@ public class DataBaseBO {
         }
     }
 
-    public static List<String> cargarIdPagosNumeroRecibo(String numeroRecibo) {
+    public static List<String> cargarIdPagosNumeroRecibo(String numeroRecibo, Context context) {
         String valor = "";
         SQLiteDatabase db = null;
 
@@ -13174,7 +13083,7 @@ public class DataBaseBO {
 
         try {
 
-            dbFile = new File(Utilidades.dirApp(), "DataBase.db");
+            dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             String query = "SELECT idPago FROM RecaudosPendientes r WHERE r.nro_Recibo = '" + numeroRecibo + "'";

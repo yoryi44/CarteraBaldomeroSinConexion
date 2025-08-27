@@ -7,9 +7,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,17 +80,26 @@ public class ServicioEnvioToken extends Service implements Synchronizer {
     };
 
     private void enviarToken() {
-        if (DataBaseBO.ExisteDataBase()) {
-            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-            Log.i("TokenR", refreshedToken);
-            Usuario tokenUsuari = DataBaseBO.obtenerUsuario();
-            if(!tokenUsuari.token.equals(refreshedToken)){
-                Sync sync = new Sync(ServicioEnvioToken.this, Constantes.ENVIAR_TOKEN_NOTIFICATION);
-                sync.token = refreshedToken;
-                sync.user = tokenUsuari.codigo;
-                sync.start();
-            }
+        if (DataBaseBO.ExisteDataBase(getApplicationContext())) {
 
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if(task.isComplete()){
+                        String refreshedToken = task.getResult();
+                        Log.i("TokenR", refreshedToken);
+                        Usuario tokenUsuari = DataBaseBO.obtenerUsuario(getApplicationContext());
+                        if(!tokenUsuari.token.equals(refreshedToken)){
+                            Sync sync = new Sync(ServicioEnvioToken.this, Constantes.ENVIAR_TOKEN_NOTIFICATION, getApplicationContext());
+                            sync.token = refreshedToken;
+                            sync.user = tokenUsuari.codigo;
+                            sync.start();
+                        }
+
+
+                    }
+                }
+            });
         }
     }
 

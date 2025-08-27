@@ -135,7 +135,7 @@ public class MetodoDePagoEfectivo extends Fragment {
         tituloCuentaDestinoEfectivo = dialogo.findViewById(R.id.tituloCuentaDestinoEfectivo);
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -167,9 +167,9 @@ public class MetodoDePagoEfectivo extends Fragment {
         double DiferenciaFormasPagoE = 0;
 
 
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
 
         final Spinner spinnerBanco = dialogo.findViewById(R.id.spinnerBancoEfectivo);
@@ -193,7 +193,7 @@ public class MetodoDePagoEfectivo extends Fragment {
 
             }
         }
-        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems);
+        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items = new String[listaItems.size()];
@@ -228,7 +228,7 @@ public class MetodoDePagoEfectivo extends Fragment {
 
             }
         }
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco));
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco, contexto), contexto);
 
         if (listaItems2.size() > 0) {
             items2 = new String[listaItems2.size()];
@@ -256,7 +256,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                     String banco = "";
                     banco = spinnerBanco.getSelectedItem().toString();
                     String parametro;
-                    parametro = DataBaseBO.cargarCodigobanco(banco);
+                    parametro = DataBaseBO.cargarCodigobanco(banco, contexto);
                     String[] items2;
                     Vector<String> listaItems2 = new Vector<String>();
                     if (lenguajeElegido == null) {
@@ -273,7 +273,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                         }
                     }
 
-                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco));
+                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco, contexto), contexto);
 
                     if (listaItems2.size() > 0) {
                         items2 = new String[listaItems2.size()];
@@ -2752,7 +2752,7 @@ public class MetodoDePagoEfectivo extends Fragment {
 
                                                         valorLista = Double.parseDouble(preciosAcomparar.get(j));
 
-                                                        if (!DataBaseBO.ExisteDocumento(documentosFinanciero)) {
+                                                        if (!DataBaseBO.ExisteDocumento(documentosFinanciero, contexto)) {
                                                             double valorLista2 = Double.parseDouble(precios.get(j));
                                                             totalesValoresLista = String.valueOf(Utilidades.formatearDecimales(valorLista2 - 0, 2));
                                                             totalFacturas.add(totalesValoresLista);
@@ -4261,9 +4261,9 @@ public class MetodoDePagoEfectivo extends Fragment {
                                         String vendedorId1 = "";
                                         String consecutivoid = "";
 
-                                        consecId1 = DataBaseBO.cargarConsecutivoId();
-                                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                                        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+                                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                                         int consec1Id = Integer.parseInt(consecId1);
                                         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -4271,7 +4271,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                         consec1Id = consec1Id + contadorId;
                                         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                                        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                                        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
                                         consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
                                         if (finalTipoUsuario.equals("10")) {
@@ -4285,7 +4285,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                                     consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, spinBanco, "0",
-                                                    "0", fotoID, consecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    "0", fotoID, consecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                 if (lenguajeElegido == null) {
 
@@ -4349,7 +4349,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                                         consecutivo1,
                                                         descripcion, via_Pago, usuario, operacion_Cme,
                                                         sincronizado, spinBanco, "0",
-                                                        "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                        "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                     if (lenguajeElegido == null) {
 
@@ -4413,7 +4413,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                                         consecutivo1,
                                                         descripcion, via_Pago, usuario, operacion_Cme,
                                                         sincronizado, spinBanco, "0",
-                                                        "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                        "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                     if (lenguajeElegido == null) {
 
@@ -4463,9 +4463,9 @@ public class MetodoDePagoEfectivo extends Fragment {
                                         String vendedorId1 = "";
                                         String consecutivoid = "";
 
-                                        consecId1 = DataBaseBO.cargarConsecutivoId();
-                                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                                        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+                                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                                         int consec1Id = Integer.parseInt(consecId1);
                                         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -4473,7 +4473,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                         consec1Id = consec1Id + contadorId;
                                         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                                        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                                        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
                                         consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
 
@@ -4487,7 +4487,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                                     consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, spinBanco, "0",
-                                                    "0", fotoID, consecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    "0", fotoID, consecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                 if (lenguajeElegido == null) {
 
@@ -4532,7 +4532,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                                     consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, spinBanco, "0",
-                                                    "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
 
                                                 if (lenguajeElegido == null) {
@@ -4608,9 +4608,9 @@ public class MetodoDePagoEfectivo extends Fragment {
                                     String vendedorId1 = "";
                                     String consecutivoid = "";
 
-                                    consecId1 = DataBaseBO.cargarConsecutivoId();
-                                    negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                                    vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                                    consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+                                    negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                                    vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                                     int consec1Id = Integer.parseInt(consecId1);
                                     int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -4618,7 +4618,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                     consec1Id = consec1Id + contadorId;
                                     numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                                    DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                                    DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
                                     consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
                                     if (fotos == null) {
@@ -4642,7 +4642,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                             consecutivo1,
                                             descripcion, via_Pago, usuario, operacion_Cme,
                                             sincronizado, spinBanco, "0",
-                                            "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                            "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                         if (lenguajeElegido == null) {
 
@@ -4706,9 +4706,9 @@ public class MetodoDePagoEfectivo extends Fragment {
                                     String vendedorId1 = "";
                                     String consecutivoid = "";
 
-                                    consecId1 = DataBaseBO.cargarConsecutivoId();
-                                    negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                                    vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                                    consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+                                    negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                                    vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                                     int consec1Id = Integer.parseInt(consecId1);
                                     int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -4716,7 +4716,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                     consec1Id = consec1Id + contadorId;
                                     numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                                    DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                                    DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
                                     consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
 
@@ -4729,7 +4729,7 @@ public class MetodoDePagoEfectivo extends Fragment {
                                             consecutivo1,
                                             descripcion, via_Pago, usuario, operacion_Cme,
                                             sincronizado, spinBanco, "0",
-                                            "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                            "0", fotoID, consecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
 
                                         if (lenguajeElegido == null) {
@@ -4828,8 +4828,8 @@ public class MetodoDePagoEfectivo extends Fragment {
                     fotosListaid.add(fotos.idenFoto);
                 }
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
                 dialogo.cancel();
             }
         });

@@ -1,5 +1,6 @@
 package servicio;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpStatus;
@@ -31,6 +32,8 @@ public class Sync extends Thread {
 
     private final static String TAG = Sync.class.getName();
 
+    Context context;
+
     private Synchronizer sincronizador;
     private int codeRequest;
 
@@ -45,6 +48,7 @@ public class Sync extends Thread {
     public String password;
     public String version;
     public String token;
+    public String androidId;
     public String regionalUser;
 
     // PARAMETROS PETICION BUSQUEDA
@@ -84,10 +88,11 @@ public class Sync extends Thread {
      * @param sincronizador clase que implementa la interfaz
      * @param codeRequest   constante para identificar que tipo de operacion realizar
      */
-    public Sync(Synchronizer sincronizador, int codeRequest) {
+    public Sync(Synchronizer sincronizador, int codeRequest, Context context) {
 
         this.sincronizador = sincronizador;
         this.codeRequest = codeRequest;
+        this.context = context;
     }
 
 
@@ -271,9 +276,9 @@ public class Sync extends Thread {
 
             String urlDataBase;
             if (!user.isEmpty()) {
-                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_CREARDB + "?un=" + user + "&pw=" + password + "&vr=" + Main.version;
+                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_CREARDB + "?un=" + user + "&pw=" + password + "&vr=" + Main.version + "&imei=" + imei;
             } else {
-                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_CREARDB + "?un=" + user + "&pw=" + password + "&vr=" + Main.version;
+                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_CREARDB + "?un=" + user + "&pw=" + password + "&vr=" + Main.version + "&imei=" + imei;
             }
 
             Log.i(TAG, "URL DB = " + urlDataBase);
@@ -296,7 +301,7 @@ public class Sync extends Thread {
                  * Y se crea el Archivo de la BD
                  **/
                 String fileName = "Temporal.zip";
-                File file = new File(Utilidades.dirApp(), fileName);
+                File file = new File(Utilidades.dirApp(context), fileName);
 
                 if (file.exists())
                     file.delete();
@@ -355,7 +360,10 @@ public class Sync extends Thread {
                     respuestaServer = respuestaServer.concat(line);
                 }
 
-                if (respuestaServer.equals(""))
+                if(respuestaServer.equals("99")) {
+                    mensaje = "imeiError";
+                }
+                else if (respuestaServer.equals(""))
                     mensaje = "No se pudo descargar la base de datos, por favor intente de nuevo.";
                 else
                     mensaje = respuestaServer;
@@ -439,7 +447,7 @@ public class Sync extends Thread {
                  * Y se crea el Archivo de la BD
                  **/
                 String fileName = "Temporal.zip";
-                File file = new File(Utilidades.dirApp(), fileName);
+                File file = new File(Utilidades.dirApp(context), fileName);
 
                 if (file.exists())
                     file.delete();
@@ -1264,7 +1272,7 @@ public class Sync extends Thread {
      */
     public boolean comprimirArchivo() {
 
-        File zipPedido = new File(Utilidades.dirApp(), "Temp.zip");
+        File zipPedido = new File(Utilidades.dirApp(context), "Temp.zip");
 
         if (zipPedido.exists())
             zipPedido.delete();
@@ -1275,7 +1283,7 @@ public class Sync extends Thread {
 
         try {
 
-            File dbFile = new File(Utilidades.dirApp(), "Temp.db");
+            File dbFile = new File(Utilidades.dirApp(context), "Temp.db");
 
             if (dbFile.exists()) {
 
@@ -1342,7 +1350,7 @@ public class Sync extends Thread {
             if (fileZip.exists()) {
 
                 String nameFile = fileZip.getName().replace(".zip", "");
-                File fileZipAux = new File(Utilidades.dirApp(), nameFile);
+                File fileZipAux = new File(Utilidades.dirApp(context), nameFile);
 
                 if (!fileZipAux.exists())
                     fileZipAux.delete();
@@ -1362,7 +1370,7 @@ public class Sync extends Thread {
 
                     } else {
 
-                        String pathFile = Utilidades.dirApp() + "/" + ze.getName();
+                        String pathFile = Utilidades.dirApp(context) + "/" + ze.getName();
                         File file = new File(pathFile);
                         FileOutputStream fout = new FileOutputStream(file);
 
@@ -1395,7 +1403,7 @@ public class Sync extends Thread {
      */
     private void dirChecker(String dir) {
 
-        File f = new File(Utilidades.dirApp().getPath() + "/" + dir);
+        File f = new File(Utilidades.dirApp(context).getPath() + "/" + dir);
 
         if (!f.isDirectory()) {
             f.mkdirs();
@@ -1518,129 +1526,129 @@ public class Sync extends Thread {
     private void enviarInformacion() {
         ok = false;
         String msg = "";
+        int intentos = 0;
+        int maxIntentos = 2; // Número máximo de intentos
+        boolean exito = false;
 
         if (comprimirArchivo()) {
-
-            File zipPedido = new File(Utilidades.dirApp(), "Temp.zip");
+            File zipPedido = new File(Utilidades.dirApp(context), "Temp.zip");
 
             if (!zipPedido.exists()) {
-
                 Log.i("EnviarPedido", "El archivo Temp.zip no Existe");
                 sincronizador.respSync(ok, "", "El archivo Temp.zip no Existe", codeRequest);
                 return;
             }
 
-            DataOutputStream dos = null;
-            HttpURLConnection conexion = null;
-            BufferedReader bufferedReader = null;
-            FileInputStream fileInputStream = null;
+            // Bucle de reintentos
+            while (intentos < maxIntentos && !exito) {
+                intentos++;
+                Log.i("EnviarPedido", "Intento #" + intentos);
 
-            byte[] buffer;
-            int maxBufferSize = 1024 * 1024;
-            int bytesRead, bytesAvailable, bufferSize;
+                DataOutputStream dos = null;
+                HttpURLConnection conexion = null;
+                BufferedReader bufferedReader = null;
+                FileInputStream fileInputStream = null;
 
-            String urlUpLoad = Constantes.URL_SYNC_DB + Constantes.URL_ENVIAR_INFORMACION + "?un=" + user + "&ext=zip&fecha=" + Utilidades.fechaActual("yyyy/MM/dd") + "&fm=" + Utilidades.fechaActual("yyyy/MM/dd");
-            Log.i("EnviarPedido", "URL Enviar Info = " + urlUpLoad);
+                byte[] buffer;
+                int maxBufferSize = 1024 * 1024;
+                int bytesRead, bytesAvailable, bufferSize;
 
-            try {
-
-                URL url = new URL(urlUpLoad);
-                conexion = (HttpURLConnection) url.openConnection();
-
-                conexion.setDoInput(true);    //Permite Entradas
-                conexion.setDoOutput(true);   //Permite Salidas
-                conexion.setUseCaches(false); //No usar cache
-
-
-
-                    /*
-                      SE ESTABLECEN LOS HEADERS
-                     */
-                conexion.setRequestMethod("POST");
-
-                conexion.setRequestProperty("Connection", "Keep-Alive");
-                conexion.setRequestProperty("Content-Type", "multipart/form-data; boundary=---------------------------4664151417711");
-
-                conexion.setConnectTimeout(6000);
-
-                /*
-                  SE CREA EL BUFFER PARA ENVIAR LA INFORMACION DEL ARCHIVO
-                 */
-                fileInputStream = new FileInputStream(zipPedido);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                buffer = new byte[bufferSize];
-
-                /*
-                  ABRE LA CONEXION DEL FLUJO DE SALIDA. LEE Y ESCRIBE LA INFORMACION DEL ARCHIVO EN EL BUFFER
-                  Y ENVIA LA INFORMACION AL SERVIDOR.
-                 */
-                dos = new DataOutputStream(conexion.getOutputStream());
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-                while (bytesRead > 0) {
-
-                    dos.write(buffer, 0, bufferSize);
-                    bytesAvailable = fileInputStream.available();
-                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                }
-
-                dos.flush();
-                Log.i("EnviarPedido", "Enviando informacion del Archivo");
-
-                /*
-                 * LEE LA RESPUESTA DEL SERVIDOR
-                 **/
-                bufferedReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-                String line;
-
-                respuestaServer = "";
-                while ((line = bufferedReader.readLine()) != null)
-                    respuestaServer = String.format("%s%s", respuestaServer, line);
-
-                if (respuestaServer.startsWith("ok") || respuestaServer.startsWith("listo")) {
-
-                    ok = true;
-
-                } else {
-
-                    if (respuestaServer.equals(""))
-                        msg = "Sin respuesta del servidor";
-                    else
-                        msg = respuestaServer;
-                }
-
-                Log.i("EnviarPedido", "respuesta: " + respuestaServer);
-
-            } catch (Exception ex) {
-
-                msg = ex.getMessage();
-                Log.e("EnviarPedido", msg, ex);
-
-            } finally {
+                String urlUpLoad = Constantes.URL_SYNC_DB + Constantes.URL_ENVIAR_INFORMACION + "?un=" + user + "&ext=zip&fecha=" + Utilidades.fechaActual("yyyy/MM/dd") + "&fm=" + Utilidades.fechaActual("yyyy/MM/dd");
+                Log.i("EnviarPedido", "URL Enviar Info = " + urlUpLoad);
 
                 try {
+                    URL url = new URL(urlUpLoad);
+                    conexion = (HttpURLConnection) url.openConnection();
 
-                    if (bufferedReader != null)
-                        bufferedReader.close();
+                    conexion.setDoInput(true);
+                    conexion.setDoOutput(true);
+                    conexion.setUseCaches(false);
+                    conexion.setRequestMethod("POST");
+                    conexion.setRequestProperty("Connection", "Keep-Alive");
+                    conexion.setRequestProperty("Content-Type", "multipart/form-data; boundary=---------------------------4664151417711");
+                    conexion.setConnectTimeout(6000);
 
-                    if (fileInputStream != null)
-                        fileInputStream.close();
+                    fileInputStream = new FileInputStream(zipPedido);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
 
-                    if (dos != null)
-                        dos.close();
+                    dos = new DataOutputStream(conexion.getOutputStream());
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
-                    if (conexion != null)
-                        conexion.disconnect();
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize);
+                        bytesAvailable = fileInputStream.available();
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                    }
 
-                } catch (IOException e) {
+                    dos.flush();
+                    Log.i("EnviarPedido", "Enviando informacion del Archivo");
 
-                    Log.e("FileUpLoad", "Error cerrando conexion: " + e.getMessage(), e);
+                    bufferedReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+                    String line;
+
+                    respuestaServer = "";
+                    while ((line = bufferedReader.readLine()) != null)
+                        respuestaServer = String.format("%s%s", respuestaServer, line);
+
+                    if (respuestaServer.startsWith("ok") || respuestaServer.startsWith("listo")) {
+                        ok = true;
+                        exito = true; // Éxito, salimos del bucle
+                    } else {
+                        if (respuestaServer.equals(""))
+                            msg = "Sin respuesta del servidor";
+                        else
+                            msg = respuestaServer;
+
+                        // Si es el último intento y sigue fallando, no reintentamos
+                        if (intentos == maxIntentos) {
+                            break;
+                        }
+
+                        // Pequeña pausa antes del reintento
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+
+                    Log.i("EnviarPedido", "respuesta: " + respuestaServer);
+
+                } catch (Exception ex) {
+                    msg = ex.getMessage();
+                    Log.e("EnviarPedido", "Intento " + intentos + " fallido: " + msg, ex);
+
+                    // Si es el último intento y sigue fallando, no reintentamos
+                    if (intentos == maxIntentos) {
+                        break;
+                    }
+
+                    // Pequeña pausa antes del reintento
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                } finally {
+                    try {
+                        if (bufferedReader != null)
+                            bufferedReader.close();
+                        if (fileInputStream != null)
+                            fileInputStream.close();
+                        if (dos != null)
+                            dos.close();
+                        if (conexion != null)
+                            conexion.disconnect();
+                    } catch (IOException e) {
+                        Log.e("FileUpLoad", "Error cerrando conexion: " + e.getMessage(), e);
+                    }
                 }
             }
         } else {
-
             msg = "Error comprimiendo la Base de datos Pedido";
             Log.e("FileUpLoad", msg);
         }

@@ -245,9 +245,10 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                         Alert.dialogo.cancel();
 
-                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO, context);
                                         sync1.user = usuarioApp.codigo;
                                         sync1.password = usuarioApp.contrasena;
+                                        sync1.imei = Utilidades.obtenerImei(context);
                                         sync1.start();
                                         envioInformacion = true;
 
@@ -268,9 +269,10 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                         Alert.dialogo.cancel();
 
-                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO, context);
                                         sync1.user = usuarioApp.codigo;
                                         sync1.password = usuarioApp.contrasena;
+                                        sync1.imei = Utilidades.obtenerImei(context);
                                         sync1.start();
                                         envioInformacion = true;
 
@@ -353,7 +355,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
 
             numeroRecibo = itemView.findViewById(R.id.txtNumeroRecibo);
             codigoCliente = itemView.findViewById(R.id.txtCodigoCliente);
@@ -379,7 +381,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
             lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
 
             String empresa23 = "";
-            empresa23 = DataBaseBO.cargarEmpresa();
+            empresa23 = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa23 = empresa23;
 
             Calendar c = Calendar.getInstance();
@@ -480,7 +482,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
 
@@ -566,7 +568,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                         pendientesFacturas.facturaCartera(listaPendientes);
 
-                        cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompleta(pendientesSeleccionada.getNumeroRecibo());
+                        cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompleta(pendientesSeleccionada.getNumeroRecibo(), context);
 
                         Gson gson = new Gson();
                         String jsonStringObject = gson.toJson(cargarFacturasPendientesCompleta);
@@ -718,7 +720,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
 
                     Vector<Bancos> listaParametrosBancosSpinner;
-                    cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompleta(pendientesSeleccionada.getNumeroRecibo());
+                    cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompleta(pendientesSeleccionada.getNumeroRecibo(), context);
 
                     spinnerAnulacion.setVisibility(View.VISIBLE);
 
@@ -739,7 +741,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                         }
                     }
 
-                    listaParametrosBancosSpinner = DataBaseBO.cargarMotivosAnulacion(listaItems);
+                    listaParametrosBancosSpinner = DataBaseBO.cargarMotivosAnulacion(listaItems, context);
 
 
                     if (listaItems.size() > 0) {
@@ -846,9 +848,9 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                             String consec = "", codigoCausal = "", numeroAnulacion = "";
                             String negocio = "";
                             String vendedor = "";
-                            consec = DataBaseBO.cargarConsecutivo();
-                            negocio = DataBaseBO.cargarNegocioConsecutivo();
-                            vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                            consec = DataBaseBO.cargarConsecutivo(context);
+                            negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                            vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                             int consec1 = Integer.parseInt(consec);
                             int vendedorsum = Integer.parseInt(vendedor);
                             int contador = 1;
@@ -856,7 +858,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                             numeroAnulacion = String.valueOf(negocio + vendedorsum + consec1);
                             codigoCausal = "";
                             final String fechacon = Utilidades.fechaActual("yyyy-MM-dd");
-                            DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fechacon);
+                            DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fechacon, context);
 
                             Bancos bancos = new Bancos();
                             listaParametrosBancosSpinner.get(position);
@@ -892,7 +894,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                                 @Override
                                                 public void onClick(View view) {
                                                     DataBaseBO.guardarFormaPagAnulados(claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor, doctoFinancieros, montoPendientess
-                                                            , finalNumeroRecibo, finalNumeroAnulacion, finalCausal, textoObservacion);
+                                                            , finalNumeroRecibo, finalNumeroAnulacion, finalCausal, textoObservacion, context);
 
                                                     /**    DataBaseBO.guardarFormaPagPendientesPen(idsPagos, claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor,
                                                      finalReferencia, fechaCreacions, finalFechaCierre, valorDocumentos, finalMoneda, montoPendientess, valorConsignados, "0",
@@ -903,8 +905,8 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                                     if (Utilidades.verificarNetwork(context)) {
                                                         final String empresa;
-                                                        empresa = DataBaseBO.cargarCodigo();
-                                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        empresa = DataBaseBO.cargarCodigo(context);
+                                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION, context);
                                                         sync.user = empresa;
                                                         sync.start();
                                                         Alert.dialogo.cancel();
@@ -916,10 +918,11 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                                         usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
                                                         // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                                        Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO, context);
 
                                                         sync1.user = usuarioApp.codigo;
                                                         sync1.password = usuarioApp.contrasena;
+                                                        sync1.imei = Utilidades.obtenerImei(context);
                                                         sync1.start();
                                                         envioInformacion = true;
                                                         Alert.dialogo.cancel();
@@ -959,7 +962,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                                         public void onClick(View view) {
 
                                                             DataBaseBO.guardarFormaPagAnulados(claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor, doctoFinancieros, montoPendientess
-                                                                    , finalNumeroRecibo, finalNumeroAnulacion, finalCausal1, textoObservacion);
+                                                                    , finalNumeroRecibo, finalNumeroAnulacion, finalCausal1, textoObservacion, context);
 
                                                             /**    DataBaseBO.guardarFormaPagPendientesPen(idsPagos, claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor,
                                                              finalReferencia, fechaCreacions, finalFechaCierre, valorDocumentos, finalMoneda, montoPendientess, valorConsignados, "0",
@@ -970,8 +973,8 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                                             if (Utilidades.verificarNetwork(context)) {
                                                                 final String empresa;
-                                                                empresa = DataBaseBO.cargarCodigo();
-                                                                Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                                                empresa = DataBaseBO.cargarCodigo(context);
+                                                                Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION, context);
                                                                 sync.user = empresa;
                                                                 sync.start();
                                                                 Alert.dialogo.cancel();
@@ -983,10 +986,11 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                                                 usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
                                                                 // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                                                Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
+                                                                Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO, context);
 
                                                                 sync1.user = usuarioApp.codigo;
                                                                 sync1.password = usuarioApp.contrasena;
+                                                                sync1.imei = Utilidades.obtenerImei(context);
                                                                 sync1.start();
                                                                 envioInformacion = true;
                                                                 Alert.dialogo.cancel();
@@ -1023,7 +1027,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                     String finalOperacionCME = operacionCME;
 
                                     DataBaseBO.guardarFormaPagAnulados(claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor, doctoFinancieros, montoPendientess
-                                            , finalNumeroRecibo, finalNumeroAnulacion, causal, textoObservacion);
+                                            , finalNumeroRecibo, finalNumeroAnulacion, causal, textoObservacion, context);
 
                                     /**    DataBaseBO.guardarFormaPagPendientesPen(idsPagos, claseDocumentos, finalSociedad, finalCodigoCliente, finalCodigoVendedor,
                                      finalReferencia, fechaCreacions, finalFechaCierre, valorDocumentos, finalMoneda, montoPendientess, valorConsignados, "0",
@@ -1034,8 +1038,8 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
                                     if (Utilidades.verificarNetwork(context)) {
                                         final String empresa;
-                                        empresa = DataBaseBO.cargarCodigo();
-                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION);
+                                        empresa = DataBaseBO.cargarCodigo(context);
+                                        Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION, context);
                                         sync.user = empresa;
                                         sync.start();
 
@@ -1236,8 +1240,8 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
     private void ImprimirTirilla(final String macAddress, int position) {
 
-        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosPendientesDatabase(pendientes.get(position).numeroRecibo);
-        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudosDataBase(pendientes.get(position).numeroRecibo);
+        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosPendientesDatabase(pendientes.get(position).numeroRecibo, context);
+        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudosDataBase(pendientes.get(position).numeroRecibo, context);
 
         List<Facturas> listaFacturas3 = new ArrayList<>();
 
@@ -1262,7 +1266,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                     //
                     zebraPrinter.getPrinterControlLanguage();
                     String empresas = "";
-                    empresas = DataBaseBO.cargarEmpresa();
+                    empresas = DataBaseBO.cargarEmpresa(context);
                     String cpclData = "";
 
                     if (empresas.equals("ADHB")) {
@@ -1275,7 +1279,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
 
                     } else {
-                        cpclData = PrinterBO.formatoTirillaEntrega2(pendientes.get(position).codigoCliente, listaFacturas3);
+                        cpclData = PrinterBO.formatoTirillaEntrega2(pendientes.get(position).codigoCliente, listaFacturas3, context);
 
                     }
 

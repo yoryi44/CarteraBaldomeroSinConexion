@@ -14,7 +14,9 @@ import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -167,12 +169,6 @@ public class Utilidades {
         return s;
     }
 
-    public static String obtenerImei() {
-
-        // TODO: AGREGAR LOGICA DEL IMEI
-        return "";
-    }
-
     public static String obtenerListaClientesSeleccionadosFormato(HashMap<String, Cliente> listaClientesSeleccionados) {
 
         String lista = "";
@@ -222,7 +218,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotal(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotal(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -257,7 +253,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalHechas(nroReciboFacTotalPar, idesPago);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalHechas(nroReciboFacTotalPar, idesPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -294,7 +290,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfec(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfec(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -329,7 +325,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecCantidadFacturas(nroReciboFacTotalPar, documentosFinanciero, idesPago);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecCantidadFacturas(nroReciboFacTotalPar, documentosFinanciero, idesPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -364,7 +360,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecTarjeta(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecTarjeta(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -399,7 +395,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecTransferencia(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalEfecTransferencia(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -434,7 +430,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarIDEfectivo(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarIDEfectivo(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -469,7 +465,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarListaEfectivo(nroReciboFacTotalPar, documentosFinanciero, idPago);
+        listafacturasParcialTotal = DataBaseBO.cargarListaEfectivo(nroReciboFacTotalPar, documentosFinanciero, idPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -506,7 +502,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalCheq(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalCheq(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -541,7 +537,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarIDCheq(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarIDCheq(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -576,7 +572,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarListaCheque(nroReciboFacTotalPar, documentosFinanciero, idPago);
+        listafacturasParcialTotal = DataBaseBO.cargarListaCheque(nroReciboFacTotalPar, documentosFinanciero, idPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -614,7 +610,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTransf(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTransf(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -649,7 +645,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTransfCheque(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTransfCheque(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -684,7 +680,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarIDTransfe(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarIDTransfe(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -719,7 +715,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarListaTransferencia(nroReciboFacTotalPar, documentosFinanciero, idPago);
+        listafacturasParcialTotal = DataBaseBO.cargarListaTransferencia(nroReciboFacTotalPar, documentosFinanciero, idPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -757,7 +753,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTarjeta(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalTarjeta(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -792,7 +788,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarIDTarjeta(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarIDTarjeta(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -827,7 +823,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarListaTarjeta(nroReciboFacTotalPar, documentosFinanciero, idPago);
+        listafacturasParcialTotal = DataBaseBO.cargarListaTarjeta(nroReciboFacTotalPar, documentosFinanciero, idPago, contexto);
 
 
         return listafacturasParcialTotal;
@@ -865,7 +861,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalBitcoin(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarFacParTotalBitcoin(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -900,7 +896,7 @@ public class Utilidades {
 
         }
 
-        listafacturasParcialTotal = DataBaseBO.cargarIDBitcoin(nroReciboFacTotalPar, documentosFinanciero);
+        listafacturasParcialTotal = DataBaseBO.cargarIDBitcoin(nroReciboFacTotalPar, documentosFinanciero, contexto);
 
 
         return listafacturasParcialTotal;
@@ -936,14 +932,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo, contexto);
 
             }
         }
@@ -959,14 +955,14 @@ public class Utilidades {
         double DiferenciaFormasPagoE = 0;
 
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOGRealizados(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOGRealizados(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGRealizados(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGRealizados(str, contexto);
 
             }
         }
@@ -1003,14 +999,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TDiferenciaSumadelTotalDelDOcumento(str);
+                DiferenciaFormasPagoE = DataBaseBO.TDiferenciaSumadelTotalDelDOcumento(str, contexto);
 
             }
         }
@@ -1046,7 +1042,7 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
 
@@ -1054,7 +1050,7 @@ public class Utilidades {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalValorConsignado(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalValorConsignado(str, contexto);
 
             }
         }
@@ -1072,7 +1068,7 @@ public class Utilidades {
 
 
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOGRealizados(consecutivo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOGRealizados(consecutivo, contexto);
         String str = "";
 
 
@@ -1080,7 +1076,7 @@ public class Utilidades {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalValorConsignadoRealizados(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalValorConsignadoRealizados(str, contexto);
 
             }
 //        }
@@ -1116,14 +1112,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotaDifeAfav(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotaDifeAfav(str, contexto);
 
             }
         }
@@ -1159,14 +1155,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFec(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFec(str, contexto);
 
             }
         }
@@ -1202,14 +1198,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFecCantidadFac(str, idPago);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFecCantidadFac(str, idPago, contexto);
 
             }
         }
@@ -1246,14 +1242,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFecCantidadFac(idPago, idPagos);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGEFecCantidadFac(idPago, idPagos, contexto);
 
             }
         }
@@ -1291,14 +1287,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.countMetodEfec(str);
+                DiferenciaFormasPagoE = DataBaseBO.countMetodEfec(str, contexto);
 
             }
         }
@@ -1334,14 +1330,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.countMetodCheq(str);
+                DiferenciaFormasPagoE = DataBaseBO.countMetodCheq(str, contexto);
 
             }
         }
@@ -1377,14 +1373,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.countMetodTarjeta(str);
+                DiferenciaFormasPagoE = DataBaseBO.countMetodTarjeta(str, contexto);
 
             }
         }
@@ -1420,14 +1416,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.countMetodTransferencia(str);
+                DiferenciaFormasPagoE = DataBaseBO.countMetodTransferencia(str, contexto);
 
             }
         }
@@ -1465,14 +1461,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGCheq(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGCheq(str, contexto);
 
             }
         }
@@ -1508,14 +1504,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGTarje(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGTarje(str, contexto);
 
             }
         }
@@ -1551,14 +1547,14 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGTrasnf(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGTrasnf(str, contexto);
 
             }
         }
@@ -1594,23 +1590,27 @@ public class Utilidades {
             nroRecibo = clienteSel.consecutivo;
         }
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, contexto);
         String str = "";
 
         for (int i = 0; i < listaFacturas2.size(); i++) {
             for (Facturas fruit : listaFacturas2) {
                 str += "\'" + fruit.idPago + "\',";
 
-                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGBit(str);
+                DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROGBit(str, contexto);
 
             }
         }
         return DiferenciaFormasPagoE;
     }
 
-    public static File dirApp() {
+    public static File dirApp(Context context) {
 
-        File SDCardRoot = Environment.getExternalStorageDirectory();
+        File SDCardRoot;
+
+        SDCardRoot = Environment.getExternalStorageDirectory();
+
+        assert SDCardRoot != null;
         File dirApp = new File(SDCardRoot.getPath() + "/" + Constantes.nameDirApp);
 
         if (!dirApp.isDirectory())
@@ -1663,9 +1663,14 @@ public class Utilidades {
         return database.exists();
     }
 
-    public static boolean existeArchivoDataBaseTemp() {
+    public static boolean existeArchivoDataBaseTemp(Context context) {
 
-        File SDCardRoot = Environment.getExternalStorageDirectory();
+        File SDCardRoot;
+
+        SDCardRoot = Environment.getExternalStorageDirectory();
+
+        assert SDCardRoot != null;
+
         File database = new File(SDCardRoot.getPath() + "/" + Constantes.nameDirApp, "Temp.db");
         return database.exists();
     }
@@ -1858,13 +1863,13 @@ public class Utilidades {
         return cantidad;
     }
 
-    public static String separarMilesSinDecimal(String numero) {
+    public static String separarMilesSinDecimal(String numero, Context context) {
         String empresa = "", simbolo = "";
         String cantidad;
         String cantidadAux1;
         String cantidadAux2;
         boolean tieneMenos;
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(context);
         final String finalEmpresa = empresa;
         String simboloefec = simbolo;
         int posPunto;
@@ -2567,4 +2572,10 @@ public class Utilidades {
 
         return fechaFormato;
     }
+
+    public static String obtenerImei(Context context) {
+
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
 }

@@ -114,7 +114,7 @@ public class AdapterFacturasSeleccionMultiple extends RecyclerView.Adapter<Adapt
             conceptoCartera.setText(item.getConcepto());
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
             if (finalEmpresa.equals("AABR")) {

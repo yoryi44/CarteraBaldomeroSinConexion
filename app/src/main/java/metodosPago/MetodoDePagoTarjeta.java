@@ -130,7 +130,7 @@ public class MetodoDePagoTarjeta {
 
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -164,9 +164,9 @@ public class MetodoDePagoTarjeta {
         double DiferenciaFormasPago;
         double DiferenciaFormasPagoE = 0;
         double DiferenciaFormasPagoPEN = 0;
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
         final Spinner spinnerCuentasBanco = dialogo.findViewById(R.id.spinnerCuentasBancoTarjeta);
         spinnerCuentasBanco.setVisibility(View.VISIBLE);
@@ -186,7 +186,7 @@ public class MetodoDePagoTarjeta {
 
             }
         }
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems);
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items2 = new String[listaItems.size()];
@@ -382,9 +382,9 @@ public class MetodoDePagoTarjeta {
 
         DiferenciaFormasPago = (DiferenciaFormasPagoE);
 
-        consecutivo = DataBaseBO.cargarConsecutivo();
-        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo();
-        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo();
+        consecutivo = DataBaseBO.cargarConsecutivo(contexto);
+        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(contexto);
+        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
         int contador = 1;
         int consec1 = Integer.parseInt(consecutivo);
         int vendedorsum = Integer.parseInt(consecutivoVendedor);
@@ -1006,9 +1006,9 @@ public class MetodoDePagoTarjeta {
         String vendedorId1 = "";
         String consecutivoid = "";
 
-        consecId1 = DataBaseBO.cargarConsecutivoId();
-        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
         int consec1Id = Integer.parseInt(consecId1);
         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -1016,7 +1016,7 @@ public class MetodoDePagoTarjeta {
         consec1Id = consec1Id + contadorId;
         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
         consecutivoid = String.valueOf(negocioId1+ vendedorsumId+ consec1Id);
 
 
@@ -2593,7 +2593,7 @@ public class MetodoDePagoTarjeta {
 
                                                         valorLista = Double.parseDouble(preciosAcomparar.get(j));
 
-                                                        if (!DataBaseBO.ExisteDocumento(documentosFinanciero)) {
+                                                        if (!DataBaseBO.ExisteDocumento(documentosFinanciero, contexto)) {
                                                             double valorLista2 = Double.parseDouble(precios.get(j));
                                                             totalesValoresLista = String.valueOf(Utilidades.formatearDecimales(valorLista2 - 0, 2));
                                                             totalFacturas.add(totalesValoresLista);
@@ -4176,7 +4176,7 @@ public class MetodoDePagoTarjeta {
                                             spinnerCuentasBanco.getSelectedItem().toString(), moneda_Consig, NCF_Comprobante_fiscal,
                                             documentosFinanciero, consecutivo1,
                                             descripc, via_Pago, usuario, operacion_Cme,
-                                            sincronizado, "0", "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2)) {
+                                            sincronizado, "0", "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2, contexto)) {
 
                                         if (lenguajeElegido == null) {
 
@@ -4230,7 +4230,7 @@ public class MetodoDePagoTarjeta {
                                             spinnerCuentasBanco.getSelectedItem().toString(), moneda_Consig, NCF_Comprobante_fiscal,
                                             documentosFinanciero, consecutivo1,
                                             descripc, via_Pago, usuario, operacion_Cme,
-                                            sincronizado, "0", "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2)) {
+                                            sincronizado, "0", "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2, contexto)) {
 
                                         if (lenguajeElegido == null) {
 
@@ -4289,7 +4289,7 @@ public class MetodoDePagoTarjeta {
                                                     consecutivo1,
                                                     descripc, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, "0", "0",
-                                                    nombreTitular, fotos.idenFoto, finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    nombreTitular, fotos.idenFoto, finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                 if (lenguajeElegido == null) {
 
@@ -4353,7 +4353,7 @@ public class MetodoDePagoTarjeta {
                                                         spinnerCuentasBanco.getSelectedItem().toString(), moneda_Consig, NCF_Comprobante_fiscal,
                                                         documentosFinanciero, consecutivo1,
                                                         descripc, via_Pago, usuario, operacion_Cme,
-                                                        sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                        sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                     if (lenguajeElegido == null) {
 
@@ -4415,7 +4415,7 @@ public class MetodoDePagoTarjeta {
                                                         spinnerCuentasBanco.getSelectedItem().toString(), moneda_Consig, NCF_Comprobante_fiscal,
                                                         documentosFinanciero, consecutivo1,
                                                         descripc, via_Pago, usuario, operacion_Cme,
-                                                        sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                        sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                     if (lenguajeElegido == null) {
 
@@ -4471,7 +4471,7 @@ public class MetodoDePagoTarjeta {
                                                     consecutivo1,
                                                     descripc, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, "0", "0",
-                                                    nombreTitular, fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    nombreTitular, fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                 if (lenguajeElegido == null) {
 
@@ -4515,7 +4515,7 @@ public class MetodoDePagoTarjeta {
                                                     spinnerCuentasBanco.getSelectedItem().toString(), moneda_Consig, NCF_Comprobante_fiscal,
                                                     documentosFinanciero, consecutivo1,
                                                     descripc, via_Pago, usuario, operacion_Cme,
-                                                    sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    sincronizado, "0", "0", nombreTitular, fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                                 if (lenguajeElegido == null) {
 
@@ -4630,8 +4630,8 @@ public class MetodoDePagoTarjeta {
                     documentoFacturas.add(nroRecibo);
                 }
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
 
                 dialogo.cancel();
             }

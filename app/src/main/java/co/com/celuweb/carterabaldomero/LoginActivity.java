@@ -1,8 +1,10 @@
 package co.com.celuweb.carterabaldomero;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -117,8 +120,7 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
          * PERMISOS
          */
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkAndRequestPermissions()) {
-            }
+            checkPermissions();
         }
 
         /**
@@ -140,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
                     String codigo = bundle.getString(Intent.EXTRA_TEXT);
 
                     //CARGAR CLIENTE DESDE CARTERA VALDOMERO
-                    List<ClienteSincronizado> listaClientesSincronizados2 = DataBaseBO.cargarClientesBusqueda(codigo, new Vector<>());
+                    List<ClienteSincronizado> listaClientesSincronizados2 = DataBaseBO.cargarClientesBusqueda(codigo, new Vector<>(), LoginActivity.this);
 
                     //VALIDAR SI EXISTE EL CLIENTE EN CARTERA VALDOMERO
                     if (!listaClientesSincronizados2.isEmpty()) {
@@ -598,7 +600,7 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
         try {
 
 
-            Sync sync = new Sync(LoginActivity.this, Constantes.LOGIN);
+            Sync sync = new Sync(LoginActivity.this, Constantes.LOGIN, LoginActivity.this);
 
 
             sync.user = user;
@@ -718,8 +720,9 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
                         } else if (respuestaServer.equals("Se ha cargado al cliente al rutero correctamente")) {
 
+                            guardarVista();
 
-                            boolean hayClientesEnRutero = Utilidades.existeArchivoDataBaseTemp();
+                            boolean hayClientesEnRutero = Utilidades.existeArchivoDataBaseTemp(LoginActivity.this);
 
                             if (hayClientesEnRutero) {
 
@@ -762,24 +765,48 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
                     public void run() {
 
-                        String mensaje = "";
-                        if (lenguajeElegido.lenguaje.equals("USA"))
-                            mensaje = "Error downloading database";
+                        if(respuestaServer.equals("imeiError"))
+                        {
+                            String mensaje = "";
+                            if (lenguajeElegido.lenguaje.equals("USA"))
+                                mensaje = "This user already has a login on another device";
+                            else
+                                mensaje = "Este usuario ya cuenta con un inicio en otro dispositivo";
+
+                            ProgressView.getInstance().Dismiss();
+                            Alert.alertGeneral(LoginActivity.this, null, mensaje, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    Alert.dialogo.cancel();
+
+
+                                }
+                            }, null);
+                        }
                         else
-                            mensaje = "Error descargando la base de datos";
+                        {
+                            String mensaje = "";
+                            if (lenguajeElegido.lenguaje.equals("USA"))
+                                mensaje = "Error downloading database";
+                            else
+                                mensaje = "Error descargando la base de datos";
 
-                        ProgressView.getInstance().Dismiss();
-                        Alert.alertGeneral(LoginActivity.this, null, "Error descargando la base de datos", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                            ProgressView.getInstance().Dismiss();
+                            Alert.alertGeneral(LoginActivity.this, null, mensaje, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                                Alert.dialogo.cancel();
+                                    Alert.dialogo.cancel();
 
 
-                            }
-                        }, null);
+                                }
+                            }, null);
+                        }
+
                     }
                 });
+
             }
 
         } catch (Exception e) {
@@ -812,6 +839,7 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
                     ProgressView.getInstance().Dismiss();
                 } else {
+
                     Usuario usuarioApp = new Usuario();
                     usuarioApp.codigo = usuario;
                     usuarioApp.contrasena = contrasena;
@@ -820,10 +848,11 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
                     PreferencesUsuario.guardarUsuario(LoginActivity.this, jsonStringObject);
 
-                    Sync sync1 = new Sync(LoginActivity.this, Constantes.DESCARGARINFO);
+                    Sync sync1 = new Sync(LoginActivity.this, Constantes.DESCARGARINFO, LoginActivity.this);
 
                     sync1.user = usuario;
                     sync1.password = contrasena;
+                    sync1.imei = Utilidades.obtenerImei(LoginActivity.this);
                     sync1.start();
 
                     credencialesUsuario(respuestaServer, etUsuario.getText().toString(), etContrasena.getText().toString());
@@ -881,9 +910,8 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
                     public void run() {
 
-                        Sync sync = new Sync(LoginActivity.this, Constantes.LOGIN);
+                        Sync sync = new Sync(LoginActivity.this, Constantes.LOGIN, LoginActivity.this);
 
-                        guardarVista();
                         if (etUsuarioFinal.equals(sync.user) && etContrasenaFinal.equals(sync.password)) {
                             Intent vistaPrincipal = new Intent(LoginActivity.this, PrincipalActivity.class);
 
@@ -1025,6 +1053,97 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
         }
 
         return true;
+    }
+
+    private void checkPermissions() {
+
+        String[] permissions = new String[]{
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WAKE_LOCK,
+                Manifest.permission.CAMERA,
+
+                /* Manifest.permission.BLUETOOTH,
+                 Manifest.permission.BLUETOOTH_ADMIN,
+                 Manifest.permission.WRITE_SETTINGS,
+                 Manifest.permission.WRITE_SECURE_SETTINGS,
+                 Manifest.permission.CALL_PHONE,
+                 Manifest.permission.CALL_PRIVILEGED,*/
+
+        };
+
+
+        int result;
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        for (String permission : permissions) {
+
+            result = ContextCompat.checkSelfPermission(this, permission);
+
+            if (result != PackageManager.PERMISSION_GRANTED) {
+
+                listPermissionsNeeded.add(permission);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+
+            int countPermissionsGranted = 0;
+
+            for (String permission: permissions) {
+
+                int result = ContextCompat.checkSelfPermission(this, permission);
+
+                if (result == PackageManager.PERMISSION_DENIED) {
+
+                    break;
+
+                } else if (result == PackageManager.PERMISSION_GRANTED) {
+
+                    countPermissionsGranted++;
+                }
+            }
+
+            if(countPermissionsGranted < permissions.length) {
+                //Faltaron Permisos por Conceder
+                new AlertDialog.Builder(this)
+                        .setTitle("Permisos Requeridos")
+                        .setMessage("Por favor Establezca los permisos para usar la aplicacion.")
+                        .setCancelable(false)
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (Build.VERSION.SDK_INT >= 23) {
+
+                                    checkPermissions();
+
+                                }
+                            }
+                        })
+                        .show();
+            }
+
+        }
     }
 
 

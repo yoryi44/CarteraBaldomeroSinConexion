@@ -75,7 +75,7 @@ public class VistaClienteActivity extends AppCompatActivity implements Synchroni
         SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
         esPreventa = settings.getBoolean("esPreventa", false);
 
-        String finalEmpresa = DataBaseBO.cargarEmpresa();
+        String finalEmpresa = DataBaseBO.cargarEmpresa(VistaClienteActivity.this);
 
         if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
                 || finalEmpresa.equals("AFPZ") || finalEmpresa.equals("AGAH") || finalEmpresa.equals("AGDP")) {
@@ -128,7 +128,7 @@ public class VistaClienteActivity extends AppCompatActivity implements Synchroni
         lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
 
         String tipoUsuario="";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(VistaClienteActivity.this);
 
         if (lenguajeElegido == null) {
 
@@ -187,7 +187,7 @@ public class VistaClienteActivity extends AppCompatActivity implements Synchroni
         TextView tvCupoCreditoClienteSel = findViewById(R.id.tvCupoCreditoClienteSel);
         TextView tvCondicionPagoClienteSel = findViewById(R.id.tvCondicionPagoClienteSel);
 
-        String cupoCredito = Utilidades.separarMilesSinDecimal(String.valueOf(clienteSel.cupo));
+        String cupoCredito = Utilidades.separarMilesSinDecimal(String.valueOf(clienteSel.cupo), VistaClienteActivity.this);
         tvCupoCreditoClienteSel.setText(cupoCredito);
         tvCondicionPagoClienteSel.setText(clienteSel.condicionPago);
     }
@@ -199,7 +199,7 @@ public class VistaClienteActivity extends AppCompatActivity implements Synchroni
 
         String empresa = "";
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(VistaClienteActivity.this);
 
         if (empresa.equals("AGCO")) {
 
@@ -449,7 +449,7 @@ public class VistaClienteActivity extends AppCompatActivity implements Synchroni
 
         //Progress.show(VistaClienteActivity.this,"Procesando", "Bloqueando cliente...",false);
         ProgressView.getInstance().Show(VistaClienteActivity.this, "Bloqueando Cliente...");
-        Sync sync = new Sync(VistaClienteActivity.this, Constantes.BLOQUEARCLIENTE);
+        Sync sync = new Sync(VistaClienteActivity.this, Constantes.BLOQUEARCLIENTE, VistaClienteActivity.this);
         sync.user = usuarioApp.codigo;
         sync.codigoCliente = clienteSel.codigo;
         sync.start();

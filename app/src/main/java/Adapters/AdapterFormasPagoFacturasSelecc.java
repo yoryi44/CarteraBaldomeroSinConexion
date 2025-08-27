@@ -143,7 +143,7 @@ public class AdapterFormasPagoFacturasSelecc extends RecyclerView.Adapter<Adapte
             input = String.valueOf(item.saldo);
             double valor = 0;
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
 
@@ -192,9 +192,9 @@ public class AdapterFormasPagoFacturasSelecc extends RecyclerView.Adapter<Adapte
             String consecutivoNegocio = "";
             String consecutivoVendedor = "";
 
-            consecutivo = DataBaseBO.cargarConsecutivo();
-            consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo();
-            consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo();
+            consecutivo = DataBaseBO.cargarConsecutivo(context);
+            consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(context);
+            consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(context);
 
 
             int contador = 1;

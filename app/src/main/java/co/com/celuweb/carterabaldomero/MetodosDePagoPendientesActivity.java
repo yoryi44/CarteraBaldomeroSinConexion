@@ -201,7 +201,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                 }
             }
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos, MetodosDePagoPendientesActivity.this);
 
             String idPagoTemporal = "";
             List<String> idPagosTemporal = new ArrayList<>();
@@ -216,12 +216,12 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             if (idPagosTemporal.size() == 0) {
                 idPagosTemporal.add("0");
             }
-            listaFacturas = DataBaseBO.cargarFacturasParametroPendientes(idPagos, numeroRecibo, idPagosTemporal);
+            listaFacturas = DataBaseBO.cargarFacturasParametroPendientes(idPagos, numeroRecibo, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
         } else if (pendientesSeleccionada != null) {
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporalVarias(idPagos, numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporalVarias(idPagos, numeroRecibos, MetodosDePagoPendientesActivity.this);
 
             String idPagoTemporal = "";
             List<String> idPagosTemporal = new ArrayList<>();
@@ -236,12 +236,12 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             if (idPagosTemporal.size() == 0) {
                 idPagosTemporal.add("0");
             }
-            listaFacturas = DataBaseBO.cargarFacturasParametroPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
+            listaFacturas = DataBaseBO.cargarFacturasParametroPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
         }
 
 
-        listaFacturas2 = DataBaseBO.cargarFacturasParametroPendientesEnRecaudos(idPagos, numeroRecibo);
+        listaFacturas2 = DataBaseBO.cargarFacturasParametroPendientesEnRecaudos(idPagos, numeroRecibo, MetodosDePagoPendientesActivity.this);
 
         String acert = "";
         for (Pendientes pendientes : listaFacturas2) {
@@ -271,7 +271,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
         String doctoFinanciero = "";
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(MetodosDePagoPendientesActivity.this);
         final String finalEmpresa = empresa;
 
         Gson gson = new Gson();
@@ -321,7 +321,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                 }
             }
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos, MetodosDePagoPendientesActivity.this);
 
             String idPagoTemporal = "";
             List<String> idPagosTemporal = new ArrayList<>();
@@ -338,8 +338,8 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                 idPagosTemporal.add("0");
             }
 
-            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal);
-            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal);
+            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
             DiferenciaFormasPago = (DiferenciaFormasPagoE);
@@ -414,7 +414,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             }
 
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporalVarias(idPagos, numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporalVarias(idPagos, numeroRecibos, MetodosDePagoPendientesActivity.this);
 
 
             String idPagoTemporal = "";
@@ -427,13 +427,13 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                 idPagosTemporal.add("0");
             }
 
-            double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivoMultiples(numeroRecibos, idPagosTemporal);
-            double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesDataMultiples(numeroRecibos, idPagosTemporal);
-            double valorTransferencias = DataBaseBO.TotalFormasPagoPendientesTransferenciaMultiples(numeroRecibos, idPagosTemporal);
+            double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivoMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesDataMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            double valorTransferencias = DataBaseBO.TotalFormasPagoPendientesTransferenciaMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
-            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
-            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
+            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
             DiferenciaFormasPago = (valorEfectivo + valorCheques);
@@ -542,7 +542,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                         String vendedor = "";
 
 
-                        vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                        vendedor = DataBaseBO.cargarVendedorConsecutivo(MetodosDePagoPendientesActivity.this);
 
                         if (facCollection != null) {
 
@@ -553,7 +553,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo, MetodosDePagoPendientesActivity.this);
                                 idPagos.addAll(idPagosNumeroRecibo);
 
 
@@ -562,7 +562,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
                             }
 
-                            DataBaseBO.eliminarConsecutivoId(vendedor);
+                            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
                         }
 
                         if (facCollectionPendientes != null) {
@@ -575,22 +575,22 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibos.add(numeroRecibo);
 
 
-                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo, MetodosDePagoPendientesActivity.this);
                                 idPagos.addAll(idPagosNumeroRecibo);
 
                             }
 
-                            DataBaseBO.eliminarConsecutivoPaquete(vendedor);
-                            DataBaseBO.eliminarConsecutivoId(vendedor);
+                            DataBaseBO.eliminarConsecutivoPaquete(vendedor, MetodosDePagoPendientesActivity.this);
+                            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
                         }
 
                         List<Facturas> listaIdenFotos = new ArrayList<>();
-                        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos);
-                        DataBaseBO.eliminarFotoID(listaIdenFotos);
+                        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarFotoID(listaIdenFotos, MetodosDePagoPendientesActivity.this);
 
-                        DataBaseBO.eliminarFoto(numeroRecibos);
-                        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos);
-                        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos);
+                        DataBaseBO.eliminarFoto(numeroRecibos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
                         SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor1 = settings.edit();
                         editor1.putBoolean("estado_MetodosDePagoPendientes", true);
@@ -642,7 +642,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                         String vendedor = "";
 
 
-                        vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                        vendedor = DataBaseBO.cargarVendedorConsecutivo(MetodosDePagoPendientesActivity.this);
 
                         if (facCollection != null) {
 
@@ -653,7 +653,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo, MetodosDePagoPendientesActivity.this);
                                 idPagos.addAll(idPagosNumeroRecibo);
 
 
@@ -662,7 +662,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
                             }
 
-                            DataBaseBO.eliminarConsecutivoId(vendedor);
+                            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
                         }
 
                         if (facCollectionPendientes != null) {
@@ -674,22 +674,22 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                 numeroRecibo = pendientes.getNumeroRecibo();
                                 numeroRecibos.add(numeroRecibo);
 
-                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo);
+                                List<String> idPagosNumeroRecibo = DataBaseBO.cargarIdPagosNumeroRecibo(numeroRecibo, MetodosDePagoPendientesActivity.this);
                                 idPagos.addAll(idPagosNumeroRecibo);
 
 
                             }
 
-                            DataBaseBO.eliminarConsecutivoPaquete(vendedor);
-                            DataBaseBO.eliminarConsecutivoId(vendedor);
+                            DataBaseBO.eliminarConsecutivoPaquete(vendedor, MetodosDePagoPendientesActivity.this);
+                            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
                         }
                         List<Facturas> listaIdenFotos = new ArrayList<>();
-                        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos);
-                        DataBaseBO.eliminarFotoID(listaIdenFotos);
+                        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarFotoID(listaIdenFotos, MetodosDePagoPendientesActivity.this);
 
-                        DataBaseBO.eliminarFoto(numeroRecibos);
-                        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos);
-                        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos);
+                        DataBaseBO.eliminarFoto(numeroRecibos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
+                        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
                         SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor1 = settings.edit();
                         editor1.putBoolean("estado_MetodosDePagoPendientes", true);
@@ -873,7 +873,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
         if (facCollection != null) {
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos, MetodosDePagoPendientesActivity.this);
 
             String idPagoTemporal = "";
             List<String> idPagosTemporal = new ArrayList<>();
@@ -884,8 +884,8 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             if (idPagosTemporal.size() == 0) {
                 idPagosTemporal.add("0");
             }
-            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal);
-            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal);
+            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientes(idPagos, numeroRecibo, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
             DiferenciaFormasPago = (DiferenciaFormasPagoE);
@@ -936,11 +936,11 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                 //   int vendedorsum = Integer.parseInt(vendedor);
                                                 //   consec1 = consec1 + contador;
                                                 // DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero);
-                                                DataBaseBO.eliminarRecaudosFinalizados();
+                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero, MetodosDePagoPendientesActivity.this);
+                                                DataBaseBO.eliminarRecaudosFinalizados(MetodosDePagoPendientesActivity.this);
 
                                                 if (Utilidades.verificarNetwork(MetodosDePagoPendientesActivity.this)) {
-                                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                                    if (DataBaseBO.hayInformacionXEnviar(MetodosDePagoPendientesActivity.this)) {
 
                                                         progressDoalog = new ProgressDialog(MetodosDePagoPendientesActivity.this);
                                                         progressDoalog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
@@ -1024,11 +1024,11 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                 //   int vendedorsum = Integer.parseInt(vendedor);
                                                 //   consec1 = consec1 + contador;
                                                 // DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero);
-                                                DataBaseBO.eliminarRecaudosFinalizados();
+                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero, MetodosDePagoPendientesActivity.this);
+                                                DataBaseBO.eliminarRecaudosFinalizados(MetodosDePagoPendientesActivity.this);
 
                                                 if (Utilidades.verificarNetwork(MetodosDePagoPendientesActivity.this)) {
-                                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                                    if (DataBaseBO.hayInformacionXEnviar(MetodosDePagoPendientesActivity.this)) {
 
                                                         progressDoalog = new ProgressDialog(MetodosDePagoPendientesActivity.this);
                                                         progressDoalog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
@@ -1078,7 +1078,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
         if (facCollectionPendientes != null) {
 
-            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos);
+            listaFacturasPendientesTemporal = DataBaseBO.cargarFacturasParametroPendientesTemporal(numeroRecibos, MetodosDePagoPendientesActivity.this);
             //  listaFacturasPendientesTemporal= DataBaseBO.cargarFacturasParametroPendientesEfectivoMultiples(numeroRecibos);
 
 
@@ -1092,13 +1092,13 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
             }
 
 
-            double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivoMultiples(numeroRecibos, idPagosTemporal);
-            double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesDataMultiples(numeroRecibos, idPagosTemporal);
-            double valorTransferencias = DataBaseBO.TotalFormasPagoPendientesTransferenciaMultiples(numeroRecibos, idPagosTemporal);
+            double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivoMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesDataMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            double valorTransferencias = DataBaseBO.TotalFormasPagoPendientesTransferenciaMultiples(numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
-            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
-            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal);
+            TotalFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
+            DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoPendientesMultiples(idPagos, numeroRecibos, idPagosTemporal, MetodosDePagoPendientesActivity.this);
 
 
             DiferenciaFormasPago = (valorEfectivo + valorCheques);
@@ -1150,11 +1150,11 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                 //   int vendedorsum = Integer.parseInt(vendedor);
                                                 //   consec1 = consec1 + contador;
                                                 // DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero);
-                                                DataBaseBO.eliminarRecaudosFinalizados();
+                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero, MetodosDePagoPendientesActivity.this);
+                                                DataBaseBO.eliminarRecaudosFinalizados(MetodosDePagoPendientesActivity.this);
 
                                                 if (Utilidades.verificarNetwork(MetodosDePagoPendientesActivity.this)) {
-                                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                                    if (DataBaseBO.hayInformacionXEnviar(MetodosDePagoPendientesActivity.this)) {
 
                                                         progressDoalog = new ProgressDialog(MetodosDePagoPendientesActivity.this);
                                                         progressDoalog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
@@ -1234,11 +1234,11 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                                 //   int vendedorsum = Integer.parseInt(vendedor);
                                                 //   consec1 = consec1 + contador;
                                                 // DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
-                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero);
-                                                DataBaseBO.eliminarRecaudosFinalizados();
+                                                DataBaseBO.eliminarFacturaCartera(documentosFinanciero, MetodosDePagoPendientesActivity.this);
+                                                DataBaseBO.eliminarRecaudosFinalizados(MetodosDePagoPendientesActivity.this);
 
                                                 if (Utilidades.verificarNetwork(MetodosDePagoPendientesActivity.this)) {
-                                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                                    if (DataBaseBO.hayInformacionXEnviar(MetodosDePagoPendientesActivity.this)) {
 
                                                         progressDoalog = new ProgressDialog(MetodosDePagoPendientesActivity.this);
                                                         progressDoalog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
@@ -1371,7 +1371,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                     @Override
                                     public void onClick(View v) {
 
-                                        DataBaseBO.borrarInfoTemp();
+                                        DataBaseBO.borrarInfoTemp(MetodosDePagoPendientesActivity.this);
 
                                         estadoEnviadoRespuesta = true;
                                         Alert.dialogo.cancel();
@@ -1388,7 +1388,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
                                     @Override
                                     public void onClick(View v) {
 
-                                        DataBaseBO.borrarInfoTemp();
+                                        DataBaseBO.borrarInfoTemp(MetodosDePagoPendientesActivity.this);
 
                                         estadoEnviadoRespuesta = true;
                                         Alert.dialogo.cancel();
@@ -1451,9 +1451,10 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
     }
 
     private void sincronizar2() {
-        Sync sync1 = new Sync(MetodosDePagoPendientesActivity.this, Constantes.DESCARGARINFO);
+        Sync sync1 = new Sync(MetodosDePagoPendientesActivity.this, Constantes.DESCARGARINFO, MetodosDePagoPendientesActivity.this);
         sync1.user = usuarioApp.codigo;
         sync1.password = usuarioApp.contrasena;
+        sync1.imei = Utilidades.obtenerImei(MetodosDePagoPendientesActivity.this);
         sync1.start();
         envioInformacion = true;
 
@@ -1602,7 +1603,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
         String vendedor = "";
 
 
-        vendedor = DataBaseBO.cargarVendedorConsecutivo();
+        vendedor = DataBaseBO.cargarVendedorConsecutivo(MetodosDePagoPendientesActivity.this);
 
         if (facCollection != null) {
 
@@ -1622,7 +1623,7 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
             }
 
-            DataBaseBO.eliminarConsecutivoId(vendedor);
+            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
         }
 
         if (facCollectionPendientes != null) {
@@ -1640,12 +1641,12 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
 
             }
 
-            DataBaseBO.eliminarConsecutivoPaquete(vendedor);
-            DataBaseBO.eliminarConsecutivoId(vendedor);
+            DataBaseBO.eliminarConsecutivoPaquete(vendedor, MetodosDePagoPendientesActivity.this);
+            DataBaseBO.eliminarConsecutivoId(vendedor, MetodosDePagoPendientesActivity.this);
         }
         List<Facturas> listaIdenFotos = new ArrayList<>();
-        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos);
-        DataBaseBO.eliminarFotoID(listaIdenFotos);
+        listaIdenFotos = DataBaseBO.cargaridFotos(idPagos, MetodosDePagoPendientesActivity.this);
+        DataBaseBO.eliminarFotoID(listaIdenFotos, MetodosDePagoPendientesActivity.this);
 
         //  PreferencesFacturasMultiplesPendientes.vaciarPreferencesFacturasMultiplesPendientesSeleccionado(this);
         PreferencesPendientesFacturas.vaciarPreferencesPendientesFacturaSeleccionada(MetodosDePagoPendientesActivity.this);
@@ -1658,9 +1659,9 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
         //   PreferencesFacturasMultiplesPendientes.vaciarPreferencesFacturasMultiplesPendientesSeleccionado(MetodosDePagoPendientesActivity.this);
 
 
-        DataBaseBO.eliminarFoto(numeroRecibos);
-        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos);
-        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos);
+        DataBaseBO.eliminarFoto(numeroRecibos, MetodosDePagoPendientesActivity.this);
+        DataBaseBO.eliminarRecaudosTotalPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
+        DataBaseBO.eliminarRecaudosRealizadosPendientesRecaudos(numeroRecibos, MetodosDePagoPendientesActivity.this);
         SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor1 = settings.edit();
         editor1.putBoolean("estado_MetodosDePagoPendientes", true);
@@ -1674,9 +1675,9 @@ public class MetodosDePagoPendientesActivity extends AppCompatActivity implement
     private void enviarInformacion() {
 
         final String empresa;
-        empresa = DataBaseBO.cargarCodigo();
+        empresa = DataBaseBO.cargarCodigo(MetodosDePagoPendientesActivity.this);
 
-        Sync sync = new Sync(MetodosDePagoPendientesActivity.this, Constantes.ENVIARINFORMACION);
+        Sync sync = new Sync(MetodosDePagoPendientesActivity.this, Constantes.ENVIARINFORMACION, MetodosDePagoPendientesActivity.this);
         sync.user = empresa;
         sync.start();
         Alert.dialogo.cancel();

@@ -82,7 +82,7 @@ public class DialogResumenFirmaFragment extends DialogFragment {
         tvLabelPrintName = view.findViewById(R.id.tvLabelPrintName);
 
         etNombreFirma = view.findViewById(R.id.etNombreFirma);
-        etNombreFirma.setText(!PreferencesNombreFirma.obtenerNombreFirma(view.getContext()).isEmpty() ? PreferencesNombreFirma.obtenerNombreFirma(view.getContext()) : DataBaseBO.cargarUsuarioApp());
+        etNombreFirma.setText(!PreferencesNombreFirma.obtenerNombreFirma(view.getContext()).isEmpty() ? PreferencesNombreFirma.obtenerNombreFirma(view.getContext()) : DataBaseBO.cargarUsuarioApp(getContext()));
 
         saveButton = view.findViewById(R.id.btnAceptarFirma);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +101,7 @@ public class DialogResumenFirmaFragment extends DialogFragment {
                 PreferencesNombreFirma.guardarNombreFirma(view.getContext(),nombreFirma);
 
                 //GUARDAR FIRMA EN BASE DE DATOS
-                DataBaseBO.guardarFirma(idPago, signatureBytes, empresa, vendedor, nombreFirma);
+                DataBaseBO.guardarFirma(idPago, signatureBytes, empresa, vendedor, nombreFirma, getContext());
 
                 listener.onSuccesSignatureDialogListener();
             }

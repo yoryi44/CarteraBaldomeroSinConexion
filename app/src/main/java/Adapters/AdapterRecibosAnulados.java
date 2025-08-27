@@ -197,9 +197,10 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
 
                                         Alert.dialogo.cancel();
 
-                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO, context);
                                         sync1.user = usuarioApp.codigo;
                                         sync1.password = usuarioApp.contrasena;
+                                        sync1.imei = Utilidades.obtenerImei(context);
                                         sync1.start();
                                         envioInformacion = true;
 
@@ -220,9 +221,10 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
 
                                         Alert.dialogo.cancel();
 
-                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO);
+                                        Sync sync1 = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.DESCARGARINFO, context);
                                         sync1.user = usuarioApp.codigo;
                                         sync1.password = usuarioApp.contrasena;
+                                        sync1.imei = Utilidades.obtenerImei(context);
                                         sync1.start();
                                         envioInformacion = true;
 
@@ -386,7 +388,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
             fecha.setText(item.getFechaCierre());
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
             if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -427,7 +429,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                 }
             }
 
-            listaParametrosBancosSpinner = DataBaseBO.cargarMotivosAnulacion(listaItems);
+            listaParametrosBancosSpinner = DataBaseBO.cargarMotivosAnulacion(listaItems, context);
 
             if (listaItems.size() > 0) {
                 items = new String[listaItems.size()];
@@ -470,7 +472,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     realizadas.getIdPago();
                                                     facturaCarteraAnulados.facturaCarteraAnulados(listaFacturasRealizadas);
 
-                                                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo());
+                                                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo(), context);
 
                                                     String claseDocumento, sociedad = "", codigoCliente = "", codigoVendedor = "", doctoFinanciero, numeroRecibo = "",
                                                             referencia = "", codigoCausal, numeroAnulacion, idPago = "";
@@ -521,16 +523,16 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     String causal = String.valueOf(indice);
 
                                                     DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
-                                                            , numeroRecibo, null, causal, null, null, null, textoObservacion);
+                                                            , numeroRecibo, null, causal, null, null, null, textoObservacion, context);
 
                                                     if (Utilidades.verificarNetwork(context)) {
 
                                                         Alert.dialogo.cancel();
 
-                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos, context);
                                                         final String empresa;
-                                                        empresa = DataBaseBO.cargarCodigo();
-                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        empresa = DataBaseBO.cargarCodigo(context);
+                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION, context);
                                                         sync.user = empresa;
                                                         sync.start();
 
@@ -572,7 +574,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     realizadas.getIdPago();
                                                     facturaCarteraAnulados.facturaCarteraAnulados(listaFacturasRealizadas);
 
-                                                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo());
+                                                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo(), context);
 
                                                     String claseDocumento, sociedad = "", codigoCliente = "", codigoVendedor = "", doctoFinanciero, numeroRecibo = "",
                                                             referencia = "", codigoCausal, numeroAnulacion, idPago = "";
@@ -623,16 +625,16 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                                     String causal = String.valueOf(indice);
 
                                                     DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
-                                                            , numeroRecibo, null, causal, null, null, null, textoObservacion);
+                                                            , numeroRecibo, null, causal, null, null, null, textoObservacion, context);
 
                                                     if (Utilidades.verificarNetwork(context)) {
 
                                                         Alert.dialogo.cancel();
 
-                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                                        DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos, context);
                                                         final String empresa;
-                                                        empresa = DataBaseBO.cargarCodigo();
-                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                                        empresa = DataBaseBO.cargarCodigo(context);
+                                                        Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION, context);
                                                         sync.user = empresa;
                                                         sync.start();
 
@@ -668,7 +670,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                             realizadas.getIdPago();
                             facturaCarteraAnulados.facturaCarteraAnulados(listaFacturasRealizadas);
 
-                            cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo());
+                            cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompleta(realizadas.getNumeroRecibo(), context);
 
                             String claseDocumento, sociedad = "", codigoCliente = "", codigoVendedor = "", doctoFinanciero, numeroRecibo = "",
                                     referencia = "", codigoCausal, numeroAnulacion, idPago = "";
@@ -719,16 +721,16 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                             String causal = String.valueOf(indice);
 
                             DataBaseBO.guardarFormaPagAnuladosSolicitud(claseDocumentos, sociedad, codigoCliente, codigoVendedor, doctoFinancieros, valorDocumentos
-                                    , numeroRecibo, null, causal, null, null, null, textoObservacion);
+                                    , numeroRecibo, null, causal, null, null, null, textoObservacion, context);
 
                             if (Utilidades.verificarNetwork(context)) {
 
                                 Alert.dialogo.cancel();
 
-                                DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos);
+                                DataBaseBO.eliminarRecaudosRealziadosNumRe(idPagos, context);
                                 final String empresa;
-                                empresa = DataBaseBO.cargarCodigo();
-                                Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION);
+                                empresa = DataBaseBO.cargarCodigo(context);
+                                Sync sync = new Sync(AdapterRecibosAnulados.this::respSync, Constantes.ENVIARINFORMACION, context);
                                 sync.user = empresa;
                                 sync.start();
 

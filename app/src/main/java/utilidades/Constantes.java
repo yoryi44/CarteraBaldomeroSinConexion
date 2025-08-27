@@ -18,8 +18,8 @@ public class Constantes {
 
             case PRUEBAS:
                 TITULO = "CARTERA BALDOMERO";
-                URL_SYNC = "http://qas.movilidadcn.com/SyncCarteraBaldomero/LogIn.aspx/";
-                URL_SYNC_DB = "http://qas.movilidadcn.com/SyncCarteraBaldomero";
+                URL_SYNC = "https://qas.movilidadcn.com/SyncCarteraBaldomero/LogIn.aspx/";
+                URL_SYNC_DB = "https://qas.movilidadcn.com/SyncCarteraBaldomero";
                 URL_DOWNLOAD_NEW_VERSION = "";
                 break;
 

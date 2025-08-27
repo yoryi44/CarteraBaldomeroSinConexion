@@ -138,7 +138,7 @@ public class AdaptersRecibosRealizados extends RecyclerView.Adapter<AdaptersReci
             }
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
             if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -178,7 +178,7 @@ public class AdaptersRecibosRealizados extends RecyclerView.Adapter<AdaptersReci
                     facturaCarteraRealizados.facturaCarteraRealizados(listaFacturasRealizadas);
 
 
-                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompletaInformes(realizadas.getNumeroRecibo());
+                    cargarFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasCompletaInformes(realizadas.getNumeroRecibo(), context);
 
                     Gson gson = new Gson();
                     String jsonStringObject = gson.toJson(cargarFacturasRealizadas);

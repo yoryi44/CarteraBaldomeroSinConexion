@@ -10,10 +10,12 @@ import com.google.gson.Gson;
 import java.util.concurrent.CountDownLatch;
 
 import businessObject.DataBaseBO;
+import co.com.celuweb.carterabaldomero.PrincipalActivity;
 import configuracion.Synchronizer;
 import dataobject.Usuario;
 import sharedpreferences.PreferencesUsuario;
 import utilidades.Constantes;
+import utilidades.Utilidades;
 
 public class MyWorker extends Worker implements Synchronizer {
 
@@ -30,7 +32,7 @@ public class MyWorker extends Worker implements Synchronizer {
         try {
             Log.d("BackgroundTaskTest", "✅ Proceso en segundo plano iniciado correctamente.");
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(getApplicationContext())) {
                 Log.i("BackgroundTaskTest", "Existe informacion pendiente por enviar...");
                 latch = new CountDownLatch(1); // Inicializar el CountDownLatch
                 enviarInformacionServidor();
@@ -52,8 +54,8 @@ public class MyWorker extends Worker implements Synchronizer {
     private void enviarInformacionServidor() {
         try {
             Log.i("BackgroundTaskTest", "Enviando información...");
-            final String empresa = DataBaseBO.cargarCodigo();
-            Sync sync = new Sync(MyWorker.this, Constantes.ENVIARINFORMACION);
+            final String empresa = DataBaseBO.cargarCodigo(getApplicationContext());
+            Sync sync = new Sync(MyWorker.this, Constantes.ENVIARINFORMACION, getApplicationContext());
             sync.user = empresa;
             sync.start();
         } catch (Exception e) {
@@ -97,9 +99,10 @@ public class MyWorker extends Worker implements Synchronizer {
         Gson gson = new Gson();
         String stringJsonObject = PreferencesUsuario.obtenerUsuario(this.getApplicationContext());
         Usuario usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-        Sync sync = new Sync(MyWorker.this, Constantes.DESCARGARINFO);
+        Sync sync = new Sync(MyWorker.this, Constantes.DESCARGARINFO, getApplicationContext());
         sync.user = usuarioApp.codigo;
         sync.password = usuarioApp.contrasena;
+        sync.imei = Utilidades.obtenerImei(getApplicationContext());
         sync.start();
     }
 

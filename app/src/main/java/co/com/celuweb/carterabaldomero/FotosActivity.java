@@ -148,7 +148,7 @@ public class FotosActivity extends AppCompatActivity {
 
     private void listar() {
         List<Integer> myList = new ArrayList<Integer>();
-        listaFotoString = DataBaseBO.listarString();
+        listaFotoString = DataBaseBO.listarString(FotosActivity.this);
 
         for (String s:listaFotoString) {
             acert = s;

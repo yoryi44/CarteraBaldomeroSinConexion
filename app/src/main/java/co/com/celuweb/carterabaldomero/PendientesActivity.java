@@ -55,7 +55,7 @@ public class PendientesActivity extends AppCompatActivity implements AdaptersRec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pendientes);
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(PendientesActivity.this);
 
         textNumRec = findViewById(R.id.txtNumRe);
         textCodCli = findViewById(R.id.txtCodCli);
@@ -107,10 +107,10 @@ public class PendientesActivity extends AppCompatActivity implements AdaptersRec
         }
 
 
-        listaFacturasPendientes = DataBaseBO.cargarFacturasPendientes();
+        listaFacturasPendientes = DataBaseBO.cargarFacturasPendientes(PendientesActivity.this);
         /// List<Pendientes> sumaPagos = DataBaseBO.cargarSumasPendientesViaPago();
 
-        listaFacturasPendientesAnulacion = DataBaseBO.cargarFacturasPendientesAnulacion();
+        listaFacturasPendientesAnulacion = DataBaseBO.cargarFacturasPendientesAnulacion(PendientesActivity.this);
         if (listaFacturasPendientesAnulacion.size() > 0) {
             for (Pendientes pen : listaFacturasPendientesAnulacion) {
 
@@ -188,7 +188,7 @@ public class PendientesActivity extends AppCompatActivity implements AdaptersRec
         }
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(PendientesActivity.this);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("ADHB") || finalEmpresa.equals("AGUC") || finalEmpresa.equals("AGSC")  || finalEmpresa.equals("AGGC")
@@ -230,7 +230,7 @@ public class PendientesActivity extends AppCompatActivity implements AdaptersRec
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(PendientesActivity.this);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("ADHB") || finalEmpresa.equals("AGUC") || finalEmpresa.equals("AGSC")  || finalEmpresa.equals("AGGC")

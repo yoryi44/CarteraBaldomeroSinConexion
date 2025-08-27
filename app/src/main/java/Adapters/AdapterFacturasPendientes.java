@@ -179,7 +179,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
 
 
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
 
@@ -272,7 +272,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                 tvidpago.setText(item.getIdPago());
 
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
                 if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -362,7 +362,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                 tvidpago.setText(item.getIdPago());
 
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
                 if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -450,7 +450,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                 tvidpago.setText(item.getIdPago());
 
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
                 if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -537,7 +537,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                 tvidpago.setText(item.getIdPago());
 
                 String empresa = "";
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(context);
                 final String finalEmpresa = empresa;
 
                 if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
@@ -721,7 +721,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
 
                         }
 
-                        cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompletaPorid(pendientesSeleccionada.getIdPago());
+                        cargarFacturasPendientesCompleta = DataBaseBO.cargarFacturasPendientesCompletaPorid(pendientesSeleccionada.getIdPago(), context);
                     } else if (multipleestado != null) {
                         for (Pendientes fac : facCollectionPendientes) {
                             numeroRecibosMultiples.add(fac.getNumeroRecibo());
@@ -732,7 +732,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
 
                         pendientesSeleccionada.getViaPago();
 
-                        cargarFacturasPendientesCompletaMultiples = DataBaseBO.cargarFacturasPendientesCompletaPoridMultiples(numeroRecibosMultiples);
+                        cargarFacturasPendientesCompletaMultiples = DataBaseBO.cargarFacturasPendientesCompletaPoridMultiples(numeroRecibosMultiples, context);
                     }
 
 
@@ -855,7 +855,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
 
                     } else if (multipleestado != null) {
 
-                        preciosPendientesMultiples = DataBaseBO.cargarFacturasParametroPendientesTransferenciaMultiplesValorPendiente(numeroRecibosMultiples);
+                        preciosPendientesMultiples = DataBaseBO.cargarFacturasParametroPendientesTransferenciaMultiplesValorPendiente(numeroRecibosMultiples, context);
 
                         for (Pendientes pendientes1 : cargarFacturasPendientesCompletaMultiples) {
                             claseDocumento = pendientes1.getClaseDocumento();
@@ -942,9 +942,9 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                         String negocioId1 = "";
                         String vendedorId1 = "";
 
-                        consecId1 = DataBaseBO.cargarConsecutivoId();
-                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                        consecId1 = DataBaseBO.cargarConsecutivoId(context);
+                        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(context);
+                        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(context);
 
                         int consec1Id = Integer.parseInt(consecId1);
                         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -952,7 +952,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                         consec1Id = consec1Id + contadorId;
                         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                          DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                          DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, context);
 
                         if (DataBaseBO.guardarFormaPagPendientes(idPago, claseDocumentos,
                                 sociedad, codigoCliente, codigoVendedor,
@@ -965,7 +965,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                                 pendientesSeleccionada.getObservaciones(), pendientesSeleccionada.getViaPago(),
                                 pendientesSeleccionada.getUsuario(), operacionCMEs,
                                 0, bancoPendientes, "0",
-                                "0", idenFoto, numeroAnulacionId1, consecutivo, pendientesSeleccionada.observacionesMotivo,fechaRecibo)) {
+                                "0", idenFoto, numeroAnulacionId1, consecutivo, pendientesSeleccionada.observacionesMotivo,fechaRecibo, context)) {
 
                             if (lenguajeElegido == null) {
 
@@ -1003,9 +1003,9 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                     } else if (multipleestado != null) {
 
                         final String fechacon = Utilidades.fechaActual("yyyy-MM-dd");
-                        consec = DataBaseBO.cargarConsecutivoPaquete();
-                        negocio = DataBaseBO.cargarNegocioConsecutivoId();
-                        vendedor = DataBaseBO.cargarVendedorConsecutivoId();
+                        consec = DataBaseBO.cargarConsecutivoPaquete(context);
+                        negocio = DataBaseBO.cargarNegocioConsecutivoId(context);
+                        vendedor = DataBaseBO.cargarVendedorConsecutivoId(context);
 
                         int consec1 = Integer.parseInt(consec);
                         int vendedorsum = Integer.parseInt(vendedor);
@@ -1014,9 +1014,9 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                         numeroAnulacion = String.valueOf(negocio + vendedor + consec1);
 
                         //CARGAR CONSUCUTIVO ID
-                        consecId = DataBaseBO.cargarConsecutivoId();
-                        negocioId = DataBaseBO.cargarNegocioConsecutivoPaquete();
-                        vendedorId = DataBaseBO.cargarVendedorConsecutivoPaquete();
+                        consecId = DataBaseBO.cargarConsecutivoId(context);
+                        negocioId = DataBaseBO.cargarNegocioConsecutivoPaquete(context);
+                        vendedorId = DataBaseBO.cargarVendedorConsecutivoPaquete(context);
 
                         int consec1Id = Integer.parseInt(consecId);
                         int vendedorsumId = Integer.parseInt(vendedor);
@@ -1029,7 +1029,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                         // DataBaseBO.guardarConsecutivoPaquete(negocio, vendedorsum, consec1, fechacon);
 
                         //GUARDAR CONSECUTIVO ID
-                         DataBaseBO.guardarConsecutivoId(negocioId, vendedorsumId, consec1Id, fechacon);
+                         DataBaseBO.guardarConsecutivoId(negocioId, vendedorsumId, consec1Id, fechacon, context);
 
                         if (DataBaseBO.guardarFormaPagPendientesMultiplesReferencias(idsPagos, claseDocumentos,
                                 sociedad, codigoClientes, codigoVendedor,
@@ -1040,7 +1040,7 @@ public class AdapterFacturasPendientes extends RecyclerView.Adapter<AdapterFactu
                                 numeroRecibos, observacioness, viaPagos,
                                 pendientesSeleccionada.getUsuario(), operacionCMEs,
                                 0, bancoPendientess, "0",
-                                "0", idenFotos, numeroAnulacion, numeroAnulacionIds,valorConsignados, consecutivos,fechasRecibos, observacionesMotivos)) {
+                                "0", idenFotos, numeroAnulacion, numeroAnulacionIds,valorConsignados, consecutivos,fechasRecibos, observacionesMotivos, context)) {
 
 
                             if (lenguajeElegido == null) {

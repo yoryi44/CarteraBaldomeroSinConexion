@@ -116,7 +116,7 @@ public class MetodoDePagoBitcoin {
         tituloCuentaDestinoBitcoin = dialogo.findViewById(R.id.tituloCuentaDestinoBitcoin);
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
         if (lenguajeElegido == null) {
 
         } else if (lenguajeElegido != null) {
@@ -148,9 +148,9 @@ public class MetodoDePagoBitcoin {
         double DiferenciaFormasPagoE = 0;
         double DiferenciaFormasPagoPEN = 0;
 
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
         final Spinner spinner2 = dialogo.findViewById(R.id.spinnerEstatus);
         ArrayAdapter adapter2 = ArrayAdapter.createFromResource(contexto, R.array.ESTATUS, R.layout.support_simple_spinner_dropdown_item);
@@ -163,7 +163,7 @@ public class MetodoDePagoBitcoin {
         String[] items2;
         Vector<String> listaItems = new Vector<String>();
         listaItems.addElement("Seleccione");
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems);
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items2 = new String[listaItems.size()];
@@ -354,9 +354,9 @@ public class MetodoDePagoBitcoin {
 
         DiferenciaFormasPago = (DiferenciaFormasPagoE);
 
-        consecutivo = DataBaseBO.cargarConsecutivo();
-        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo();
-        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo();
+        consecutivo = DataBaseBO.cargarConsecutivo(contexto);
+        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(contexto);
+        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
         int contador = 1;
         int consec1 = Integer.parseInt(consecutivo);
         int vendedorsum = Integer.parseInt(consecutivoVendedor);
@@ -701,9 +701,9 @@ public class MetodoDePagoBitcoin {
         String vendedorId1 = "";
         String consecutivoid = "";
 
-        consecId1 = DataBaseBO.cargarConsecutivoId();
-        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
         int consec1Id = Integer.parseInt(consecId1);
         int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -711,7 +711,7 @@ public class MetodoDePagoBitcoin {
         consec1Id = consec1Id + contadorId;
         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
         consecutivoid = String.valueOf(negocioId1+ vendedorsumId+ consec1Id);
 
 
@@ -3559,7 +3559,7 @@ public class MetodoDePagoBitcoin {
                                         NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                         descripcion, via_Pago, usuario, operacion_Cme,
                                         sincronizado, "0", "0",
-                                        "0", fotos.idenFoto,finalConsecutivoid, consecutivo2)) {
+                                        "0", fotos.idenFoto,finalConsecutivoid, consecutivo2, contexto)) {
                                     //  DataBaseBO.eliminarFacturaCartera(documento);
                                       if (lenguajeElegido == null) {
 
@@ -3620,7 +3620,7 @@ public class MetodoDePagoBitcoin {
                                         NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                         descripcion, via_Pago, usuario, operacion_Cme,
                                         sincronizado, "0", "0", "0"
-                                        , fotos.idenFoto,finalConsecutivoid,consecutivo2)) {
+                                        , fotos.idenFoto,finalConsecutivoid,consecutivo2, contexto)) {
                                     //  DataBaseBO.eliminarFacturaCartera(documento);
                                       if (lenguajeElegido == null) {
 
@@ -3686,7 +3686,7 @@ public class MetodoDePagoBitcoin {
                                                 consecutivo1,
                                                 descripcion, via_Pago, usuario, operacion_Cme,
                                                 sincronizado, "0", "0",
-                                                "0",fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                "0",fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                             Toasty.warning(contexto, "El registro fue almacenado correctamente.", Toasty.LENGTH_SHORT).show();
 
@@ -3719,7 +3719,7 @@ public class MetodoDePagoBitcoin {
                                                     NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, "0", "0", "0"
-                                                    , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
                                                 //  DataBaseBO.eliminarFacturaCartera(documento);
                                                 if (lenguajeElegido == null) {
 
@@ -3770,7 +3770,7 @@ public class MetodoDePagoBitcoin {
                                                     NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, "0", "0", "0"
-                                                    , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                    , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
                                                 //  DataBaseBO.eliminarFacturaCartera(documento);
                                                 if (lenguajeElegido == null) {
 
@@ -3832,7 +3832,7 @@ public class MetodoDePagoBitcoin {
                                                 consecutivo1,
                                                 descripcion, via_Pago, usuario, operacion_Cme,
                                                 sincronizado, "0", "0",
-                                                "0",fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                "0",fotos.idenFoto,finalConsecutivoid, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
 
                                             if (lenguajeElegido == null) {
 
@@ -3862,7 +3862,7 @@ public class MetodoDePagoBitcoin {
                                                 NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                                 descripcion, via_Pago, usuario, operacion_Cme,
                                                 sincronizado, "0", "0", "0"
-                                                , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "")) {
+                                                , fotos.idenFoto,finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto)) {
                                             //  DataBaseBO.eliminarFacturaCartera(documento);
 
                                             if (lenguajeElegido == null) {
@@ -3975,8 +3975,8 @@ public class MetodoDePagoBitcoin {
                 }
 
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
 
                 dialogo.cancel();
             }

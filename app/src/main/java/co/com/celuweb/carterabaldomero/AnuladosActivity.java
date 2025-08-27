@@ -103,7 +103,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
         listAnulados.add(clienteSel.codigo);
 
 
-        listaFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasDif(clienteSel.codigo);
+        listaFacturasRealizadas = DataBaseBO.cargarFacturasRealizadasDif(clienteSel.codigo, AnuladosActivity.this);
         rvFacturasRealizadas = findViewById(R.id.rvFacturasRealizadas);
         rvFacturasRealizadas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         AdapterRecibosAnulados adapterRecibosAnulados = new AdapterRecibosAnulados(listaFacturasRealizadas,AnuladosActivity.this);
@@ -155,7 +155,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
                         //Formateo el mes obtenido: antepone el 0 si son menores de 10
                         String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                         //Muestro la fecha con el formato deseado
-                        String empresa = DataBaseBO.cargarEmpresa();
+                        String empresa = DataBaseBO.cargarEmpresa(AnuladosActivity.this);
                         final String finalEmpresa = empresa;
 
                         if (finalEmpresa.equals("AGUC"))
@@ -187,7 +187,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
                         //Formateo el mes obtenido: antepone el 0 si son menores de 10
                         String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                         //Muestro la fecha con el formato deseado
-                        String empresa = DataBaseBO.cargarEmpresa();
+                        String empresa = DataBaseBO.cargarEmpresa(AnuladosActivity.this);
                         final String finalEmpresa = empresa;
 
                         if (finalEmpresa.equals("AGUC"))
@@ -206,7 +206,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
             }
         });
 
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(AnuladosActivity.this);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("AGUC")) {
@@ -278,7 +278,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
     private void busquedaListaClientes(String parametroBusqueda) {
         final Vector<String> listaItems = new Vector<>();
         parametroBusqueda = etParametroBusqueda.getText().toString();
-        listaFacturasRealizadasBusqueda = DataBaseBO.cargarClientesBusquedaFacRealizadas(parametroBusqueda);
+        listaFacturasRealizadasBusqueda = DataBaseBO.cargarClientesBusquedaFacRealizadas(parametroBusqueda, AnuladosActivity.this);
 
         rvFacturasRealizadas = findViewById(R.id.rvFacturasRealizadas);
         rvFacturasRealizadas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -308,7 +308,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
         final String inicial = etFechaIncialSAP.getText().toString();
         final String fin = etFechaFinSAP.getText().toString();
 
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(AnuladosActivity.this);
         final String finalEmpresa = empresa;
         SimpleDateFormat date = null;
 
@@ -401,7 +401,7 @@ public class AnuladosActivity extends AppCompatActivity implements AdapterRecibo
         rvFacturasRealizadas = findViewById(R.id.rvFacturasRealizadas);
         rvFacturasRealizadas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        listaFacturasRealizadas = DataBaseBO.cargarFechaCarteraAnulados(inicial, fin,clienteSel.codigo);
+        listaFacturasRealizadas = DataBaseBO.cargarFechaCarteraAnulados(inicial, fin,clienteSel.codigo, AnuladosActivity.this);
 
         rvFacturasRealizadas = findViewById(R.id.rvFacturasRealizadas);
         rvFacturasRealizadas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

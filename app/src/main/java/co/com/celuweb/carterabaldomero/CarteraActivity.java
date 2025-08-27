@@ -65,7 +65,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
     private TextView tvRangoFecha,titulotvFacturas;
     private ImageView ImgBusfecha;
     private Vector<Cartera> listaParametosSpinner;
-    Activity context;
+    Activity context = CarteraActivity.this;
     private EditText etFechaIncialSAP;
     private EditText etFechaFinSAP;
     private ClienteSincronizado clienteSel;
@@ -105,7 +105,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
         ImgBusfecha.setVisibility(View.GONE);
         etParametroBusqueda = findViewById(R.id.etParametroBusqueda2);
 
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(context);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("AGUC")) {
@@ -196,7 +196,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                                 //Formateo el mes obtenido: antepone el 0 si son menores de 10
                                                 String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                                                 //Muestro la fecha con el formato deseado
-                                                String empresa = DataBaseBO.cargarEmpresa();
+                                                String empresa = DataBaseBO.cargarEmpresa(context);
                                                 final String finalEmpresa = empresa;
 
                                                 if (finalEmpresa.equals("AGUC"))
@@ -227,7 +227,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                                 //Formateo el mes obtenido: antepone el 0 si son menores de 10
                                                 String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                                                 //Muestro la fecha con el formato deseado
-                                                String empresa = DataBaseBO.cargarEmpresa();
+                                                String empresa = DataBaseBO.cargarEmpresa(context);
                                                 final String finalEmpresa = empresa;
 
                                                 if (finalEmpresa.equals("AGUC"))
@@ -262,7 +262,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                 String[] items;
                                 Vector<String> listaItems = new Vector<String>();
 
-                                listaParametosSpinner = DataBaseBO.cargarTipoCartera(listaItems);
+                                listaParametosSpinner = DataBaseBO.cargarTipoCartera(listaItems, context);
 
                                 if (listaItems.size() > 0) {
                                     items = new String[listaItems.size()];
@@ -386,7 +386,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                                 //Formateo el mes obtenido: antepone el 0 si son menores de 10
                                                 String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                                                 //Muestro la fecha con el formato deseado
-                                               String empresa = DataBaseBO.cargarEmpresa();
+                                               String empresa = DataBaseBO.cargarEmpresa(context);
                                                 final String finalEmpresa = empresa;
 
                                                 if (finalEmpresa.equals("AGUC"))
@@ -417,7 +417,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                                 //Formateo el mes obtenido: antepone el 0 si son menores de 10
                                                 String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                                                 //Muestro la fecha con el formato deseado
-                                                String empresa = DataBaseBO.cargarEmpresa();
+                                                String empresa = DataBaseBO.cargarEmpresa(context);
                                                 final String finalEmpresa = empresa;
 
                                                 if (finalEmpresa.equals("AGUC"))
@@ -452,7 +452,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
                                 String[] items;
                                 Vector<String> listaItems = new Vector<String>();
 
-                                listaParametosSpinner = DataBaseBO.cargarTipoCartera(listaItems);
+                                listaParametosSpinner = DataBaseBO.cargarTipoCartera(listaItems, context);
 
                                 if (listaItems.size() > 0) {
                                     items = new String[listaItems.size()];
@@ -550,7 +550,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
 
 
         String parametro = clienteSel.codigo;
-        listaCartera = DataBaseBO.cargarFechaCartera(parametro, listaItems, inicial, fin);
+        listaCartera = DataBaseBO.cargarFechaCartera(parametro, listaItems, inicial, fin, context);
 
         rvListaCartera = findViewById(R.id.rvListaCartera);
         rvListaCartera.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -675,7 +675,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
 
 
                         if (!documentt.equals("")) {
-                            DataBaseBO.eliminarRecaudosTotal(documentosFinanciero);
+                            DataBaseBO.eliminarRecaudosTotal(documentosFinanciero, context);
                             SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor1 = settings.edit();
                             PreferencesCartera.vaciarPreferencesCarteraSeleccionada(getApplicationContext());
@@ -754,7 +754,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
 
 
                         if (!documentt.equals("")) {
-                            DataBaseBO.eliminarRecaudosTotal(documentosFinanciero);
+                            DataBaseBO.eliminarRecaudosTotal(documentosFinanciero, context);
                             SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor1 = settings.edit();
                             PreferencesCartera.vaciarPreferencesCarteraSeleccionada(getApplicationContext());
@@ -841,7 +841,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
         final String inicial = etFechaIncialSAP.getText().toString();
         final String fin = etFechaFinSAP.getText().toString();
 
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(context);
         final String finalEmpresa = empresa;
         SimpleDateFormat date = null;
 
@@ -937,7 +937,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
         parametroBusqueda = spinner2.getSelectedItem().toString();
 
         String parametro = clienteSel.codigo;
-        listaCartera = DataBaseBO.cargarCarteraTipoParametroBusqueda(parametroBusqueda, parametro, listaItems);
+        listaCartera = DataBaseBO.cargarCarteraTipoParametroBusqueda(parametroBusqueda, parametro, listaItems, context);
 
         rvListaCartera = findViewById(R.id.rvListaCartera);
         rvListaCartera.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -966,7 +966,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
         final Vector<String> listaItems = new Vector<>();
         parametroBusqueda = etParametroBusqueda.getText().toString();
         String parametro = clienteSel.codigo;
-        listaCartera = DataBaseBO.cargarCarteraParametroBusqueda(parametroBusqueda, parametro, listaItems);
+        listaCartera = DataBaseBO.cargarCarteraParametroBusqueda(parametroBusqueda, parametro, listaItems, context);
 
         rvListaCartera = findViewById(R.id.rvListaCartera);
         rvListaCartera.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -991,7 +991,7 @@ public class CarteraActivity extends AppCompatActivity implements AdapterCartera
         rvListaCartera = findViewById(R.id.rvListaCartera);
         Vector<String> listaItems = new Vector<>();
         String parametro = clienteSel.codigo;
-        listaCartera = DataBaseBO.cargarCarteraCompleta(parametro, listaItems);
+        listaCartera = DataBaseBO.cargarCarteraCompleta(parametro, listaItems, context);
         rvListaCartera.setVisibility(View.VISIBLE);
 
         AdapterCartera adapter3 = new AdapterCartera(listaCartera, CarteraActivity.this);

@@ -108,7 +108,7 @@ public class PrinterBO extends AppCompatActivity {
      * Metodo encargado de generar la tirilla de entrega(Establecer Impresora)
      */
 
-    public static String formatoTirillaEntrega1(String param, List<Facturas> idpago) throws WriterException {
+    public static String formatoTirillaEntrega1(String param, List<Facturas> idpago, Context context) throws WriterException {
 
         String strPrint;
 
@@ -152,13 +152,13 @@ public class PrinterBO extends AppCompatActivity {
 
         ArrayList<Facturas> facturas = new ArrayList<Facturas>();
 
-        facturas = DataBaseBO.getImpresionFactura(param, idpago);
-        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago);
+        facturas = DataBaseBO.getImpresionFactura(param, idpago, context);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago, context);
 
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
 
         formato = Utilidades.CentrarLinea("  Recibo de Ingreso", 30);
@@ -379,11 +379,11 @@ public class PrinterBO extends AppCompatActivity {
 
         final List<String> Documentos = new ArrayList<>();
 
-        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -546,9 +546,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -588,9 +588,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -932,17 +932,17 @@ public class PrinterBO extends AppCompatActivity {
         final List<Double> pagado = new ArrayList<>();
         final List<String> fechas = new ArrayList<>();
         final List<Double> balance = new ArrayList<>();
-        double salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
-        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+        double salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, context);
+        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, context);
         Boolean isPrimerRegistro = true;
 
         final List<String> Documentos = new ArrayList<>();
 
-        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo, context);
 
         for (Facturas facturas12 : facturasHechas) {
             //SUMAR VALOR PAGADO
@@ -1211,9 +1211,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -1253,9 +1253,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -1636,11 +1636,11 @@ public class PrinterBO extends AppCompatActivity {
 
         final List<String> Documentos = new ArrayList<>();
 
-        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -1803,9 +1803,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -1845,9 +1845,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -2172,8 +2172,8 @@ public class PrinterBO extends AppCompatActivity {
         double sumaFacturasSubTotal = 0;
         double sumaBalance = 0;
         double sumaValorPAgado = 0;
-        double salfoAFA = DataBaseBO.SaldoAfavorRecaudosPendientes(numeroRecibo);
-        double valorNegativos = DataBaseBO.TotalValoresNegativosRecaudosPendientes(numeroRecibo);
+        double salfoAFA = DataBaseBO.SaldoAfavorRecaudosPendientes(numeroRecibo, context);
+        double valorNegativos = DataBaseBO.TotalValoresNegativosRecaudosPendientes(numeroRecibo, context);
         Boolean isPrimerRegistro = true;
 
         ArrayList<Facturas> facturas = new ArrayList<Facturas>();
@@ -2195,11 +2195,11 @@ public class PrinterBO extends AppCompatActivity {
 
         final List<String> Documentos = new ArrayList<>();
 
-        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo, context);
 
         for (Facturas facturas12 : facturasHechas) {
             //SUMAR VALOR PAGADO
@@ -2467,9 +2467,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -2509,9 +2509,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -2886,11 +2886,11 @@ public class PrinterBO extends AppCompatActivity {
 
         final List<String> Documentos = new ArrayList<>();
 
-        facturas = DataBaseBO.getImpresionFactura(param, idpago);
+        facturas = DataBaseBO.getImpresionFactura(param, idpago, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechas(param, idpago);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechas(param, idpago, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -3053,9 +3053,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCartera(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCartera(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -3095,9 +3095,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraCliente(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraCliente(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -3439,11 +3439,11 @@ public class PrinterBO extends AppCompatActivity {
         final List<String> Documentos = new ArrayList<>();
 
 
-        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago,numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago,numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -3607,9 +3607,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -3650,9 +3650,9 @@ public class PrinterBO extends AppCompatActivity {
         }
 
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -4005,8 +4005,8 @@ public class PrinterBO extends AppCompatActivity {
         double sumaFacturasSubTotal = 0;
         double sumaValorPAgado = 0;
         double sumaBalance = 0;
-        double salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo);
-        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo);
+        double salfoAFA = DataBaseBO.SaldoAfavor(numeroRecibo, context);
+        double valorNegativos = DataBaseBO.TotalValoresNegativos(numeroRecibo, context);
         Boolean isPrimerRegistro = true;
 
         ArrayList<Facturas> facturas = new ArrayList<Facturas>();
@@ -4029,11 +4029,11 @@ public class PrinterBO extends AppCompatActivity {
         final List<String> Documentos = new ArrayList<>();
 
 
-        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaRealizados(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago,numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosRealizados(param, idpago,numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosRealizados(param, idpago, numeroRecibo, context);
 
         for (Facturas facturas12 : facturasHechas) {
             //SUMAR VALOR PAGADO
@@ -4303,9 +4303,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosRealizados(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -4346,9 +4346,9 @@ public class PrinterBO extends AppCompatActivity {
         }
 
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosRealizados(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -4761,11 +4761,11 @@ public class PrinterBO extends AppCompatActivity {
         final List<String> Documentos = new ArrayList<>();
 
 
-        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -4929,9 +4929,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -4972,9 +4972,9 @@ public class PrinterBO extends AppCompatActivity {
         }
 
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -5327,8 +5327,8 @@ public class PrinterBO extends AppCompatActivity {
         double sumaFacturasSubTotal = 0;
         double sumaValorPAgado = 0;
         double sumaBalance = 0;
-        double salfoAFA = DataBaseBO.SaldoAfavorRecaudosPendientes(numeroRecibo);
-        double valorNegativos = DataBaseBO.TotalValoresNegativosRecaudosPendientes(numeroRecibo);
+        double salfoAFA = DataBaseBO.SaldoAfavorRecaudosPendientes(numeroRecibo, context);
+        double valorNegativos = DataBaseBO.TotalValoresNegativosRecaudosPendientes(numeroRecibo, context);
         Boolean isPrimerRegistro = true;
 
 
@@ -5352,11 +5352,11 @@ public class PrinterBO extends AppCompatActivity {
         final List<String> Documentos = new ArrayList<>();
 
 
-        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo);
+        facturas = DataBaseBO.getImpresionFacturaPendientes(param, idpago, numeroRecibo, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionClienteRecaudosPendientes(param, idpago, numeroRecibo, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechasRecaudosPendientes(param, idpago, numeroRecibo, context);
 
         for (Facturas facturas12 : facturasHechas) {
             //SUMAR VALOR PAGADO
@@ -5626,9 +5626,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCarteraRecaudosPendientes(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -5669,9 +5669,9 @@ public class PrinterBO extends AppCompatActivity {
         }
 
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraClienteRecaudosPendientes(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -6074,11 +6074,11 @@ public class PrinterBO extends AppCompatActivity {
         final List<String> Documentos = new ArrayList<>();
 
 
-        facturas = DataBaseBO.getImpresionFactura(param, idpago);
+        facturas = DataBaseBO.getImpresionFactura(param, idpago, context);
 
-        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago, context);
 
-        facturasHechas = DataBaseBO.getImpresionFacturaHechas(param, idpago);
+        facturasHechas = DataBaseBO.getImpresionFacturaHechas(param, idpago, context);
 
 
         for (Facturas facturas12 : facturasHechas) {
@@ -6242,9 +6242,9 @@ public class PrinterBO extends AppCompatActivity {
 
         }
 
-        listCarteraDocu = DataBaseBO.getImpresionCartera(documentoFin);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        listCarteraDocu = DataBaseBO.getImpresionCartera(documentoFin, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
         for (Cartera cartera:listCarteraDocu) {
 
@@ -6285,9 +6285,9 @@ public class PrinterBO extends AppCompatActivity {
         }
 
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
-        Cartera cartera1 = DataBaseBO.cargarCarteraCliente(documentoFin);
+        Cartera cartera1 = DataBaseBO.cargarCarteraCliente(documentoFin, context);
 
         byte[] data = null;
         Resources res = Resources.getSystem();
@@ -6618,7 +6618,7 @@ public class PrinterBO extends AppCompatActivity {
     }
 
 
-    public static String formatoTirillaEntrega2(String param, List<Facturas> idpago) throws WriterException {
+    public static String formatoTirillaEntrega2(String param, List<Facturas> idpago, Context context) throws WriterException {
 
         String strPrint, dato;
         char ret1 = 13;
@@ -6638,12 +6638,12 @@ public class PrinterBO extends AppCompatActivity {
         strPrint += "CENTER" + enter;
 
         ArrayList<Facturas> facturas = new ArrayList<Facturas>();
-        facturas = DataBaseBO.getImpresionFactura(param, idpago);
-        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        facturas = DataBaseBO.getImpresionFactura(param, idpago, context);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
         dato = "Recibo de Ingreso";
         strPrint += "TEXT " + font + " " + size + " " + posX + " " + posY + " " + dato + enter;
@@ -6779,7 +6779,7 @@ public class PrinterBO extends AppCompatActivity {
         return strPrint;
     }
 
-    public static String formatoTirillaEntregaEmpresa(String param, List<Facturas> idpago) throws WriterException {
+    public static String formatoTirillaEntregaEmpresa(String param, List<Facturas> idpago, Context context) throws WriterException {
 
         String strPrint, dato;
         char ret1 = 13;
@@ -6799,12 +6799,12 @@ public class PrinterBO extends AppCompatActivity {
         strPrint += "CENTER" + enter;
 
         ArrayList<Facturas> facturas = new ArrayList<Facturas>();
-        facturas = DataBaseBO.getImpresionFactura(param, idpago);
-        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago);
-        String empresa = DataBaseBO.cargarEmpresa();
-        String vendedor = DataBaseBO.cargarUsuarioApp();
+        facturas = DataBaseBO.getImpresionFactura(param, idpago, context);
+        Facturas encabezadoFactura = DataBaseBO.getImpresionCliente(param, idpago, context);
+        String empresa = DataBaseBO.cargarEmpresa(context);
+        String vendedor = DataBaseBO.cargarUsuarioApp(context);
 
-        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente);
+        Cliente cliente = DataBaseBO.cargarCliente(encabezadoFactura.codCliente, context);
 
         dato = "Recibo de Ingreso";
         strPrint += "TEXT " + font + " " + size + " " + posX + " " + posY + " " + dato + enter;

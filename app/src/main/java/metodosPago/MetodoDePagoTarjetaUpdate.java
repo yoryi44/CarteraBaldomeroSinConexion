@@ -127,7 +127,7 @@ public class MetodoDePagoTarjetaUpdate {
 
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -159,9 +159,9 @@ public class MetodoDePagoTarjetaUpdate {
         String consecutivoVendedor = "";
         String codigoVendedor = "";
         double DiferenciaFormasPago;
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
         final Spinner spinnerCuentasBanco = dialogo.findViewById(R.id.spinnerCuentasBancoTarjeta);
         spinnerCuentasBanco.setVisibility(View.VISIBLE);
@@ -181,7 +181,7 @@ public class MetodoDePagoTarjetaUpdate {
 
             }
         }
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems);
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancosSolo(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items2 = new String[listaItems.size()];
@@ -398,7 +398,7 @@ public class MetodoDePagoTarjetaUpdate {
 
         }
 
-        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos);
+        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos, contexto);
 
         double countEfectivo = 0;
         double countCheque = 0;
@@ -759,7 +759,7 @@ public class MetodoDePagoTarjetaUpdate {
         }
 
 
-        cargarFacturas = DataBaseBO.cargarFacturasParametroIDS(idesPago);
+        cargarFacturas = DataBaseBO.cargarFacturasParametroIDS(idesPago, contexto);
 
         if (cargarFacturas.size() > 0) {
             for (Facturas facturas1 : cargarFacturas) {
@@ -909,9 +909,9 @@ public class MetodoDePagoTarjetaUpdate {
 
         String vendedor = "";
 
-        vendedor = DataBaseBO.cargarVendedorConsecutivo();
+        vendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
 
-        DataBaseBO.eliminarConsecutivoId(vendedor);
+        DataBaseBO.eliminarConsecutivoId(vendedor, contexto);
 
         final String fechacon = Utilidades.fechaActual("yyyy-MM-dd");
         String consecId1 = "", numeroAnulacionId1 = "";
@@ -924,9 +924,9 @@ public class MetodoDePagoTarjetaUpdate {
         String consecutivoidTarjeta = "";
         String consecutivoidTransferencia = "";
 
-        consecId1 = DataBaseBO.cargarConsecutivoId();
-        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
         int consec1Id = Integer.parseInt(consecId1);
         int consec1IdEfec = Integer.parseInt(consecId1) + 1;
@@ -939,7 +939,7 @@ public class MetodoDePagoTarjetaUpdate {
         consec1Id = consec1Id + contadorId;
         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
 
         consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
         consecutivoidEfectivo2 = String.valueOf(negocioId1 + vendedorsumId + consec1IdEfec);
@@ -4517,7 +4517,7 @@ public class MetodoDePagoTarjetaUpdate {
                                         moneda_Consig, NCF_Comprobante_fiscal,
                                         finalDocumentoFinanciero, consecutivo1,
                                         descripc, via_Pago, usuario, operacion_Cme, sincronizado, "0",
-                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid)) {
+                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, contexto)) {
 
 
                                     if (lenguajeElegido == null) {
@@ -4573,7 +4573,7 @@ public class MetodoDePagoTarjetaUpdate {
                                         moneda_Consig, NCF_Comprobante_fiscal,
                                         finalDocumentoFinanciero, consecutivo1,
                                         descripc, via_Pago, usuario, operacion_Cme, sincronizado, "0",
-                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid)) {
+                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, contexto)) {
 
 
                                     if (lenguajeElegido == null) {
@@ -4618,8 +4618,8 @@ public class MetodoDePagoTarjetaUpdate {
                             try {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, contexto);
 
                                 if (DataBaseBO.updateFormaPago(finalIdsPagos, claseDocumento, sociedad,
                                         cod_cliente,
@@ -4630,9 +4630,9 @@ public class MetodoDePagoTarjetaUpdate {
                                         moneda_Consig, NCF_Comprobante_fiscal,
                                         documentosFinanciero, consecutivo1,
                                         descripc, via_Pago, usuario, operacion_Cme, sincronizado, "0",
-                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid)) {
+                                        "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, contexto)) {
 
-                                    DataBaseBO.eliminarRecaudos(finalIdsPagos);
+                                    DataBaseBO.eliminarRecaudos(finalIdsPagos, contexto);
 
                                     double DiferenciaFormasPagoUpdate = Utilidades.totalFormasPago(contexto);
 
@@ -4665,7 +4665,7 @@ public class MetodoDePagoTarjetaUpdate {
                                             moneda_Consig, NCF_Comprobante_fiscal,
                                             documentosFinanciero, consecutivo1,
                                             descripc, via_Pago, usuario, operacion_Cme, sincronizado, "0",
-                                            "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                            "0", nombreTitular, fotos.idenFoto, finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     if (finalCountTarjeta >= 2) {
@@ -5654,7 +5654,7 @@ public class MetodoDePagoTarjetaUpdate {
                                                 }
                                             }
 
-                                            DataBaseBO.eliminarRecaudos(idesPagoTarjeta.get(k));
+                                            DataBaseBO.eliminarRecaudos(idesPagoTarjeta.get(k), contexto);
 
                                             final String idTarjetaPago = finalCodigoVendedor + Utilidades.fechaActual("ddHHmmss") + k;
 
@@ -5669,7 +5669,7 @@ public class MetodoDePagoTarjetaUpdate {
                                                     moneda_Consig, NCF_Comprobante_fiscal,
                                                     documentosFinanciero, consecutivo1,
                                                     descripc, "O", usuario, operacion_Cme, sincronizado, "0",
-                                                    "0", nombrePropietarioTarjeta, fotoTarjeta, finalConsecutivoidEfectivo, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                    "0", nombrePropietarioTarjeta, fotoTarjeta, finalConsecutivoidEfectivo, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
                                         }
 
@@ -6619,7 +6619,7 @@ public class MetodoDePagoTarjetaUpdate {
 
                                         System.out.println("id " + idPagoEfectivo);
 
-                                        DataBaseBO.eliminarRecaudosPendientes(idPagoEfectivo);
+                                        DataBaseBO.eliminarRecaudosPendientes(idPagoEfectivo, contexto);
 
                                         DataBaseBO.guardarFormaPagParcialPendiente(idEfectivoPago, claseDocumento,
                                                 sociedad, cod_cliente, finalCod_Vendedor,
@@ -6630,7 +6630,7 @@ public class MetodoDePagoTarjetaUpdate {
                                                 consecutivo1,
                                                 descripc, "A", usuario, operacion_Cme,
                                                 sincronizado, spinBanco, "0",
-                                                "0", ideFoto, finalConsecutivoidCheque, finalconsec1Id, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                "0", ideFoto, finalConsecutivoidCheque, finalconsec1Id, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     }
@@ -7640,7 +7640,7 @@ public class MetodoDePagoTarjetaUpdate {
                                         }
 
 
-                                        DataBaseBO.eliminarRecaudosPendientes(idPagoCheque);
+                                        DataBaseBO.eliminarRecaudosPendientes(idPagoCheque, contexto);
 
                                         DataBaseBO.guardarFormaPagParcialPendiente(idChequePago, claseDocumento,
                                                 sociedad, cod_cliente, finalCod_Vendedor,
@@ -7651,7 +7651,7 @@ public class MetodoDePagoTarjetaUpdate {
                                                 consecutivo1,
                                                 descripc, "B", usuario, operacion_Cme,
                                                 sincronizado, spinBanco, numeroCheque,
-                                                "0", ideFotoCheq, finalConsecutivoidTransferencia, finalconsec1Id, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                "0", ideFotoCheq, finalConsecutivoidTransferencia, finalconsec1Id, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     }
@@ -8585,7 +8585,7 @@ public class MetodoDePagoTarjetaUpdate {
                                         }
 
 
-                                        DataBaseBO.eliminarRecaudos(idPagoTransf);
+                                        DataBaseBO.eliminarRecaudos(idPagoTransf, contexto);
 
                                         DataBaseBO.guardarFormaPagParcial(idTarjetaPago, claseDocumento,
                                                 sociedad, cod_cliente, finalCod_Vendedor,
@@ -8596,7 +8596,7 @@ public class MetodoDePagoTarjetaUpdate {
                                                 consecutivo1,
                                                 descripc, "6", usuario, operacion_Cme,
                                                 sincronizado, bancoTransferencia, "0",
-                                                "0", fotoTransf, finalConsecutivoidTarjeta, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                "0", fotoTransf, finalConsecutivoidTarjeta, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
                                     }
 
                                     if (lenguajeElegido == null) {
@@ -8706,8 +8706,8 @@ public class MetodoDePagoTarjetaUpdate {
                     documentoFacturas.add(nroRecibo);
                 }
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
 
                 dialogo.cancel();
             }

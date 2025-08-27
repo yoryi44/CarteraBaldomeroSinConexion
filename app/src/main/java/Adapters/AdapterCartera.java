@@ -173,7 +173,7 @@ public class AdapterCartera extends RecyclerView.Adapter<AdapterCartera.ViewHold
             fechaVencimientoCartera.setText(item.getFechaVencto());
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
 

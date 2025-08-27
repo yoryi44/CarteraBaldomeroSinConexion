@@ -122,7 +122,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
         Spinner spinner = (Spinner) findViewById(R.id.spinnerDiasRuta);
         spinner.setVisibility(View.INVISIBLE);
         Vector<String> listaItems = new Vector<>();
-        listaClientesSincronizados2 = DataBaseBO.cargarClientes(listaItems);
+        listaClientesSincronizados2 = DataBaseBO.cargarClientes(listaItems, RutaActivity.this);
 
         rvListaClientesSincronizados = findViewById(R.id.rvListaClientesSincronizados);
         rvListaClientesSincronizados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -228,7 +228,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
 
         String empresa = "";
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(RutaActivity.this);
 
         if (empresa.equals("AGCO")) {
 
@@ -350,7 +350,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
         Spinner spinner = (Spinner) findViewById(R.id.spinnerDiasRuta);
         spinner.setVisibility(View.INVISIBLE);
         Vector<String> listaItems = new Vector<>();
-        listaClientesSincronizados2 = DataBaseBO.cargarClientes(listaItems);
+        listaClientesSincronizados2 = DataBaseBO.cargarClientes(listaItems, RutaActivity.this);
 
         rvListaClientesSincronizados = findViewById(R.id.rvListaClientesSincronizados);
         rvListaClientesSincronizados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -401,7 +401,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
         String parametroBusqueda = spinner.getSelectedItem().toString();
 
         Vector<String> listaItems = new Vector<>();
-        listaDias = DataBaseBO.cargarDias(parametroBusqueda, listaItems);
+        listaDias = DataBaseBO.cargarDias(parametroBusqueda, listaItems, RutaActivity.this);
 
 
         Gson gson2 = new Gson();
@@ -466,7 +466,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
         String parametroBusqueda = spinner.getSelectedItem().toString();
 
         Vector<String> listaItems = new Vector<>();
-        listaDias = DataBaseBO.cargarDias(parametroBusqueda, listaItems);
+        listaDias = DataBaseBO.cargarDias(parametroBusqueda, listaItems, RutaActivity.this);
 
         rvListaClientesSincronizados = findViewById(R.id.rvListaClientesSincronizados);
         rvListaClientesSincronizados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -511,7 +511,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
 
         ClienteSincronizado clienteRetorno = null;
         //Clientes que se sincronizaron o seleccionaron al momento de armar el rutero
-        List<ClienteSincronizado> listaClientesDatabase = DataBaseBO.obtenerListaClientesSincronizadosAux(0);
+        List<ClienteSincronizado> listaClientesDatabase = DataBaseBO.obtenerListaClientesSincronizadosAux(0, RutaActivity.this);
         for (ClienteSincronizado cliente : listaClientesDatabase) {
             if (cliente.codigo.trim().equals(codigoCliente.trim())) {
                 clienteRetorno = cliente;
@@ -616,7 +616,7 @@ public class RutaActivity extends AppCompatActivity implements View.OnClickListe
     private void busquedaListaClientes(String parametroBusqueda) {
         final Vector<String> listaItems = new Vector<>();
         parametroBusqueda = etParametroBusqueda.getText().toString();
-        listaClientesSincronizados2 = DataBaseBO.cargarClientesBusqueda(parametroBusqueda, listaItems);
+        listaClientesSincronizados2 = DataBaseBO.cargarClientesBusqueda(parametroBusqueda, listaItems, RutaActivity.this);
 
         rvListaClientesSincronizados = findViewById(R.id.rvListaClientesSincronizados);
         rvListaClientesSincronizados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

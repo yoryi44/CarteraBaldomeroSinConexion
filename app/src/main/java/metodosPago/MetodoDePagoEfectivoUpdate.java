@@ -129,7 +129,7 @@ public class MetodoDePagoEfectivoUpdate {
         tituloCuentaDestinoEfectivo = dialogo.findViewById(R.id.tituloCuentaDestinoEfectivo);
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -158,9 +158,9 @@ public class MetodoDePagoEfectivoUpdate {
         String consecutivo = "";
         String codigoVendedor = "";
         double DiferenciaFormasPago;
-        codigoVendedor = DataBaseBO.cargarCodigo();
-        empresa = DataBaseBO.cargarEmpresa();
-        monedaTipo = DataBaseBO.cargarMoneda();
+        codigoVendedor = DataBaseBO.cargarCodigo(contexto);
+        empresa = DataBaseBO.cargarEmpresa(contexto);
+        monedaTipo = DataBaseBO.cargarMoneda(contexto);
 
 
         double DiferenciaFormasPagoE = 0;
@@ -204,7 +204,7 @@ public class MetodoDePagoEfectivoUpdate {
 
             }
         }
-        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems);
+        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items = new String[listaItems.size()];
@@ -243,7 +243,7 @@ public class MetodoDePagoEfectivoUpdate {
             }
         }
         String parametro = spinnerBanco.getSelectedItem().toString();
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, parametro);
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, parametro, contexto);
 
         if (listaItems2.size() > 0) {
             items2 = new String[listaItems2.size()];
@@ -473,7 +473,7 @@ public class MetodoDePagoEfectivoUpdate {
         }
 
 
-        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos);
+        consecutivo = DataBaseBO.cargarConsecutivoUpdate(idsPagos, contexto);
 
         if (anticipo != null) {
             if (anticipo.estado == true) {
@@ -825,7 +825,7 @@ public class MetodoDePagoEfectivoUpdate {
             }
         });
 
-        cargarFacturas = DataBaseBO.cargarFacturasParametroIDS(idesPago);
+        cargarFacturas = DataBaseBO.cargarFacturasParametroIDS(idesPago, contexto);
 
         ArrayAdapter adapterCuentasBanco = new ArrayAdapter<>(contexto.getApplicationContext(), android.R.layout.simple_spinner_item, items2);
         adapterCuentasBanco.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -842,11 +842,11 @@ public class MetodoDePagoEfectivoUpdate {
                     String banco = "";
                     banco = spinnerBanco.getSelectedItem().toString();
                     String parametro;
-                    parametro = DataBaseBO.cargarCodigobanco(banco);
+                    parametro = DataBaseBO.cargarCodigobanco(banco, contexto);
                     String[] items2;
                     Vector<String> listaItems2 = new Vector<String>();
                     listaItems2.addElement("Seleccione");
-                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco));
+                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco, contexto), contexto);
 
                     if (listaItems2.size() > 0) {
                         items2 = new String[listaItems2.size()];
@@ -902,7 +902,7 @@ public class MetodoDePagoEfectivoUpdate {
                 tvFechaFragEfec.setText(facturas1.getFechaConsignacion());
             }
         }
-        cargarFacturasPen = DataBaseBO.cargarFacturasParametroIDSPen(idesPago);
+        cargarFacturasPen = DataBaseBO.cargarFacturasParametroIDSPen(idesPago, contexto);
 
         if (cargarFacturasPen.size() > 0) {
             for (Facturas facturas1 : cargarFacturasPen) {
@@ -1052,9 +1052,9 @@ public class MetodoDePagoEfectivoUpdate {
 
         String vendedor = "";
 
-        vendedor = DataBaseBO.cargarVendedorConsecutivo();
+        vendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
 
-        DataBaseBO.eliminarConsecutivoId(vendedor);
+        DataBaseBO.eliminarConsecutivoId(vendedor, contexto);
 
         final String fechacon = Utilidades.fechaActual("yyyy-MM-dd");
         String consecId1 = "", numeroAnulacionId1 = "";
@@ -1067,9 +1067,9 @@ public class MetodoDePagoEfectivoUpdate {
         String consecutivoidTarjeta = "";
         String consecutivoidTransferencia = "";
 
-        consecId1 = DataBaseBO.cargarConsecutivoId();
-        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+        consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+        negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+        vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
         int consec1Id = Integer.parseInt(consecId1);
         int consec1IdEfec = Integer.parseInt(consecId1) + 1;
@@ -1082,7 +1082,7 @@ public class MetodoDePagoEfectivoUpdate {
         consec1Id = consec1Id + contadorId;
         numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+        DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
 
         consecutivoid = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
         consecutivoidEfectivo2 = String.valueOf(negocioId1 + vendedorsumId + consec1IdEfec);
@@ -2159,7 +2159,7 @@ public class MetodoDePagoEfectivoUpdate {
                         if (facCollection != null) {
 
                             if (fotos == null) {
-                                fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0));
+                                fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0), contexto);
                             }
                             if (fotos != null) {
                                 if(finalIdsFotos != null)
@@ -2184,8 +2184,8 @@ public class MetodoDePagoEfectivoUpdate {
 
                                 //EFECTIVO
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(contexto);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, contexto);
 
                                 if (DataBaseBO.updateFormaPagoPendientes(finalIdsPagos, claseDocumento, sociedad, cod_cliente, finalCod_Vendedor
                                         , referencia, fechasDocumentos,
@@ -2193,10 +2193,10 @@ public class MetodoDePagoEfectivoUpdate {
                                         moneda, preciosfacturasLogica, preciosParcial, cuentasBanco,
                                         moneda_Consig, NCF_Comprobante_fiscal, documentosFinanciero, consecutivo1,
                                         descripcion, via_Pago, usuario, operacion_Cme, sincronizado, spinBanco,
-                                        "0", "0", fotoID, finalConsecutivoid)) {
+                                        "0", "0", fotoID, finalConsecutivoid, contexto)) {
 
 
-                                    DataBaseBO.eliminarRecaudosPendientes(finalIdsPagos);
+                                    DataBaseBO.eliminarRecaudosPendientes(finalIdsPagos, contexto);
 
                                     double DiferenciaFormasPagoUpdate = Utilidades.totalFormasPago(contexto);
 
@@ -2229,7 +2229,7 @@ public class MetodoDePagoEfectivoUpdate {
                                             consecutivo1,
                                             descripcion, "A", usuario, operacion_Cme,
                                             sincronizado, spinBanco, "0",
-                                            "0", fotoID, finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                            "0", fotoID, finalConsecutivoid, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     //EFECTIVO > 1
@@ -2541,7 +2541,7 @@ public class MetodoDePagoEfectivoUpdate {
                                                 }
                                             }
 
-                                            DataBaseBO.eliminarRecaudosPendientes(idesPagoEfectivo.get(k));
+                                            DataBaseBO.eliminarRecaudosPendientes(idesPagoEfectivo.get(k), contexto);
 
                                             final String idEfectivoPago = finalCodigoVendedor + Utilidades.fechaActual("ddHHmmss") + k;
 
@@ -2556,7 +2556,7 @@ public class MetodoDePagoEfectivoUpdate {
                                                     consecutivo1,
                                                     descripcion, via_Pago, usuario, operacion_Cme,
                                                     sincronizado, spinBanco, "0",
-                                                    "0", fotoID, finalConsecutivoidEfectivo, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                    "0", fotoID, finalConsecutivoidEfectivo, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                         }
@@ -2883,7 +2883,7 @@ public class MetodoDePagoEfectivoUpdate {
                                             }
                                         }
 
-                                        DataBaseBO.eliminarRecaudosPendientes(idPagoCheque);
+                                        DataBaseBO.eliminarRecaudosPendientes(idPagoCheque, contexto);
 
                                         DataBaseBO.guardarFormaPagParcialPendiente(idChequePago, claseDocumento,
                                                 sociedad, cod_cliente, finalCod_Vendedor,
@@ -2894,7 +2894,7 @@ public class MetodoDePagoEfectivoUpdate {
                                                 consecutivo1,
                                                 descripcion, "B", usuario, operacion_Cme,
                                                 sincronizado, banco, numeroCheque,
-                                                "0", fotoID, finalConsecutivoidCheque, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                "0", fotoID, finalConsecutivoidCheque, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     }
@@ -3464,7 +3464,7 @@ public class MetodoDePagoEfectivoUpdate {
                                             }
                                         }
 
-                                        DataBaseBO.eliminarRecaudos(idPagoTarjeta);
+                                        DataBaseBO.eliminarRecaudos(idPagoTarjeta, contexto);
 
                                         DataBaseBO.guardarFormaPagParcial(idTarjetaPago, claseDocumento, sociedad,
                                                 cod_cliente,
@@ -3475,7 +3475,7 @@ public class MetodoDePagoEfectivoUpdate {
                                                 moneda_Consig, NCF_Comprobante_fiscal,
                                                 documentosFinanciero, consecutivo1,
                                                 descripcion, "O", usuario, operacion_Cme, sincronizado, "0",
-                                                "0", nombrePropietario, fotoTarjeta, finalConsecutivoidTarjeta, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "");
+                                                "0", nombrePropietario, fotoTarjeta, finalConsecutivoidTarjeta, consecutivo2, formaPago != null ? formaPago.observacionesMotivo : "", contexto);
 
 
                                     }
@@ -3547,7 +3547,7 @@ public class MetodoDePagoEfectivoUpdate {
                                 PreferencesParcial.guardarParcialSeleccionada(contexto.getApplicationContext(), jsonStringObject);
 
                                 if (fotos == null) {
-                                    fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0));
+                                    fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0), contexto);
                                 }
                                 if (fotos != null) {
                                     fotoID = fotos.idenFoto;
@@ -3564,7 +3564,7 @@ public class MetodoDePagoEfectivoUpdate {
                                         moneda, precios, precios, cuentasBanco,
                                         moneda_Consig, NCF_Comprobante_fiscal, finalDocumentoFinanciero, consecutivo1,
                                         descripcion, via_Pago, usuario, operacion_Cme, sincronizado, spinBanco,
-                                        "0", "0", fotoID, finalConsecutivoid)) {
+                                        "0", "0", fotoID, finalConsecutivoid, contexto)) {
 
 
                                     if (lenguajeElegido == null) {
@@ -3612,7 +3612,7 @@ public class MetodoDePagoEfectivoUpdate {
                                 PreferencesParcial.guardarParcialSeleccionada(contexto.getApplicationContext(), jsonStringObject);
 
                                 if (fotos == null) {
-                                    fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0));
+                                    fotoID = DataBaseBO.cargarFotosSinDocumentosAsociados(documentosFinanciero.get(0), contexto);
                                 }
                                 if (fotos != null) {
                                     fotoID = fotos.idenFoto;
@@ -3629,7 +3629,7 @@ public class MetodoDePagoEfectivoUpdate {
                                         moneda, precios, precios, cuentasBanco,
                                         moneda_Consig, NCF_Comprobante_fiscal, finalDocumentoFinanciero, consecutivo1,
                                         descripcion, via_Pago, usuario, operacion_Cme, sincronizado, spinBanco,
-                                        "0", "0", fotoID, finalConsecutivoid)) {
+                                        "0", "0", fotoID, finalConsecutivoid, contexto)) {
 
 
                                     if (lenguajeElegido == null) {
@@ -3714,9 +3714,9 @@ public class MetodoDePagoEfectivoUpdate {
                     documentoFacturas.add(nroRecibo);
                 }
 
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
 
-                DataBaseBO.eliminarFoto(documentoFacturas);
+                DataBaseBO.eliminarFoto(documentoFacturas, contexto);
                 dialogo.cancel();
             }
         });

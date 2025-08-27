@@ -301,8 +301,8 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
             String nombreUsuario = "";
             String empresa = "";
 
-            nombreUsuario = DataBaseBO.cargarUsuarioApp();
-            empresa = DataBaseBO.cargarCodigo();
+            nombreUsuario = DataBaseBO.cargarUsuarioApp(PrincipalActivity.this);
+            empresa = DataBaseBO.cargarCodigo(PrincipalActivity.this);
 
             tvNombreUsuario.setText(nombreUsuario);
             tvEmpresa.setText(empresa);
@@ -323,9 +323,9 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
         String nombreUsuario = "", tipoUsuario = "";
         String empresa = "";
 
-        nombreUsuario = DataBaseBO.cargarUsuarioApp();
-        empresa = DataBaseBO.cargarCodigo();
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        nombreUsuario = DataBaseBO.cargarUsuarioApp(PrincipalActivity.this);
+        empresa = DataBaseBO.cargarCodigo(PrincipalActivity.this);
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(PrincipalActivity.this);
 
         tvNombreUsuario.setText(nombreUsuario);
         tvEmpresa.setText(empresa);
@@ -572,7 +572,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
         String empresa = "";
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(PrincipalActivity.this);
 
         if (empresa.equals("AGCO")) {
 
@@ -804,17 +804,18 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                     if (Utilidades.verificarNetwork(PrincipalActivity.this)) {
 
 
-                                        if (!DataBaseBO.hayInformacionXEnviar()) {
+                                        if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
                                             Gson gson = new Gson();
                                             String stringJsonObject = PreferencesUsuario.obtenerUsuario(PrincipalActivity.this);
                                             usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
                                             // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                            Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO);
+                                            Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO, PrincipalActivity.this);
 
                                             sync1.user = usuarioApp.codigo;
                                             sync1.password = usuarioApp.contrasena;
+                                            sync1.imei = Utilidades.obtenerImei(PrincipalActivity.this);
                                             sync1.start();
                                             envioInformacion = true;
 
@@ -824,7 +825,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                             progressDoalog.show();
 
 
-                                        } else if (DataBaseBO.hayInformacionXEnviar()) {
+                                        } else if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
                                             Toasty.warning(getApplicationContext(), "There is registered information, to synchronize first send information.", Toasty.LENGTH_SHORT).show();
                                             Alert.dialogo.cancel();
                                         }
@@ -865,17 +866,18 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                     if (Utilidades.verificarNetwork(PrincipalActivity.this)) {
 
 
-                                        if (!DataBaseBO.hayInformacionXEnviar()) {
+                                        if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
                                             Gson gson = new Gson();
                                             String stringJsonObject = PreferencesUsuario.obtenerUsuario(PrincipalActivity.this);
                                             usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
                                             // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-                                            Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO);
+                                            Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO, PrincipalActivity.this);
 
                                             sync1.user = usuarioApp.codigo;
                                             sync1.password = usuarioApp.contrasena;
+                                            sync1.imei = Utilidades.obtenerImei(PrincipalActivity.this);
                                             sync1.start();
                                             envioInformacion = true;
 
@@ -885,7 +887,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                             progressDoalog.show();
 
 
-                                        } else if (DataBaseBO.hayInformacionXEnviar()) {
+                                        } else if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
                                             if (lenguajeElegido == null) {
 
@@ -950,10 +952,11 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
         usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
         // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-        Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO);
+        Sync sync1 = new Sync(PrincipalActivity.this, Constantes.DESCARGARINFO, PrincipalActivity.this);
 
         sync1.user = usuarioApp.codigo;
         sync1.password = usuarioApp.contrasena;
+        sync1.imei = Utilidades.obtenerImei(PrincipalActivity.this);
         sync1.start();
         envioInformacion = true;
 
@@ -1050,7 +1053,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
                                 Alert.dialogo.cancel();
 
-                                if (DataBaseBO.hayInformacionXEnviar()) {
+                                if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
                                     // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
                                     Alert.alertGeneral(PrincipalActivity.this, null, "You have pending information to send", new View.OnClickListener() {
                                         @Override
@@ -1079,7 +1082,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 //                                    startActivity(login);
 //                                    finish();
 
-                                } else if (!DataBaseBO.hayInformacionXEnviar()) {
+                                } else if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
 
                                     PreferencesUsuario.vaciarPreferencesUsuario(PrincipalActivity.this);
@@ -1117,7 +1120,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
                                 Alert.dialogo.cancel();
 
-                                if (DataBaseBO.hayInformacionXEnviar()) {
+                                if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
                                     Alert.alertGeneral(PrincipalActivity.this, null, "Tiene información pendiente por enviar", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -1146,7 +1149,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 //                                    startActivity(login);
 //                                    finish();
 
-                                } else if (!DataBaseBO.hayInformacionXEnviar()) {
+                                } else if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
 
                                     PreferencesUsuario.vaciarPreferencesUsuario(PrincipalActivity.this);
@@ -1221,16 +1224,16 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                             @Override
                             public void onClick(View v) {
                                 if (Utilidades.verificarNetwork(PrincipalActivity.this)) {
-                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                    if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
                                         final String empresa;
-                                        empresa = DataBaseBO.cargarCodigo();
+                                        empresa = DataBaseBO.cargarCodigo(PrincipalActivity.this);
                                         ProgressView.getInstance().Show(PrincipalActivity.this, "Sending information...");
 
-                                        Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION);
+                                        Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION, PrincipalActivity.this);
                                         sync.user = empresa;
                                         sync.start();
                                         Alert.dialogo.cancel();
-                                        DataBaseBO.borrarInfoTemp();
+                                        DataBaseBO.borrarInfoTemp(PrincipalActivity.this);
                                         ProgressView.getInstance().Dismiss();
                                         envioInformacion = true;
                                     } else {
@@ -1280,16 +1283,16 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                             @Override
                             public void onClick(View v) {
                                 if (Utilidades.verificarNetwork(PrincipalActivity.this)) {
-                                    if (DataBaseBO.hayInformacionXEnviar()) {
+                                    if (DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
                                         final String empresa;
-                                        empresa = DataBaseBO.cargarCodigo();
+                                        empresa = DataBaseBO.cargarCodigo(PrincipalActivity.this);
                                         ProgressView.getInstance().Show(PrincipalActivity.this, "Enviando Información...");
 
-                                        Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION);
+                                        Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION, PrincipalActivity.this);
                                         sync.user = empresa;
                                         sync.start();
                                         Alert.dialogo.cancel();
-                                        DataBaseBO.borrarInfoTemp();
+                                        DataBaseBO.borrarInfoTemp(PrincipalActivity.this);
                                         ProgressView.getInstance().Dismiss();
                                         envioInformacion = true;
                                     } else {

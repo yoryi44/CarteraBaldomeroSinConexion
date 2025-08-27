@@ -70,7 +70,7 @@ public class VistaCarteraAdapter extends RecyclerView.Adapter<VistaCarteraAdapte
         holder.tvVencCartera.setText(facturaCartera.fechaVencto);
         holder.tvCondicionPagoCartera.setText(facturaCartera.condPago);
         holder.tvDescripcionCartera.setText(facturaCartera.descripcion);
-        holder.tvValorFactura.setText(Utilidades.separarMilesSinDecimal(String.valueOf(facturaCartera.saldo)));
+        holder.tvValorFactura.setText(Utilidades.separarMilesSinDecimal(String.valueOf(facturaCartera.saldo), contexto));
     }
 
     @Override

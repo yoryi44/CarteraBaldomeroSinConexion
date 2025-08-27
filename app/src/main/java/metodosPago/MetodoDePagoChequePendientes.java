@@ -142,7 +142,7 @@ public class MetodoDePagoChequePendientes {
         tituloCuentaDestinoCheque = dialogo.findViewById(R.id.tituloCuentaDestinoCheque);
 
         String tipoUsuario = "";
-        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp();
+        tipoUsuario = DataBaseBO.cargarTipoUsuarioApp(contexto);
 
         if (lenguajeElegido == null) {
 
@@ -168,7 +168,7 @@ public class MetodoDePagoChequePendientes {
 
 
 
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(contexto);
 
         if (empresa.equals("AGUC"))
         {
@@ -196,7 +196,7 @@ public class MetodoDePagoChequePendientes {
 
             }
         }
-        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems);
+        listaParametrosBancosSpinner = DataBaseBO.cargarTipoBancos(listaItems, contexto);
 
         if (listaItems.size() > 0) {
             items = new String[listaItems.size()];
@@ -231,7 +231,7 @@ public class MetodoDePagoChequePendientes {
 
             }
         }
-        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco));
+        listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco, contexto), contexto);
 
         if (listaItems2.size() > 0) {
             items2 = new String[listaItems2.size()];
@@ -259,7 +259,7 @@ public class MetodoDePagoChequePendientes {
                     String banco = "";
                     banco = spinnerBanco.getSelectedItem().toString();
                     String parametro;
-                    parametro = DataBaseBO.cargarCodigobanco(banco);
+                    parametro = DataBaseBO.cargarCodigobanco(banco, contexto);
                     String[] items2;
                     Vector<String> listaItems2 = new Vector<String>();
                     if (lenguajeElegido == null) {
@@ -275,7 +275,7 @@ public class MetodoDePagoChequePendientes {
 
                         }
                     }
-                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco));
+                    listaParametrosCuentas = DataBaseBO.cargarCuentasBancos(listaItems2, DataBaseBO.cargarCodigobanco(banco, contexto), contexto);
 
                     if (listaItems2.size() > 0) {
                         items2 = new String[listaItems2.size()];
@@ -486,7 +486,7 @@ public class MetodoDePagoChequePendientes {
 
             }
 
-            List<Pendientes> listaFacturas = DataBaseBO.cargarFacturasParametroPendientesCheque(idPagosPen);
+            List<Pendientes> listaFacturas = DataBaseBO.cargarFacturasParametroPendientesCheque(idPagosPen, contexto);
 
             for (Pendientes pendientes : listaFacturas) {
                 claseDocumento = pendientes.getClaseDocumento();
@@ -563,8 +563,8 @@ public class MetodoDePagoChequePendientes {
 
             }
 
-            List<Pendientes> listaFacturas = DataBaseBO.cargarFacturasParametroPendientesChequeMultiples(numeroRecibosMultiples);
-            preciosPendientesMultiples = DataBaseBO.cargarFacturasParametroPendientesChequeMultiplesValorPendiente(numeroRecibosMultiples);
+            List<Pendientes> listaFacturas = DataBaseBO.cargarFacturasParametroPendientesChequeMultiples(numeroRecibosMultiples, contexto);
+            preciosPendientesMultiples = DataBaseBO.cargarFacturasParametroPendientesChequeMultiplesValorPendiente(numeroRecibosMultiples, contexto);
 
 
             for (Pendientes pendientes : listaFacturas) {
@@ -1113,9 +1113,9 @@ public class MetodoDePagoChequePendientes {
                             String negocioId1 = "";
                             String vendedorId1 = "";
 
-                            consecId1 = DataBaseBO.cargarConsecutivoId();
-                            negocioId1 = DataBaseBO.cargarNegocioConsecutivoId();
-                            vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId();
+                            consecId1 = DataBaseBO.cargarConsecutivoId(contexto);
+                            negocioId1 = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                            vendedorId1 = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                             int consec1Id = Integer.parseInt(consecId1);
                             int vendedorsumId = Integer.parseInt(vendedorId1);
@@ -1123,7 +1123,7 @@ public class MetodoDePagoChequePendientes {
                             consec1Id = consec1Id + contadorId;
                             numeroAnulacionId1 = String.valueOf(negocioId1 + vendedorsumId + consec1Id);
 
-                           DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon);
+                           DataBaseBO.guardarConsecutivoId(negocioId1, vendedorsumId, consec1Id, fechacon, contexto);
 
                             if (DataBaseBO.guardarFormaPagPendientes(finalIdPago, claseDocumentos,
                                     finalSociedad, finalCodigoCliente, finalCod_vendedor,
@@ -1134,12 +1134,12 @@ public class MetodoDePagoChequePendientes {
                                     finalNumeroRecibo,
                                     pendientesSeleccionada.getObservaciones(), finalViaPago, finalUsuario, operacionCMEs,
                                     0, spinnerBanco.getSelectedItem().toString(), tvNumeroCheque.getText().toString(),
-                                    "0",fotos.idenFoto,numeroAnulacionId1, finalConsecutivo, pendientesSeleccionada.getObservacionesMotivo(), finalFechaRecibo)) {
+                                    "0",fotos.idenFoto,numeroAnulacionId1, finalConsecutivo, pendientesSeleccionada.getObservacionesMotivo(), finalFechaRecibo, contexto)) {
 
                                     //SE ACTUALIZAN LOS ID DE LAS FOTOS PARA RELACIONARLAS CON LAS FOTOS DE BUZON
 //                                    if(finalEmpresa1.equals("AGUC"))
 //                                    {
-                                        DataBaseBO.actualizarFotoBuzon(finalIdPago);
+                                        DataBaseBO.actualizarFotoBuzon(finalIdPago, contexto);
 //                                    }
 
                          //       DataBaseBO.eliminarRecaudosTotalPendientes(idPagosPendientes);
@@ -1182,9 +1182,9 @@ public class MetodoDePagoChequePendientes {
                             String negocio = "";
                             String vendedor = "";
 
-                            consec = DataBaseBO.cargarConsecutivoPaquete();
-                            negocio = DataBaseBO.cargarNegocioConsecutivoPaquete();
-                            vendedor = DataBaseBO.cargarVendedorConsecutivoPaquete();
+                            consec = DataBaseBO.cargarConsecutivoPaquete(contexto);
+                            negocio = DataBaseBO.cargarNegocioConsecutivoPaquete(contexto);
+                            vendedor = DataBaseBO.cargarVendedorConsecutivoPaquete(contexto);
 
                             int consec1 = Integer.parseInt(consec);
                             int vendedorsum = Integer.parseInt(vendedor);
@@ -1192,16 +1192,16 @@ public class MetodoDePagoChequePendientes {
                             consec1 = consec1 + contador;
                             numeroAnulacion = String.valueOf(negocio + vendedorsum + consec1);
                             final String fechacon = Utilidades.fechaActual("yyyy-MM-dd");
-                            DataBaseBO.guardarConsecutivoPaquete(negocio, vendedorsum, consec1, fechacon);
+                            DataBaseBO.guardarConsecutivoPaquete(negocio, vendedorsum, consec1, fechacon, contexto);
 
                             //CARGAR CONSUCUTIVO ID
                             String consecId = "",numeroAnulacionId="";
                             String negocioId = "";
                             String vendedorId = "";
 
-                            consecId = DataBaseBO.cargarConsecutivoId();
-                            negocioId = DataBaseBO.cargarNegocioConsecutivoId();
-                            vendedorId = DataBaseBO.cargarVendedorConsecutivoId();
+                            consecId = DataBaseBO.cargarConsecutivoId(contexto);
+                            negocioId = DataBaseBO.cargarNegocioConsecutivoId(contexto);
+                            vendedorId = DataBaseBO.cargarVendedorConsecutivoId(contexto);
 
                             int consec1Id = Integer.parseInt(consecId);
                             int vendedorsumId = Integer.parseInt(vendedorId);
@@ -1209,7 +1209,7 @@ public class MetodoDePagoChequePendientes {
                             consec1Id = consec1Id + contadorId;
                             numeroAnulacionId = String.valueOf(negocioId + vendedorsumId + consec1Id);
                             final String fechaconId = Utilidades.fechaActual("yyyy-MM-dd");
-                            DataBaseBO.guardarConsecutivoId(negocioId, vendedorsumId, consec1Id, fechacon);
+                            DataBaseBO.guardarConsecutivoId(negocioId, vendedorsumId, consec1Id, fechacon, contexto);
 
 
 
@@ -1222,13 +1222,13 @@ public class MetodoDePagoChequePendientes {
                                     numeroRecibos,
                                     observacioness, viaPagos, finalUsuario, operacionCMEs,
                                     0,  spinnerBanco.getSelectedItem().toString(), tvNumeroCheque.getText().toString(),
-                                    "0",fotos.idenFoto,numeroAnulacion,numeroAnulacionId,valorConsignados,consecutivos, observacionesMotivos, listaConsecutivoidFac, fechasRecibos)) {
+                                    "0",fotos.idenFoto,numeroAnulacion,numeroAnulacionId,valorConsignados,consecutivos, observacionesMotivos, listaConsecutivoidFac, fechasRecibos, contexto)) {
 
                                     //SE ACTUALIZAN LOS ID DE LAS FOTOS PARA RELACIONARLAS CON LAS FOTOS DE BUZON
 //                                    if(finalSociedad.equals("AGUC"))
 //                                    {
-                                        DataBaseBO.actualizarFotoBuzonMultiples(idPagosPendientes);
-                                        DataBaseBO.actualizarNumeroChequePrecargado(idPagosPendientes);
+                                        DataBaseBO.actualizarFotoBuzonMultiples(idPagosPendientes, contexto);
+                                        DataBaseBO.actualizarNumeroChequePrecargado(idPagosPendientes, contexto);
 //                                    }
 
                     //            DataBaseBO.eliminarRecaudosTotalPendientes(idPagosPendientes);
@@ -1302,7 +1302,7 @@ public class MetodoDePagoChequePendientes {
                     fotoID = fotos.idenFoto;
                     fotosListaid.add(fotos.idenFoto);
                 }
-                DataBaseBO.eliminarFotoIDFac(fotosListaid);
+                DataBaseBO.eliminarFotoIDFac(fotosListaid, contexto);
                 dialogo.cancel();
             }
         });

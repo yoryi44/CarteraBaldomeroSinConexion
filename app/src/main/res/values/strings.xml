@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Cartera En línea</string>
 
-    <string name="title_activity_login" translatable="false">Login</string>
+    <string name="title_activity_login">Login</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 

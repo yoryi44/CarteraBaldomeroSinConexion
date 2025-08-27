@@ -136,11 +136,11 @@ public class FacturasSeleccionadasPendientesActivity extends AppCompatActivity i
         }
 
 
-        int cuantasEfectivo = DataBaseBO.cuantasEfectivo(numeroRecibos);
-        int cuantasCheque = DataBaseBO.cuantasCheque(numeroRecibos);
+        int cuantasEfectivo = DataBaseBO.cuantasEfectivo(numeroRecibos, FacturasSeleccionadasPendientesActivity.this);
+        int cuantasCheque = DataBaseBO.cuantasCheque(numeroRecibos, FacturasSeleccionadasPendientesActivity.this);
 
-        double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivo(numeroRecibos);
-        double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesData(numeroRecibos);
+        double valorEfectivo = DataBaseBO.TotalFormasPagoPendientesEfectivo(numeroRecibos, FacturasSeleccionadasPendientesActivity.this);
+        double valorCheques = DataBaseBO.TotalFormasPagoPendientesChequesData(numeroRecibos, FacturasSeleccionadasPendientesActivity.this);
 
         txtCantidadEfec.setText(String.valueOf(cuantasEfectivo));
         txtCantidadCheques.setText(String.valueOf(cuantasCheque));
@@ -148,7 +148,7 @@ public class FacturasSeleccionadasPendientesActivity extends AppCompatActivity i
 
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(FacturasSeleccionadasPendientesActivity.this);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")

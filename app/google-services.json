@@ -1,45 +1,64 @@
 {
   "project_info": {
-    "project_number": "684359364907",
-    "firebase_url": "https://cartera-a12d5.firebaseio.com",
-    "project_id": "cartera-a12d5",
-    "storage_bucket": "cartera-a12d5.appspot.com"
+    "project_number": "824788230868",
+    "project_id": "nutresa-aa5e1",
+    "storage_bucket": "nutresa-aa5e1.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:684359364907:android:5e86a2113099c73294956e",
+        "mobilesdk_app_id": "1:824788230868:android:f930e85a9dad10b2b3d141",
         "android_client_info": {
-          "package_name": "co.com.celuweb.carterabaldomero"
+          "package_name": "celuweb.com.nutresaEntregas"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "684359364907-l77f0iudjp16ab37c9dvhpjrcp78okfq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "co.com.celuweb.carteranutresa",
-            "certificate_hash": "12e4b63baa2d66c97fea2a4581454d3b04710d14"
-          }
-        },
-        {
-          "client_id": "684359364907-o0jhrk1vch5ufohkdaultuv831vpg8v7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDp7LePOGiJ3ZsZUyz_3n9lI8y2svYbW_Q"
+          "current_key": "AIzaSyBnWOndR1Q46vTO3u27mFwrWXmaADuEXAE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "684359364907-o0jhrk1vch5ufohkdaultuv831vpg8v7.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824788230868:android:1afcace44e0fa766b3d141",
+        "android_client_info": {
+          "package_name": "co.com.NutresaIntegrado"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnWOndR1Q46vTO3u27mFwrWXmaADuEXAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824788230868:android:05243d8e14545fcfb3d141",
+        "android_client_info": {
+          "package_name": "co.com.celuweb.carterabaldomero"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnWOndR1Q46vTO3u27mFwrWXmaADuEXAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

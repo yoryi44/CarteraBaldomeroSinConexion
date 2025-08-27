@@ -109,7 +109,7 @@ public class AdapterSeleccionFacRealizados extends RecyclerView.Adapter<AdapterS
             conceptoCartera.setText(item.getClaseDocumento());
 
             String empresa = "";
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
 
             if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")

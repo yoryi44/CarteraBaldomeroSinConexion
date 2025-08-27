@@ -226,6 +226,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         listaFacturas = new ArrayList<>();
         listaFacturasJuntas = new ArrayList<>();
         listaFacturas3 = new ArrayList<>();
+        context = MetodosDePagoActivity.this;
 
         tvMontoFactura = findViewById(R.id.tvMontoCarteraFP);
         tvTotalFormasPago = findViewById(R.id.tvTotalFormasPago);
@@ -252,7 +253,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
         Gson gson2 = new Gson();
         String stringJsonObject2 = PreferencesUsuario.obtenerUsuario(this);
@@ -267,15 +268,15 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         clienteSel = gson1.fromJson(stringJsonObject1, ClienteSincronizado.class);
 
         Gson gson3 = new Gson();
-        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
         Gson gson22 = new Gson();
-        String stringJsonObject22 = PreferencesFormaPago.obteneFacturaSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject22 = PreferencesFormaPago.obteneFacturaSeleccionada(context);
         formaPago = gson22.fromJson(stringJsonObject22, FormaPago.class);
 
         Gson gson12 = new Gson();
-        String stringJsonObject12 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(MetodosDePagoActivity.this);
+        String stringJsonObject12 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(context);
         clienteSel = gson12.fromJson(stringJsonObject12, ClienteSincronizado.class);
 
 
@@ -290,7 +291,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
         nroRecibo = clienteSel.consecutivo;
 
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, context);
 
         if (lenguajeElegido == null) {
 
@@ -328,7 +329,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         esPreventa = settings.getBoolean("esPreventa", false);
         System.out.println("estado a eliminar.................... ----> " + settings.getAll());
 
-        DataBaseBO.eliminarFotosSinDocumentosAsociados();
+        DataBaseBO.eliminarFotosSinDocumentosAsociados(context);
 
 
     }
@@ -433,24 +434,24 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         } else if (lenguajeElegido != null) {
             if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿If you return to cancel the collection, are you sure you want to cancel the collection?", "Cancel Collection", new View.OnClickListener() {
+                Alert.vistaDialogoCerrarSesion(context, "¿If you return to cancel the collection, are you sure you want to cancel the collection?", "Cancel Collection", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Gson gson = new Gson();
                         Type collectionType = new TypeToken<Collection<Cartera>>() {
                         }.getType();
-                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
                         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
                         final List<String> documentosFinanciero = new ArrayList<>();
 
                         Gson gson3 = new Gson();
-                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
                         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
                         Gson gson1 = new Gson();
-                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(MetodosDePagoActivity.this);
+                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(context);
                         clienteSel = gson1.fromJson(stringJsonObject1, ClienteSincronizado.class);
 
                         String documentoFinanciero = "";
@@ -477,14 +478,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == true) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -523,14 +524,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -575,14 +576,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
@@ -620,14 +621,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == false) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
@@ -680,24 +681,24 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Si regresa cancelara el recaudo,esta seguro que desea cancelar el recaudo?", "Cancelar Recaudo", new View.OnClickListener() {
+                Alert.vistaDialogoCerrarSesion(context, "¿Si regresa cancelara el recaudo,esta seguro que desea cancelar el recaudo?", "Cancelar Recaudo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Gson gson = new Gson();
                         Type collectionType = new TypeToken<Collection<Cartera>>() {
                         }.getType();
-                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
                         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
                         final List<String> documentosFinanciero = new ArrayList<>();
 
                         Gson gson3 = new Gson();
-                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
                         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
                         Gson gson1 = new Gson();
-                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(MetodosDePagoActivity.this);
+                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(context);
                         clienteSel = gson1.fromJson(stringJsonObject1, ClienteSincronizado.class);
 
                         String documentoFinanciero = "";
@@ -724,14 +725,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == true) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -770,14 +771,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == false) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -822,14 +823,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == true) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -867,14 +868,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == false) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor1 = settings.edit();
@@ -932,15 +933,15 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
         Gson gson3 = new Gson();
-        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
         Gson gson34 = new Gson();
-        String stringJsonObject34 = PreferencesReciboDinero.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject34 = PreferencesReciboDinero.obteneAnticipoSeleccionada(context);
         ReciboDinero reciboDinero = gson34.fromJson(stringJsonObject34, ReciboDinero.class);
 
 
@@ -979,7 +980,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                     } else if (lenguajeElegido != null) {
                         if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                            AlertPagos.vistaDialMontoAnticipo(MetodosDePagoActivity.this, "¿Are you sure you want to cancel the collection?", null, new View.OnClickListener() {
+                            AlertPagos.vistaDialMontoAnticipo(context, "¿Are you sure you want to cancel the collection?", null, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     AlertPagos.dialogo.cancel();
@@ -1000,7 +1001,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                         } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                            AlertPagos.vistaDialMontoAnticipo(MetodosDePagoActivity.this, "¿Esta seguro que desea cancelar el recaudo?", null, new View.OnClickListener() {
+                            AlertPagos.vistaDialMontoAnticipo(context, "¿Esta seguro que desea cancelar el recaudo?", null, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     AlertPagos.dialogo.cancel();
@@ -1042,7 +1043,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                     } else if (lenguajeElegido != null) {
                         if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                            AlertPagos.vistaDialRecibolegalizar(MetodosDePagoActivity.this, "¿Are you sure you want to cancel the collection?", null, new View.OnClickListener() {
+                            AlertPagos.vistaDialRecibolegalizar(context, "¿Are you sure you want to cancel the collection?", null, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                 }
@@ -1061,7 +1062,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                         } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                            AlertPagos.vistaDialRecibolegalizar(MetodosDePagoActivity.this, "¿Esta seguro que desea cancelar el recaudo?", null, new View.OnClickListener() {
+                            AlertPagos.vistaDialRecibolegalizar(context, "¿Esta seguro que desea cancelar el recaudo?", null, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                 }
@@ -1094,7 +1095,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             }
         }
 
-        String empresas = DataBaseBO.cargarEmpresa();
+        String empresas = DataBaseBO.cargarEmpresa(context);
 
         if (!empresas.equals("AGUC")) {
             ((TextView) findViewById(R.id.tvSimboloDolarDiferenciaG)).setVisibility(View.GONE);
@@ -1113,18 +1114,18 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     private void metodosSeleccionados() {
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(context);
 
         String busquedaViaE = "A";
         String busquedaViaC = "B";
         String busquedaViaT = "O";
         String busquedaViaF = "6";
         String busquedaViaB = "4";
-        String viaE = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaE);
-        String viaC = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaC);
-        String viaT = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaT);
-        String viaF = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaF);
-        String viaB = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaB);
+        String viaE = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaE, context);
+        String viaC = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaC, context);
+        String viaT = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaT, context);
+        String viaF = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaF, context);
+        String viaB = DataBaseBO.cargarViaFormasdePagoEmpresa(busquedaViaB, context);
         RadioButton rbEfectvo = findViewById(R.id.rbEfectivo);
         RadioButton rbCheq = findViewById(R.id.rbCheque);
         RadioButton rbTrans = findViewById(R.id.rbTrasnferencia);
@@ -1239,7 +1240,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
         final Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
@@ -1317,7 +1318,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             double TotalFormasPagoPEn = 0;
 
 
-            empresa = DataBaseBO.cargarEmpresa();
+            empresa = DataBaseBO.cargarEmpresa(context);
             final String finalEmpresa = empresa;
             //Actualizada 2
 
@@ -1513,242 +1514,6 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             }
 
         }
-
-
-        /// formas pago
-/**
- empresa = DataBaseBO.cargarEmpresa();
- final String finalEmpresa = empresa;
- listaFacturas3 = new ArrayList<>();
-
- if (facCollection != null) {
-
- for (Cartera cartera1 : facCollection) {
- document = cartera1.getDocumento();
- documentoFinanciero = cartera1.getDocumentoFinanciero();
- precioTotal += cartera1.getSaldo();
-
- claseDocument = cartera1.getConcepto();
- claseDocumento.add(claseDocument);
- documentt.add(document);
- documentosFinanciero.add(documentoFinanciero);
- }
-
-
- double DiferenciaFormasPago;
- double TotalFormasPago = 0;
- double DiferenciaFormasPagoPEND;
- double TotalFormasPagoPEND = 0;
- double DiferenciaFormasPagoE = 0;
- double TotalFormasPagoE = 0;
- double DiferenciaFormasPagoPEN = 0;
- double TotalFormasPagoPEn = 0;
-
- if (facCollection != null) {
-
-
- if (formaPago.parcial == true) {
-
-
- nroRecibo = clienteSel.consecutivo;
-
- listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, listaItems);
- listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo, listaItems);
-
-
- if (anticipo != null) {
- for (Facturas fac : listaFacturas2) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- } else if (anticipo == null) {
- for (Facturas fac : listaFacturas2) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- }
-
- if (anticipo != null) {
- for (Facturas fac : listaFacturas4) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- } else if (anticipo == null) {
- for (Facturas fac : listaFacturas4) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- }
-
- String str = "";
-
- for (int i = 0; i < listaFacturas3.size(); i++) {
- for (Facturas fruit : listaFacturas3) {
- str += "\'" + fruit.idPago + "\',";
- TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str);
- DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str);
- TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
- DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
-
- }
- }
-
- }
-
- if (formaPago.parcial == false) {
-
- nroRecibo = clienteSel.consecutivo;
-
- listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, listaItems);
- listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo, listaItems);
-
-
- if (anticipo != null) {
- for (Facturas fac : listaFacturas2) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- } else if (anticipo == null) {
- for (Facturas fac : listaFacturas2) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- }
-
- if (anticipo != null) {
- for (Facturas fac : listaFacturas4) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- } else if (anticipo == null) {
- for (Facturas fac : listaFacturas4) {
- acert = fac.idPago;
- listaFacturas3.add(fac);
- }
- }
-
- String str = "";
-
- for (int i = 0; i < listaFacturas3.size(); i++) {
- for (Facturas fruit : listaFacturas3) {
- str += "\'" + fruit.idPago + "\',";
- TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str);
- DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str);
- TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
- DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
-
- }
- }
- }
-
- }
-
-
- DiferenciaFormasPago = (Utilidades.formatearDecimales(DiferenciaFormasPagoE, 2) + Utilidades.formatearDecimales(DiferenciaFormasPagoPEN, 2));
- TotalFormasPago = (Utilidades.formatearDecimales(TotalFormasPagoE, 2) + Utilidades.formatearDecimales(TotalFormasPagoPEn, 2));
-
-
- try {
- if (formaPago.parcial == true) {
-
- ActionBar barVista = getSupportActionBar();
- Objects.requireNonNull(barVista).setDisplayHomeAsUpEnabled(true);
- barVista.setTitle(Utilidades.tituloFormato(this, "Metodos de Pago (PARCIAL)"));
-
- if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
- || finalEmpresa.equals("AFPZ") || finalEmpresa.equals("AGAH") || finalEmpresa.equals("AGDP")) {
-
- NumberFormat formating = NumberFormat.getInstance(new Locale("es"));
-
- if (TotalFormasPago == 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(DiferenciaFormasPago));
- } else if (formaPago.valor < -1) {
- tvDiferenciaMetodosPago.setText(formating.format(formaPago.valor - (-(DiferenciaFormasPago))));
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvMontoFactura.setText(formating.format(formaPago.valor - (-(DiferenciaFormasPago))));
- } else if (formaPago.valor > 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(formaPago.valor - (DiferenciaFormasPago)));
- }
- tvMontoFactura.setText(formating.format(formaPago.valor));
-
-
- } else {
-
- NumberFormat formating = NumberFormat.getInstance(new Locale("en"));
-
- if (TotalFormasPago == 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(DiferenciaFormasPago));
- } else if (formaPago.valor < -1) {
- tvDiferenciaMetodosPago.setText(formating.format(formaPago.valor - (-(DiferenciaFormasPago))));
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvMontoFactura.setText(formating.format(formaPago.valor - (-(DiferenciaFormasPago))));
- } else if (formaPago.valor > 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(formaPago.valor - (DiferenciaFormasPago)));
- }
- tvMontoFactura.setText(formating.format(formaPago.valor));
-
- }
-
-
- }
-
- if (formaPago.parcial == false) {
- ActionBar barVista = getSupportActionBar();
- Objects.requireNonNull(barVista).setDisplayHomeAsUpEnabled(true);
- barVista.setTitle(Utilidades.tituloFormato(this, "Metodos de Pago (TOTAL)"));
-
-
- if (finalEmpresa.equals("AGCO") || finalEmpresa.equals("AGSC") || finalEmpresa.equals("AGGC") || finalEmpresa.equals("AFPN")
- || finalEmpresa.equals("AFPZ") || finalEmpresa.equals("AGAH") || finalEmpresa.equals("AGDP")) {
-
- NumberFormat formating = NumberFormat.getInstance(new Locale("es"));
-
- if (TotalFormasPago == 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(DiferenciaFormasPago));
- } else if (precioTotal < -1) {
- tvDiferenciaMetodosPago.setText(formating.format(precioTotal - (-(DiferenciaFormasPago))));
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvMontoFactura.setText(formating.format(precioTotal - (-(DiferenciaFormasPago))));
- } else if (precioTotal > 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(precioTotal - (DiferenciaFormasPago)));
- }
- tvMontoFactura.setText(formating.format(precioTotal));
-
-
- } else {
-
- NumberFormat formating = NumberFormat.getInstance(new Locale("en"));
-
- if (TotalFormasPago == 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(DiferenciaFormasPago));
- } else if (precioTotal < -1) {
- tvDiferenciaMetodosPago.setText(formating.format(precioTotal - (-(DiferenciaFormasPago))));
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvMontoFactura.setText(formating.format(precioTotal - (-(DiferenciaFormasPago))));
- } else if (precioTotal > 0) {
- tvTotalFormasPago.setText(formating.format(TotalFormasPago));
- tvDiferenciaMetodosPago.setText(formating.format(precioTotal - (DiferenciaFormasPago)));
- }
- tvMontoFactura.setText(formating.format(precioTotal));
-
- }
-
- }
-
- } catch (Exception exception) {
- System.out.println("Error en la forma de pago parcial " + exception);
- }
-
-
- }
- ***/
     }
 
     ///METODO PARA PARCIAL Y TOTAL
@@ -1764,7 +1529,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
         final Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
@@ -1777,7 +1542,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         String nroRecibo = "";
         String empresa = "";
         String acert = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(context);
         final String finalEmpresa = empresa;
 
         if (facCollection != null) {
@@ -2048,7 +1813,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         List<Cartera> carteraS = new ArrayList<>();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
         final List<String> claseDocumento = new ArrayList<>();
@@ -2080,8 +1845,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
         nroRecibo = clienteSel.consecutivo;
         String acert = "";
-        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
-        listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo);
+        listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, context);
+        listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo, context);
 
 
         if (anticipo != null) {
@@ -2109,8 +1874,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         }
 
 
-        listaFacturasPend = DataBaseBO.cargarFacturasParametroReciboPendientes(clienteSel.codigo, listaFacturas3, listaItems, clienteSel.consecutivo);
-        listaFacturas = DataBaseBO.cargarFacturasParametro(listaFacturas3, listaItems, clienteSel.consecutivo);
+        listaFacturasPend = DataBaseBO.cargarFacturasParametroReciboPendientes(clienteSel.codigo, listaFacturas3, listaItems, clienteSel.consecutivo, context);
+        listaFacturas = DataBaseBO.cargarFacturasParametro(listaFacturas3, listaItems, clienteSel.consecutivo, context);
 
         for (Facturas facturas123 : listaFacturas) {
 
@@ -2126,8 +1891,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
 
         RecyclerView rvListaCarteraFactura = findViewById(R.id.rvListaFacturas);
-        rvListaCarteraFactura.setLayoutManager(new LinearLayoutManager(MetodosDePagoActivity.this, LinearLayoutManager.VERTICAL, false));
-        final AdapterFacturas adapter = new AdapterFacturas(listaFacturasJuntas, MetodosDePagoActivity.this);
+        rvListaCarteraFactura.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        final AdapterFacturas adapter = new AdapterFacturas(listaFacturasJuntas, context);
         rvListaCarteraFactura.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -2139,7 +1904,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         List<Cartera> carteraS = new ArrayList<>();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
@@ -2188,7 +1953,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
         final Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
         if (facCollection != null) {
@@ -2213,8 +1978,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             if (anticipo.estado == true) {
                 nroRecibo = clienteSel.consecutivo;
                 String acert = "";
-                listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
-                listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo);
+                listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, context);
+                listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo, context);
 
 
                 if (anticipo != null) {
@@ -2246,10 +2011,10 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 for (int i = 0; i < listaFacturas3.size(); i++) {
                     for (Facturas fruit : listaFacturas3) {
                         str += "\'" + fruit.idPago + "\',";
-                        TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo);
-                        DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo);
-                        TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
-                        DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
+                        TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo, context);
+                        DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo, context);
+                        TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str, context);
+                        DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str, context);
 
                     }
                 }
@@ -2257,8 +2022,8 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 nroRecibo = clienteSel.consecutivo;
                 String acert = "";
-                listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo);
-                listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo);
+                listaFacturas2 = DataBaseBO.cargarIdPagoOG(nroRecibo, context);
+                listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientes(nroRecibo, context);
 
 
                 if (anticipo != null) {
@@ -2290,7 +2055,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 for (int i = 0; i < listaFacturas3.size(); i++) {
                     for (Facturas fruit : listaFacturas3) {
                         str += "\'" + fruit.idPago + "\',";
-                        TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo);
+                        TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo, context);
                         //  DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str);
                         //   TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
                         //   DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str);
@@ -2349,7 +2114,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 @Override
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to finish the collection? ", "Collect",
+                                    Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to finish the collection? ", "Collect",
                                             new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -2372,7 +2137,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 @Override
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
+                                    Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
                                             new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -2471,7 +2236,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 @Override
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to finish the collection? ", "Collect",
+                                    Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to finish the collection? ", "Collect",
                                             new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -2496,7 +2261,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 public void run() {
                                     progressDialog.dismiss();
 
-                                    Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
+                                    Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
                                             new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -2556,11 +2321,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoAnticipoESP() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -2571,13 +2336,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
 
@@ -2598,11 +2363,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoAnticipoUSA() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -2613,9 +2378,9 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
@@ -2634,11 +2399,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoReciboPorLegalizarESP() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -2649,13 +2414,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -2671,11 +2436,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoReciboPorLegalizarUSA() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -2686,13 +2451,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -2714,7 +2479,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         Gson gson = new Gson();
         Type collectionType = new TypeToken<Collection<Cartera>>() {
         }.getType();
-        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
         final Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
 
         if (facCollection != null) {
@@ -2743,7 +2508,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             for (int i = 0; i < listaFacturas2.size(); i++) {
                 for (Facturas fruit : listaFacturas2) {
                     str += "\'" + fruit.idPago + "\',";
-                    Utilidades.formatearDecimales(TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo), 2);
+                    Utilidades.formatearDecimales(TotalFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str, clienteSel.consecutivo, context), 2);
                     //    Utilidades.formatearDecimales(DiferenciaFormasPagoE = DataBaseBO.TotalFormasPagoAnticipoRROG(str), 2);
                     //   Utilidades.formatearDecimales(TotalFormasPagoPEn = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str), 2);
                     //    Utilidades.formatearDecimales(DiferenciaFormasPagoPEN = DataBaseBO.TotalFormasPagoAnticipoRROGPendientes(str), 2);
@@ -2776,7 +2541,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to finish the collection? ", "Collect",
+                                Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to finish the collection? ", "Collect",
                                         new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -2801,7 +2566,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
+                                Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
                                         new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -2837,7 +2602,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 @Override
                                 public void run() {
                                     {
-                                        Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to finish the collection? ", "Collect",
+                                        Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to finish the collection? ", "Collect",
                                                 new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
@@ -2864,7 +2629,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 @Override
                                 public void run() {
                                     {
-                                        Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
+                                        Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
                                                 new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
@@ -2967,7 +2732,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to finish the collection? ", "Collect",
+                                Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to finish the collection? ", "Collect",
                                         new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -2992,7 +2757,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
+                                Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea terminar el recaudo? ", "Terminar Recaudo",
                                         new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -3055,11 +2820,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoTotalUSA() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3070,13 +2835,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3092,11 +2857,11 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoTotalESP() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3107,13 +2872,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -3129,12 +2894,12 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoParcialUSA() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3145,13 +2910,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3167,12 +2932,12 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoTotalParcialUSA() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_eng));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3183,13 +2948,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "You have no information to send....", Toasty.LENGTH_SHORT).show();
@@ -3205,12 +2970,12 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoTotalParcialESP() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3223,13 +2988,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -3245,12 +3010,12 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
     public void dialogTerminarRecaudoPagoParcialESP() {
         Alert.dialogo.cancel();
 
-        if (Utilidades.verificarNetwork(MetodosDePagoActivity.this)) {
+        if (Utilidades.verificarNetwork(context)) {
 
 
-            if (DataBaseBO.hayInformacionXEnviar()) {
+            if (DataBaseBO.hayInformacionXEnviar(context)) {
 
-                progressDialog = new ProgressDialog(MetodosDePagoActivity.this);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setMessage(getResources().getString(R.string.realizando_calculos_esp));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -3261,13 +3026,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 String vendedor = "";
                 int contador = 1;
                 int Position = 6;
-                consec = DataBaseBO.cargarConsecutivo();
-                negocio = DataBaseBO.cargarNegocioConsecutivo();
-                vendedor = DataBaseBO.cargarVendedorConsecutivo();
+                consec = DataBaseBO.cargarConsecutivo(context);
+                negocio = DataBaseBO.cargarNegocioConsecutivo(context);
+                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
                 int consec1 = Integer.parseInt(consec);
                 int vendedorsum = Integer.parseInt(vendedor);
 //                consec1 = consec1 + contador;
-                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha);
+                DataBaseBO.guardarConsecutivo(negocio, vendedorsum, consec1, fecha, context);
 
             } else {
                 Toasty.warning(getApplicationContext(), "No tiene informacion por enviar....", Toasty.LENGTH_SHORT).show();
@@ -3309,9 +3074,9 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
 
         Gson gson2 = new Gson();
-        String stringJsonObject2 = PreferencesFormaPago.obteneFacturaSeleccionada(MetodosDePagoActivity.this);
+        String stringJsonObject2 = PreferencesFormaPago.obteneFacturaSeleccionada(context);
         formaPago = gson2.fromJson(stringJsonObject2, FormaPago.class);
-        PreferencesFotos.vaciarPreferencesFotoSeleccionada(MetodosDePagoActivity.this);
+        PreferencesFotos.vaciarPreferencesFotoSeleccionada(context);
 
         if (formaPago != null) {
 
@@ -3321,7 +3086,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 if (rbEfectivo.isChecked()) {
 
 
-                    MetodoDePagoEfectivo.vistaDialogoEfectivo(MetodosDePagoActivity.this
+                    MetodoDePagoEfectivo.vistaDialogoEfectivo(context
                     );
 
 
@@ -3330,7 +3095,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 if (rbCheque.isChecked()) {
 
 
-                    MetodoDePagoCheque.vistaDialogoCheque(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoCheque.vistaDialogoCheque(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3349,7 +3114,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 if (rbTrasnferencia.isChecked()) {
 
 
-                    MetodoDePagoTransferencia.vistaDialogoTransferencia(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoTransferencia.vistaDialogoTransferencia(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3369,7 +3134,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                 if (rbTarjetaCredito.isChecked()) {
 
 
-                    MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3389,7 +3154,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbBitcoin.isChecked()) {
 
-                    MetodoDePagoBitcoin.vistaDialogoBitcoin(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoBitcoin.vistaDialogoBitcoin(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3411,7 +3176,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbEfectivo.isChecked()) {
 
-                    MetodoDePagoEfectivo.vistaDialogoEfectivo(MetodosDePagoActivity.this
+                    MetodoDePagoEfectivo.vistaDialogoEfectivo(context
                     );
 
 
@@ -3419,7 +3184,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbCheque.isChecked()) {
 
-                    MetodoDePagoCheque.vistaDialogoCheque(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoCheque.vistaDialogoCheque(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3451,7 +3216,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbTrasnferencia.isChecked()) {
 
-                    MetodoDePagoTransferencia.vistaDialogoTransferencia(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoTransferencia.vistaDialogoTransferencia(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3484,7 +3249,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbTarjetaCredito.isChecked()) {
 
-                    MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3517,7 +3282,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 if (rbBitcoin.isChecked()) {
 
-                    MetodoDePagoBitcoin.vistaDialogoBitcoin(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                    MetodoDePagoBitcoin.vistaDialogoBitcoin(context, "Exito", "Información enviada correctamente",
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -3552,7 +3317,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             if (rbEfectivo.isChecked()) {
 
-                MetodoDePagoEfectivo.vistaDialogoEfectivo(MetodosDePagoActivity.this
+                MetodoDePagoEfectivo.vistaDialogoEfectivo(context
                 );
 
 
@@ -3561,7 +3326,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             if (rbCheque.isChecked()) {
 
 
-                MetodoDePagoCheque.vistaDialogoCheque(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                MetodoDePagoCheque.vistaDialogoCheque(context, "Exito", "Información enviada correctamente",
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -3582,7 +3347,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             if (rbTrasnferencia.isChecked()) {
 
-                MetodoDePagoTransferencia.vistaDialogoTransferencia(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                MetodoDePagoTransferencia.vistaDialogoTransferencia(context, "Exito", "Información enviada correctamente",
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -3602,7 +3367,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             if (rbTarjetaCredito.isChecked()) {
 
-                MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                MetodoDePagoTarjeta.vistaDialogoTarjetaCredito(context, "Exito", "Información enviada correctamente",
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -3620,7 +3385,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             if (rbBitcoin.isChecked()) {
 
-                MetodoDePagoBitcoin.vistaDialogoBitcoin(MetodosDePagoActivity.this, "Exito", "Información enviada correctamente",
+                MetodoDePagoBitcoin.vistaDialogoBitcoin(context, "Exito", "Información enviada correctamente",
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -3657,24 +3422,24 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
         } else if (lenguajeElegido != null) {
             if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Are you sure you want to cancel the collection?", "Cancel Collection", new View.OnClickListener() {
+                Alert.vistaDialogoCerrarSesion(context, "¿Are you sure you want to cancel the collection?", "Cancel Collection", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Gson gson = new Gson();
                         Type collectionType = new TypeToken<Collection<Cartera>>() {
                         }.getType();
-                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
                         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
                         final List<String> documentosFinanciero = new ArrayList<>();
 
                         Gson gson3 = new Gson();
-                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
                         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
                         Gson gson1 = new Gson();
-                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(MetodosDePagoActivity.this);
+                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(context);
                         clienteSel = gson1.fromJson(stringJsonObject1, ClienteSincronizado.class);
 
                         String documentoFinanciero = "";
@@ -3700,14 +3465,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == true) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -3746,14 +3511,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == false) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
 
@@ -3798,14 +3563,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == true) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                 PreferencesAnticipo.vaciarPreferencesAnticipoSeleccionada(getApplicationContext());
@@ -3843,14 +3608,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == false) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor1 = settings.edit();
@@ -3886,7 +3651,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             }
                         }
 
-                        DataBaseBO.eliminarFotosSinDocumentosAsociados();
+                        DataBaseBO.eliminarFotosSinDocumentosAsociados(context);
                         Alert.dialogo.cancel();
                         finish();
 
@@ -3901,24 +3666,24 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
             } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                Alert.vistaDialogoCerrarSesion(MetodosDePagoActivity.this, "¿Esta seguro que desea cancelar el recaudo?", "Cancelar Recaudo", new View.OnClickListener() {
+                Alert.vistaDialogoCerrarSesion(context, "¿Esta seguro que desea cancelar el recaudo?", "Cancelar Recaudo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Gson gson = new Gson();
                         Type collectionType = new TypeToken<Collection<Cartera>>() {
                         }.getType();
-                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject = PreferencesCartera.obteneCarteraSeleccionada(context);
 
                         Collection<Cartera> facCollection = gson.fromJson(stringJsonObject, collectionType);
                         final List<String> documentosFinanciero = new ArrayList<>();
 
                         Gson gson3 = new Gson();
-                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(MetodosDePagoActivity.this);
+                        String stringJsonObject3 = PreferencesAnticipo.obteneAnticipoSeleccionada(context);
                         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
 
                         Gson gson1 = new Gson();
-                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(MetodosDePagoActivity.this);
+                        String stringJsonObject1 = PreferencesClienteSeleccionado.obtenerClienteSeleccionado(context);
                         clienteSel = gson1.fromJson(stringJsonObject1, ClienteSincronizado.class);
 
                         String documentoFinanciero = "";
@@ -3942,14 +3707,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                                 if (anticipo.estado == true) {
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                     PreferencesAnticipo.vaciarPreferencesAnticipoSeleccionada(getApplicationContext());
@@ -3987,14 +3752,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
 
                                     String vendedor = "";
-                                    vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                    DataBaseBO.eliminarConsecutivoId(vendedor);
+                                    vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                    DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                    DataBaseBO.eliminarFoto(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                    DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                    DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                     SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                     PreferencesAnticipo.vaciarPreferencesAnticipoSeleccionada(getApplicationContext());
@@ -4037,14 +3802,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == true) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                 PreferencesAnticipo.vaciarPreferencesAnticipoSeleccionada(getApplicationContext());
@@ -4081,14 +3846,14 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             if (formaPago.parcial == false) {
 
                                 String vendedor = "";
-                                vendedor = DataBaseBO.cargarVendedorConsecutivo();
-                                DataBaseBO.eliminarConsecutivoId(vendedor);
+                                vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
+                                DataBaseBO.eliminarConsecutivoId(vendedor, context);
 
-                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero);
-                                DataBaseBO.eliminarFoto(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero);
-                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero);
+                                DataBaseBO.eliminarRecaudosTotalAnticiPenD(documentosFinanciero, context);
+                                DataBaseBO.eliminarFoto(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosTotalAntici(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosPendientesDataBase(documentosFinanciero, context);
+                                DataBaseBO.eliminarRecaudosRealizadosDataBase(documentosFinanciero, context);
 
                                 SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor1 = settings.edit();
@@ -4124,7 +3889,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
                             }
                         }
 
-                        DataBaseBO.eliminarFotosSinDocumentosAsociados();
+                        DataBaseBO.eliminarFotosSinDocumentosAsociados(context);
 
                         Alert.dialogo.cancel();
                         finish();
@@ -4191,7 +3956,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             } else if (lenguajeElegido != null) {
                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                    Alert.nutresaShow(MetodosDePagoActivity.this, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
+                    Alert.nutresaShow(context, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
 
                             new View.OnClickListener() {
 
@@ -4205,7 +3970,7 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
 
                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                    Alert.nutresaShow(MetodosDePagoActivity.this, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
+                    Alert.nutresaShow(context, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
 
                             new View.OnClickListener() {
 
@@ -4228,13 +3993,13 @@ public class MetodosDePagoActivity extends AppCompatActivity implements AdapterF
             } else if (lenguajeElegido != null) {
                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                    progressDialog = ProgressDialog.show(context, "",
                             "Please Wait...\n\nProcessing Information!", true);
                     progressDialog.show();
 
                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                    progressDialog = ProgressDialog.show(context, "",
                             "Por Favor Espere...\n\nProcesando Informacion!", true);
                     progressDialog.show();
 
@@ -4313,7 +4078,7 @@ imprimirSewooLKP20(macImpresora);*/
                                     socket.connect();
                                     Thread.sleep(3500);
 
-                                    ReporstPrinter.ImprimiendoPrinter(socket, PrinterBO.formatoTirillaEntrega1(clienteSel.codigo, listaFacturas3));
+                                    ReporstPrinter.ImprimiendoPrinter(socket, PrinterBO.formatoTirillaEntrega1(clienteSel.codigo, listaFacturas3, context));
                                     // OutputStream stream =
                                     // socket.getOutputStream();
                                     // String strPrint =
@@ -4327,7 +4092,7 @@ imprimirSewooLKP20(macImpresora);*/
                                     socket.connect();
                                     Thread.sleep(3500);
 
-                                    ReporstPrinter.ImprimiendoPrinter(socket, PrinterBO.formatoTirillaEntrega1(clienteSel.codigo, listaFacturas3));
+                                    ReporstPrinter.ImprimiendoPrinter(socket, PrinterBO.formatoTirillaEntrega1(clienteSel.codigo, listaFacturas3, context));
 
                                     handlerFinish.sendEmptyMessage(0);
                                 }
@@ -4349,7 +4114,7 @@ imprimirSewooLKP20(macImpresora);*/
 
                     if (!mensaje.equals("")) {
 
-                        context = MetodosDePagoActivity.this;
+                        context = context;
                         handlerFinish.sendEmptyMessage(0);
                     }
 
@@ -4365,7 +4130,7 @@ imprimirSewooLKP20(macImpresora);*/
                         mensaje += "\n\n" + motivo;
                     }
 
-                    context = MetodosDePagoActivity.this;
+                    context = context;
                     handlerFinish.sendEmptyMessage(0);
 
                 } finally {
@@ -4389,8 +4154,8 @@ imprimirSewooLKP20(macImpresora);*/
 
     private void ImprimirTirilla(final String macAddress) {
 
-        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosPendientes(nroRecibo);
-        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudos(nroRecibo);
+        List<Facturas> listaFacturas2 = DataBaseBO.cargarIdPagoOGRecaudosPendientes(nroRecibo, context);
+        List<Facturas> listaFacturas4 = DataBaseBO.cargarIdPagoOGPendientesRecaudos(nroRecibo, context);
 
         List<Facturas> listaFacturas3 = new ArrayList<>();
 
@@ -4414,7 +4179,7 @@ imprimirSewooLKP20(macImpresora);*/
                     //
                     zebraPrinter.getPrinterControlLanguage();
                     String empresas = "";
-                    empresas = DataBaseBO.cargarEmpresa();
+                    empresas = DataBaseBO.cargarEmpresa(context);
                     String cpclData = "";
 
                     if (empresas.equals("ADHB")) {
@@ -4427,7 +4192,7 @@ imprimirSewooLKP20(macImpresora);*/
 
 
                     } else {
-                        cpclData = PrinterBO.formatoTirillaEntrega2(clienteSel.codigo, listaFacturas3);
+                        cpclData = PrinterBO.formatoTirillaEntrega2(clienteSel.codigo, listaFacturas3, context);
 
                     }
 
@@ -4445,7 +4210,7 @@ imprimirSewooLKP20(macImpresora);*/
                     mensaje = "No se pudo Imprimir.\n\n" + e.getMessage();
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(MetodosDePagoActivity.this, "No se pudo Imprimir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "No se pudo Imprimir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -4459,7 +4224,7 @@ imprimirSewooLKP20(macImpresora);*/
                         Log.e("FormEstadisticaPedidos", "ImprimirTirilla", e);
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(MetodosDePagoActivity.this, "No se pudo Imprimir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "No se pudo Imprimir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 volverPantallaPrincipal();
                             }
                         });
@@ -4480,7 +4245,7 @@ imprimirSewooLKP20(macImpresora);*/
             if (progressDialog != null)
                 progressDialog.cancel();
 
-            DataBaseBO.borrarInfoTemp();
+            DataBaseBO.borrarInfoTemp(context);
 
             estadoEnviadoRespuesta = true;
             Alert.dialogo.cancel();
@@ -4525,7 +4290,7 @@ imprimirSewooLKP20(macImpresora);*/
 
             if (ok) {
 
-                MetodosDePagoActivity.this.runOnUiThread(new Runnable() {
+                context.runOnUiThread(new Runnable() {
 
                     public void run() {
 
@@ -4539,12 +4304,12 @@ imprimirSewooLKP20(macImpresora);*/
                             } else if (lenguajeElegido != null) {
                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                    Toasty.warning(MetodosDePagoActivity.this, "No internet connection.", Toasty.LENGTH_SHORT).show();
+                                    Toasty.warning(context, "No internet connection.", Toasty.LENGTH_SHORT).show();
 
 
                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                    Toasty.warning(MetodosDePagoActivity.this, "No tiene conexión a internet.", Toasty.LENGTH_SHORT).show();
+                                    Toasty.warning(context, "No tiene conexión a internet.", Toasty.LENGTH_SHORT).show();
 
                                 }
                             }
@@ -4557,17 +4322,17 @@ imprimirSewooLKP20(macImpresora);*/
                             {
                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                    Alert.alertGeneral(MetodosDePagoActivity.this, null, "The information is correctly recorded", new View.OnClickListener() {
+                                    Alert.alertGeneral(context, null, "The information is correctly recorded", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
 
                                             Alert.dialogo.cancel();
 
-                                            String empresa = DataBaseBO.cargarEmpresa();
+                                            String empresa = DataBaseBO.cargarEmpresa(context);
 
                                             if (empresa.equals("ADHB")) {
                                                 //DIALOGO IMPRIMIR
-                                                Alert.alertGeneral(MetodosDePagoActivity.this, null, "¿ print receipt ?", new View.OnClickListener() {
+                                                Alert.alertGeneral(context, null, "¿ print receipt ?", new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
 
@@ -4591,7 +4356,7 @@ imprimirSewooLKP20(macImpresora);*/
                                                             } else if (lenguajeElegido != null) {
                                                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                                                    Alert.nutresaShow(MetodosDePagoActivity.this, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
+                                                                    Alert.nutresaShow(context, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
 
                                                                             new View.OnClickListener() {
 
@@ -4604,7 +4369,7 @@ imprimirSewooLKP20(macImpresora);*/
 
                                                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                                                    Alert.nutresaShow(MetodosDePagoActivity.this, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
+                                                                    Alert.nutresaShow(context, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
 
                                                                             new View.OnClickListener() {
 
@@ -4625,13 +4390,13 @@ imprimirSewooLKP20(macImpresora);*/
                                                             } else if (lenguajeElegido != null) {
                                                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                                                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                                                                    progressDialog = ProgressDialog.show(context, "",
                                                                             "Please Wait...\n\nProcessing Information!", true);
                                                                     progressDialog.show();
 
                                                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                                                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                                                                    progressDialog = ProgressDialog.show(context, "",
                                                                             "Por Favor Espere...\n\nProcesando Informacion!", true);
                                                                     progressDialog.show();
 
@@ -4653,14 +4418,14 @@ imprimirSewooLKP20(macImpresora);*/
                                                 }, new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        DataBaseBO.borrarInfoTemp();
+                                                        DataBaseBO.borrarInfoTemp(context);
                                                         estadoEnviadoRespuesta = true;
                                                         Alert.dialogo.cancel();
                                                         volverPantallaPrincipal();
                                                     }
                                                 });
                                             } else {
-                                                DataBaseBO.borrarInfoTemp();
+                                                DataBaseBO.borrarInfoTemp(context);
                                                 estadoEnviadoRespuesta = true;
                                                 volverPantallaPrincipal();
                                             }
@@ -4670,17 +4435,17 @@ imprimirSewooLKP20(macImpresora);*/
 
                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                    Alert.alertGeneral(MetodosDePagoActivity.this, null, "Se registro correctamente la información", new View.OnClickListener() {
+                                    Alert.alertGeneral(context, null, "Se registro correctamente la información", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
 
                                             Alert.dialogo.cancel();
 
-                                            String empresa = DataBaseBO.cargarEmpresa();
+                                            String empresa = DataBaseBO.cargarEmpresa(context);
 
                                             if (empresa.equals("ADHB")) {
                                                 //DIALOGO IMPRIMIR
-                                                Alert.alertGeneral(MetodosDePagoActivity.this, null, "¿ Desea Imprimir el recibo ?", new View.OnClickListener() {
+                                                Alert.alertGeneral(context, null, "¿ Desea Imprimir el recibo ?", new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
 
@@ -4704,7 +4469,7 @@ imprimirSewooLKP20(macImpresora);*/
                                                             } else if (lenguajeElegido != null) {
                                                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                                                    Alert.nutresaShow(MetodosDePagoActivity.this, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
+                                                                    Alert.nutresaShow(context, "Information", "No Printer Set. Please first Configure the Printer!", "OK", null,
 
                                                                             new View.OnClickListener() {
 
@@ -4718,7 +4483,7 @@ imprimirSewooLKP20(macImpresora);*/
 
                                                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                                                    Alert.nutresaShow(MetodosDePagoActivity.this, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
+                                                                    Alert.nutresaShow(context, "Informacion", "No hay Impresora Establecida. Por Favor primero Configure la Impresora!", "Aceptar", null,
 
                                                                             new View.OnClickListener() {
 
@@ -4741,13 +4506,13 @@ imprimirSewooLKP20(macImpresora);*/
                                                             } else if (lenguajeElegido != null) {
                                                                 if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                                                                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                                                                    progressDialog = ProgressDialog.show(context, "",
                                                                             "Please Wait...\n\nProcessing Information!", true);
                                                                     progressDialog.show();
 
                                                                 } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                                                                    progressDialog = ProgressDialog.show(MetodosDePagoActivity.this, "",
+                                                                    progressDialog = ProgressDialog.show(context, "",
                                                                             "Por Favor Espere...\n\nProcesando Informacion!", true);
                                                                     progressDialog.show();
 
@@ -4771,14 +4536,14 @@ imprimirSewooLKP20(macImpresora);*/
                                                 }, new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        DataBaseBO.borrarInfoTemp();
+                                                        DataBaseBO.borrarInfoTemp(context);
                                                         estadoEnviadoRespuesta = true;
                                                         Alert.dialogo.cancel();
                                                         volverPantallaPrincipal();
                                                     }
                                                 });
                                             } else {
-                                                DataBaseBO.borrarInfoTemp();
+                                                DataBaseBO.borrarInfoTemp(context);
                                                 estadoEnviadoRespuesta = true;
                                                 volverPantallaPrincipal();
                                             }
@@ -4793,7 +4558,7 @@ imprimirSewooLKP20(macImpresora);*/
                 });
 
             } else {
-                MetodosDePagoActivity.this.runOnUiThread(new Runnable() {
+                context.runOnUiThread(new Runnable() {
 
                     public void run() {
 
@@ -4807,12 +4572,12 @@ imprimirSewooLKP20(macImpresora);*/
                             mensaje = "Error descargando la base de datos, inicie día nuevamente";
 
                         ProgressView.getInstance().Dismiss();
-                        Alert.alertGeneral(MetodosDePagoActivity.this, null, mensaje, new View.OnClickListener() {
+                        Alert.alertGeneral(context, null, mensaje, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
                                 Alert.dialogo.cancel();
-                                DataBaseBO.borrarInfoTemp();
+                                DataBaseBO.borrarInfoTemp(context);
                                 volverPantallaLogin();
 
                             }
@@ -4838,7 +4603,7 @@ imprimirSewooLKP20(macImpresora);*/
 
     private void enviarInfo(boolean ok, String respuestaServer, String msg) {
 
-        MetodosDePagoActivity.this.runOnUiThread(new Runnable() {
+        context.runOnUiThread(new Runnable() {
             public void run() {
 
                 if (progressDialog != null)
@@ -4851,14 +4616,14 @@ imprimirSewooLKP20(macImpresora);*/
 
                     if (respuestaServer.equals("listo") || respuestaServer.equals("ok")) {
 
-                        PreferencesCartera.vaciarPreferencesCarteraSeleccionada(MetodosDePagoActivity.this);
+                        PreferencesCartera.vaciarPreferencesCarteraSeleccionada(context);
 
-                        progressDoalog = new ProgressDialog(MetodosDePagoActivity.this);
+                        progressDoalog = new ProgressDialog(context);
                         progressDialog.setCancelable(false);
                         progressDoalog.setMax(100);
 
                         if (formaPago != null) {
-                            DataBaseBO.eliminarFacturaCartera(documentosFinanciero);
+                            DataBaseBO.eliminarFacturaCartera(documentosFinanciero, context);
                         }
 
                         sincronizar2();
@@ -4879,7 +4644,7 @@ imprimirSewooLKP20(macImpresora);*/
                     } else if (lenguajeElegido != null) {
                         if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "Could not Register Information", new View.OnClickListener() {
+                            Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -4892,7 +4657,7 @@ imprimirSewooLKP20(macImpresora);*/
 
                         } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                            Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -4917,7 +4682,7 @@ imprimirSewooLKP20(macImpresora);*/
                     } else if (lenguajeElegido != null) {
                         if (lenguajeElegido.lenguaje.equals("USA")) {
 
-                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "Could not Register Information", new View.OnClickListener() {
+                            Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -4930,7 +4695,7 @@ imprimirSewooLKP20(macImpresora);*/
 
                         } else if (lenguajeElegido.lenguaje.equals("ESP")) {
 
-                            Alert.alertGeneral(MetodosDePagoActivity.this, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+                            Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -4953,14 +4718,15 @@ imprimirSewooLKP20(macImpresora);*/
     private void sincronizar2() {
 
         Gson gson = new Gson();
-        String stringJsonObject = PreferencesUsuario.obtenerUsuario(MetodosDePagoActivity.this);
+        String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
         usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
         // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
 
-        Sync sync1 = new Sync(MetodosDePagoActivity.this, Constantes.DESCARGARINFO);
+        Sync sync1 = new Sync(MetodosDePagoActivity.this, Constantes.DESCARGARINFO, context);
 
         sync1.user = usuarioApp.codigo;
         sync1.password = usuarioApp.contrasena;
+        sync1.imei = Utilidades.obtenerImei(context);
         sync1.start();
         envioInformacion = true;
 
@@ -4970,7 +4736,7 @@ imprimirSewooLKP20(macImpresora);*/
         //     if (!folder.exists()) {
         //          System.out.println("No Existe temp.....  " + folder);
         //    } else {
-        progressDoalog = new ProgressDialog(MetodosDePagoActivity.this);
+        progressDoalog = new ProgressDialog(context);
         progressDoalog.setMax(100);
 
         progressDoalog.setMessage("Descargando informacion....");
@@ -5021,13 +4787,13 @@ imprimirSewooLKP20(macImpresora);*/
 
         } else {
             guardarVista();
-            Intent vistaInforme = new Intent(MetodosDePagoActivity.this, PrincipalActivity.class);
+            Intent vistaInforme = new Intent(context, PrincipalActivity.class);
             startActivity(vistaInforme);
         }
     }
 
     public void volverPantallaLogin() {
-        PreferencesUsuario.vaciarPreferencesUsuario(MetodosDePagoActivity.this);
+        PreferencesUsuario.vaciarPreferencesUsuario(context);
 
         SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
         settings.edit().clear().apply();
@@ -5047,7 +4813,7 @@ imprimirSewooLKP20(macImpresora);*/
      * * @param idPago
      */
     private void mostrarDialogFragmentFirma(String idPago) {
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(context);
 
         if (empresa.equals("AGUC")) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -5081,7 +4847,7 @@ imprimirSewooLKP20(macImpresora);*/
      */
     @Override
     public void onDialogDismissed(Bitmap signatureBitmap, String idPago, String empresa) {
-        String vendedor = DataBaseBO.cargarVendedorConsecutivo();
+        String vendedor = DataBaseBO.cargarVendedorConsecutivo(context);
         mostrarDialogResumenFragmentFirma(idPago, signatureBitmap, empresa, vendedor);
     }
 
@@ -5100,9 +4866,9 @@ imprimirSewooLKP20(macImpresora);*/
      */
     private void continuarMetodoDePago() {
 
-        DataBaseBO.verificarPagoCompletoPorTransferencia(nroRecibo);
+        DataBaseBO.verificarPagoCompletoPorTransferencia(nroRecibo, context);
 
-        String empresa = DataBaseBO.cargarCodigo();
+        String empresa = DataBaseBO.cargarCodigo(context);
         obtenerCoordenadas(empresa);
 
         switch (METODO_PAGO) {
@@ -5172,7 +4938,7 @@ imprimirSewooLKP20(macImpresora);*/
                             double latitud = location.getLatitude();
                             double longitud = location.getLongitude();
                             Log.d("Ubicacion", "Latitud: " + latitud + ", Longitud: " + longitud);
-                            DataBaseBO.guardarCoordenadas(latitud, longitud, clienteSel.codigo, nroRecibo);
+                            DataBaseBO.guardarCoordenadas(latitud, longitud, clienteSel.codigo, nroRecibo, context);
                         }
 
                         enviarInformacion(empresa);
@@ -5183,7 +4949,7 @@ imprimirSewooLKP20(macImpresora);*/
 
     public void enviarInformacion(String empresa)
     {
-        Sync sync = new Sync(MetodosDePagoActivity.this, Constantes.ENVIARINFORMACION);
+        Sync sync = new Sync(MetodosDePagoActivity.this, Constantes.ENVIARINFORMACION, context);
         sync.user = empresa;
         sync.start();
         Alert.dialogo.cancel();

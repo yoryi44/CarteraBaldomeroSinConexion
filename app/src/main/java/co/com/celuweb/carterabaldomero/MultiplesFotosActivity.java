@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -113,7 +114,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         btnEliminar= findViewById(R.id.btnEliminar);
         btnEliminarFotos= findViewById(R.id.btnEliminarFotos);
         next = findViewById(R.id.next);
-        codigoVendedor = DataBaseBO.cargarCodigo();
+        codigoVendedor = DataBaseBO.cargarCodigo(MultiplesFotosActivity.this);
         select = findViewById(R.id.select);
         total = findViewById(R.id.text);
         imageView = findViewById(R.id.image);
@@ -244,7 +245,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         /*OJOOOO, esto no es la micro sd, es el archivo que se crean
         en la carpeta Android con el
         * nombre del paquete del proyecto, ahi quedan todas las fotos*/
-        File foto = new File(getExternalFilesDir(null),
+        File foto = new File(MultiplesFotosActivity.this.getExternalFilesDir(null),
                 nombreFoto);
         /*Se añade (Permiso para almacenar  --- el archivo que contendra
         la foto)*/
@@ -307,12 +308,12 @@ public class MultiplesFotosActivity extends AppCompatActivity {
 
         int numero = (int) (Math.random() * 1000) + 1;
         String codigoVendedor = "";
-        codigoVendedor = DataBaseBO.cargarCodigo();
+        codigoVendedor = DataBaseBO.cargarCodigo(MultiplesFotosActivity.this);
         final String idPago = codigoVendedor + Utilidades.fechaActual("ddHHmmss") + numero;
         idUnicaElmininar = idPago;
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(MultiplesFotosActivity.this);
 
 
         if (facCollectionPend != null) {
@@ -374,7 +375,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         en la carpeta android ---- y el nombre del archivo)*/
                 Bitmap bitmap1 =
                         BitmapFactory.
-                                decodeFile(getExternalFilesDir(null) +
+                                decodeFile(MultiplesFotosActivity.this.getExternalFilesDir(null) +
                                         "/" + nombreFoto);
                 /*Se añade la foto al imageView*/
                 String posicion = String.valueOf(position);
@@ -391,16 +392,16 @@ public class MultiplesFotosActivity extends AppCompatActivity {
                 {
                     if(!metodo_pago.isEmpty())
                     {
-                        DataBaseBO.guardarImagenMutilples(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto,metodo_pago);
+                        DataBaseBO.guardarImagenMutilples(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto,metodo_pago, MultiplesFotosActivity.this);
                     }
                     else
                     {
-                        DataBaseBO.guardarImagen(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto);
+                        DataBaseBO.guardarImagen(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto, MultiplesFotosActivity.this);
                     }
                 }
                 else
                 {
-                    DataBaseBO.guardarImagen(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto);
+                    DataBaseBO.guardarImagen(idPago, bitmap1, documentoFacturas, empresa, fotos.idenFoto, MultiplesFotosActivity.this);
                 }
             }else if (estadoFto == false) {
                 if (lenguajeElegido == null) {
@@ -463,7 +464,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
 
 
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(MultiplesFotosActivity.this);
 
         if (facCollection != null) {
             nroRecibo = clienteSel.consecutivo;
@@ -531,7 +532,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
                         imageView.buildDrawingCache();
 
                         Bitmap bitmap = Bitmap.createBitmap(resizedBitmap);
-                        DataBaseBO.guardarImagenes(idsFotos.get(i), bitmap, documentoFacturas, empresa, fotos.idenFoto);
+                        DataBaseBO.guardarImagenes(idsFotos.get(i), bitmap, documentoFacturas, empresa, fotos.idenFoto, MultiplesFotosActivity.this);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -560,7 +561,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
                         idEliminarVariasUnica.add(idUnicaElmininarVariasUnica);
 
 
-                        DataBaseBO.guardarImagen(idPago, bitmap, documentoFacturas, empresa, fotos.idenFoto);
+                        DataBaseBO.guardarImagen(idPago, bitmap, documentoFacturas, empresa, fotos.idenFoto, MultiplesFotosActivity.this);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -708,10 +709,10 @@ public class MultiplesFotosActivity extends AppCompatActivity {
 
         int numero = (int) (Math.random() * 1000) + 1;
         String codigoVendedor = "";
-        codigoVendedor = DataBaseBO.cargarCodigo();
+        codigoVendedor = DataBaseBO.cargarCodigo(MultiplesFotosActivity.this);
         final String idPago = codigoVendedor + Utilidades.fechaActual("ddHHmmss") + numero;
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(MultiplesFotosActivity.this);
 
         if (facCollection != null) {
 
@@ -732,7 +733,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         // fot.idFoto}
 
 
-        DataBaseBO.eliminarFoto(idEliminar);
+        DataBaseBO.eliminarFoto(idEliminar, MultiplesFotosActivity.this);
         if (lenguajeElegido == null) {
 
         } else if (lenguajeElegido != null) {
@@ -798,10 +799,10 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         anticipo = gson3.fromJson(stringJsonObject3, Anticipo.class);
         int numero = (int) (Math.random() * 1000) + 1;
         String codigoVendedor = "";
-        codigoVendedor = DataBaseBO.cargarCodigo();
+        codigoVendedor = DataBaseBO.cargarCodigo(MultiplesFotosActivity.this);
         final String idPago = codigoVendedor + Utilidades.fechaActual("ddHHmmss") + numero;
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(MultiplesFotosActivity.this);
 
         if (facCollection != null) {
 
@@ -828,7 +829,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
 
         if (idEliminarVarias.size()>0) {
 
-            DataBaseBO.eliminarFoto(idEliminarVarias);
+            DataBaseBO.eliminarFoto(idEliminarVarias, MultiplesFotosActivity.this);
             if (lenguajeElegido == null) {
 
             } else if (lenguajeElegido != null) {
@@ -850,7 +851,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         }
 
         if (idEliminarVariasUnica.size()>0) {
-            DataBaseBO.eliminarFoto(idEliminarVariasUnica);
+            DataBaseBO.eliminarFoto(idEliminarVariasUnica, MultiplesFotosActivity.this);
             if (lenguajeElegido == null) {
 
             } else if (lenguajeElegido != null) {

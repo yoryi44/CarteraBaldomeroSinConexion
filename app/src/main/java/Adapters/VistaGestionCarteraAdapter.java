@@ -68,7 +68,7 @@ public class VistaGestionCarteraAdapter extends RecyclerView.Adapter<VistaGestio
 
             // SIN GESTION
             holder.ivIndicadorMarcaCartera.setImageResource(R.mipmap.icononoprogramado);
-            holder.tvValorFactura.setText(Utilidades.separarMilesSinDecimal(String.valueOf(facturaCartera.saldo)));
+            holder.tvValorFactura.setText(Utilidades.separarMilesSinDecimal(String.valueOf(facturaCartera.saldo), contexto));
             holder.tvValorFactura.setTextColor(contexto.getResources().getColor(R.color.colorBotonNegro));
 
         }

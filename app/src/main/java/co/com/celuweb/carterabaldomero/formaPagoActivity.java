@@ -85,7 +85,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
         tituloReciboDineroMonto = findViewById(R.id.tituloReciboDineroMonto);
         tituloReciboDineroObserva = findViewById(R.id.tituloReciboDineroObserva);
 
-        String empresa = DataBaseBO.cargarEmpresa();
+        String empresa = DataBaseBO.cargarEmpresa(formaPagoActivity.this);
         final String finalEmpresa = empresa;
 
         if (finalEmpresa.equals("AABR")) {
@@ -285,7 +285,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
         input = String.valueOf(precioTotal);
         double valor = 0;
         String empresa = "";
-        empresa = DataBaseBO.cargarEmpresa();
+        empresa = DataBaseBO.cargarEmpresa(formaPagoActivity.this);
         final String finalEmpresa = empresa;
 
         /// decimales .., else ... else ,,.  5
@@ -437,7 +437,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
             }
         }
 
-        Vector<MotivosAbono> listaParametosSpinner = DataBaseBO.cargarMotivosAbono(listaItems);
+        Vector<MotivosAbono> listaParametosSpinner = DataBaseBO.cargarMotivosAbono(listaItems, formaPagoActivity.this);
 
         if (listaItems.size() > 0) {
             items = new String[listaItems.size()];
@@ -517,7 +517,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
             String jsonStringObject = gson.toJson(formaPago);
             PreferencesFormaPago.guardarFormaSeleccionada(formaPagoActivity.this, jsonStringObject);
 
-            String empresa = DataBaseBO.cargarEmpresa();
+            String empresa = DataBaseBO.cargarEmpresa(formaPagoActivity.this);
 
             if(empresa.equals("AGUC"))
             {
@@ -576,7 +576,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
 
             valorRecaudoParcial.getText().toString();
 
-            String empresa = DataBaseBO.cargarEmpresa();
+            String empresa = DataBaseBO.cargarEmpresa(formaPagoActivity.this);
 
             if(empresa.equals("AGUC"))
             {
@@ -647,7 +647,7 @@ public class formaPagoActivity extends AppCompatActivity implements AdapterForma
             } else if (!valorRecaudoParcial.getText().toString().isEmpty() && !observaciones.getText().toString().isEmpty()) {
 
                 double valor = 0;
-                empresa = DataBaseBO.cargarEmpresa();
+                empresa = DataBaseBO.cargarEmpresa(formaPagoActivity.this);
                 final String finalEmpresa = empresa;
                 double monto = 0;
                 String input = valorRecaudoParcial.getText().toString();
