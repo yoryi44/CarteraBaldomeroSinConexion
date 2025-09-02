@@ -180,6 +180,9 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
             public void run() {
                 if (respuestaServer.equals("listo")) {
 
+                    if (progressDoalog != null)
+                        progressDoalog.cancel();
+
                     if (respuestaServer.equals("listo") || respuestaServer.equals("ok")) {
 
                         progressDoalog = new ProgressDialog(context);
@@ -204,10 +207,7 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                         sync1.start();
                                         envioInformacion = true;
 
-                                        progressDoalog = new ProgressDialog(context);
-                                        progressDoalog.setMessage("Downloading information....");
-                                        progressDoalog.setTitle("Downloading");
-                                        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
                                         progressDoalog.show();
 
                                     }
@@ -227,6 +227,9 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                                         sync1.imei = Utilidades.obtenerImei(context);
                                         sync1.start();
                                         envioInformacion = true;
+
+                                        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
+                                        progressDoalog.show();
 
                                     }
                                 }, null);
@@ -273,6 +276,9 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
 
                 } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
 
+                    if (progressDoalog != null)
+                        progressDoalog.cancel();
+
                     if (lenguajeElegido == null) {
 
                     } else if (lenguajeElegido != null) {
@@ -306,6 +312,10 @@ public class AdapterRecibosAnulados extends RecyclerView.Adapter<AdapterRecibosA
                     }
                 }
                 else {
+
+                    if (progressDoalog != null)
+                        progressDoalog.cancel();
+
                     if (lenguajeElegido == null) {
 
                     } else if (lenguajeElegido != null) {

@@ -6181,7 +6181,7 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT clase_Documento,Fecha_recibo,SUM(valor_Pagado) AS valor_Pagado,nro_Recibo FROM recaudosAnulados  WHERE fecha_Consignacion BETWEEN '" + initialDate + "' AND '" + finalDate + "' AND cod_Cliente = '" + param + "'  GROUP BY nro_Recibo";
+            String query = "SELECT clase_Documento,fecha,SUM(valor_Pagado) AS valor_Pagado,nro_Recibo FROM recaudosAnulados  WHERE fecha_Consignacion BETWEEN '" + initialDate + "' AND '" + finalDate + "' AND cod_Cliente = '" + param + "'  GROUP BY nro_Recibo";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -11129,9 +11129,15 @@ public class DataBaseBO {
                 facturasCartera.put("valor_Pagado", valor_Pagado.get(i));
                 facturasCartera.put("valor_Consignado", valor_Consignado.get(i));
                 if (via_Pago.get(i).equals("6"))
+                {
                     facturasCartera.put("consignadoM", valor_Consignado.get(i));
+                    facturasCartera.put("consecutivoid", listaConsecutivoidFac.get(i));
+                }
                 else
+                {
                     facturasCartera.put("consignadoM", consignadoM.get(i));
+                    facturasCartera.put("consecutivoid", listaConsecutivoidFac.get(0));
+                }
                 facturasCartera.put("saldo_favor", saldo_favor.get(i));
                 facturasCartera.put("cuenta_Bancaria", cuenta_Bancaria);
                 facturasCartera.put("moneda_Consig", moneda_Consig);
@@ -11152,7 +11158,6 @@ public class DataBaseBO {
                 facturasCartera.put("Iden_Foto", idenFoto);
                 facturasCartera.put("nro_paquete", numPaquete);
                 facturasCartera.put("consecutivo", consecutivosMultiples.get(i));
-                facturasCartera.put("consecutivoid", listaConsecutivoidFac.get(i));
                 facturasCartera.put("envioCorreo", "1");
 
                 dbTemp.insertOrThrow("recaudos", null, facturasCartera);

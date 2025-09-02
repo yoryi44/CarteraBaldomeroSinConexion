@@ -211,7 +211,6 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
     }
 
-
     private void enviarInfo(boolean ok, String respuestaServer, String msg) {
 
         Gson gson2 = new Gson();
@@ -228,6 +227,9 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
 
                     if (respuestaServer.equals("listo") || respuestaServer.equals("ok")) {
+
+                        if(progressDoalog != null)
+                            progressDoalog.cancel();
 
 
                         progressDoalog = new ProgressDialog(context);
@@ -252,10 +254,7 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                         sync1.start();
                                         envioInformacion = true;
 
-                                        progressDoalog = new ProgressDialog(context);
-                                        progressDoalog.setMessage("Downloading information....");
-                                        progressDoalog.setTitle("Downloading");
-                                        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
                                         progressDoalog.show();
 
                                     }
@@ -276,6 +275,9 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                         sync1.start();
                                         envioInformacion = true;
 
+                                        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
+                                        progressDoalog.show();
+
                                     }
                                 }, null);
 
@@ -285,11 +287,15 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
 
 
                     } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
-
+                        if(progressDoalog != null)
+                            progressDoalog.cancel();
                     }
 
 
                 } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
+
+                    if(progressDoalog != null)
+                        progressDoalog.cancel();
 
                     if (lenguajeElegido == null) {
 
@@ -1042,24 +1048,14 @@ public class AdaptersRecibosPendientes extends RecyclerView.Adapter<AdaptersReci
                                         Sync sync = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.ENVIARINFORMACION, context);
                                         sync.user = empresa;
                                         sync.start();
-
                                         envioInformacion = true;
+
+                                        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
+                                        progressDoalog.show();
+
                                     } else {
                                         descargarInfo(true, "", "");
                                     }
-
-
-//                                    Gson gson = new Gson();
-//                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
-//                                    usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-//                                    // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
-//
-//                                    Sync sync1 = new Sync(AdaptersRecibosPendientes.this::respSync, Constantes.DESCARGARINFO);
-//
-//                                    sync1.user = usuarioApp.codigo;
-//                                    sync1.password = usuarioApp.contrasena;
-//                                    sync1.start();
-//                                    envioInformacion = true;
 
                                 }
 
