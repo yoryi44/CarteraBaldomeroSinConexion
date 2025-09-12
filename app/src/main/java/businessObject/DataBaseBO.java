@@ -9180,7 +9180,7 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento,SUM(DISTINCT valor_consignado) as valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
+            String query = "SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento,SUM(DISTINCT valor_consignado) as valor_Pagado,via_Pago,ifnull(banco,'') as banco,Numero_de_cheque \n" +
                     "FROM (SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM recaudos WHERE cod_Cliente = '" + param + "'  UNION ALL SELECT cod_Cliente,clase_Documento,valor_Consignado,idPago,nro_Recibo,fecha_Documento,fecha_Consignacion,valor_Documento, valor_Pagado,via_Pago,banco,Numero_de_cheque \n" +
                     "FROM recaudosPendientes WHERE cod_Cliente = '" + param + "') T WHERE nro_Recibo = '" + numeroRecibo + "' GROUP BY idPago,via_Pago";
