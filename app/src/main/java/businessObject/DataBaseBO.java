@@ -9440,7 +9440,7 @@ public class DataBaseBO {
             dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT Documento FROM recaudosPendientes where docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY valor_Documento ORDER BY valor_Documento Desc ";
+            String query = "SELECT ifnull(Documento,'') as Documento FROM recaudosPendientes where docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') GROUP BY valor_Documento ORDER BY valor_Documento Desc ";
 
 
             System.out.println("Impresion infoCliente---> " + query);
