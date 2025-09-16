@@ -338,10 +338,8 @@ public class DataBaseBO {
 
             String query = "SELECT u.empresa FROM usuario u  WHERE u.empresa = 'AGSC'  or 'AGCO'";
             db.execSQL(query);
-            db.execSQL("VACUUM");
 
             dbTemp.execSQL(query);
-            dbTemp.execSQL("VACUUM");
 
             respuesta = true;
 
@@ -692,7 +690,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM fotos WHERE Iden_Foto IN('" + str.substring(1, str.length() - 2) + "')");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -725,7 +722,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM fotos WHERE Idfoto IN(" + str + "'')");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8302,7 +8298,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM cartera WHERE documento IN('" + str.substring(1, str.length() - 2) + "')");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8331,7 +8326,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8361,7 +8355,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8390,7 +8383,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8417,7 +8409,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM consecutivoID WHERE vendedor ='" + documentoFactura + "'");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8443,7 +8434,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM consecutivopaquete WHERE vendedor ='" + documentoFactura + "'");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8472,7 +8462,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8502,7 +8491,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8531,7 +8519,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE idPago IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8560,7 +8547,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8590,7 +8576,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8619,7 +8604,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudos WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8648,7 +8632,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPen WHERE docto_Financiero IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8678,13 +8661,10 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudosPen WHERE idPago = '" + documentoFactura + "'");
-            dbTemp.execSQL("VACUUM");
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE idPago = '" + documentoFactura + "'");
-            db.execSQL("VACUUM");
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE idPago = '" + documentoFactura + "'");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -8714,10 +8694,8 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudos WHERE idPago = '" + documentoFactura + "'");
-            dbTemp.execSQL("VACUUM");
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE idPago = '" + documentoFactura + "'");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -9564,7 +9542,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM clientes WHERE Codigo = '" + codigoClienteAEliminar + "'");
-            db.execSQL("VACUUM");
 
             mensaje = "Imagen borrada con exito";
 
@@ -9601,10 +9578,8 @@ public class DataBaseBO {
             String query = "DELETE FROM ProgramacionPago WHERE documento = '" + documento + "'";
 
             db.execSQL(query);
-            db.execSQL("VACUUM");
 
             dbTemp.execSQL(query);
-            dbTemp.execSQL("VACUUM");
 
             respuesta = true;
 
@@ -12981,7 +12956,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosPendientes WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -13010,7 +12984,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -13040,7 +13013,6 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             db.execSQL("DELETE FROM recaudosRealizados WHERE nro_Recibo IN ('" + str.substring(1, str.length() - 2) + "') ");
-            db.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
@@ -13065,7 +13037,6 @@ public class DataBaseBO {
             dbTemp = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
             dbTemp.execSQL("DELETE FROM recaudosPen WHERE nro_Recibo IN (SELECT DISTINCT re.nro_Recibo FROM recaudos re)");
-            dbTemp.execSQL("VACUUM");
 
             mensaje = "borrada con exito";
 
