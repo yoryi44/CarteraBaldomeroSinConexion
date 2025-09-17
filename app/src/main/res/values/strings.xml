@@ -144,6 +144,10 @@
     <string name="yyyy_mm_dd">yyyy/mm/dd</string>
     <string name="realizando_calculos_esp">Realizando los cálculos  correspondientes</string>
     <string name="realizando_calculos_eng">Performing the corresponding calculations</string>
+    <string name="descargando_informacion_esp">Descargando información</string>
+    <string name="descargando_informacion_eng">Download</string>
+    <string name="enviando_informacion_esp">Enviando información</string>
+    <string name="enviando_informacion_eng">sending information</string>
 
     <string-array name="DIAS">
         <item>DIAS DE LA SEMANA</item>

@@ -4284,7 +4284,8 @@ imprimirSewooLKP20(macImpresora);*/
 
     private void descargarInfo(boolean ok, String respuestaServer, String msg) {
 
-        //Progress.hide();
+        if(progressDoalog != null)
+            progressDoalog.dismiss();
 
         try {
 
@@ -4603,6 +4604,9 @@ imprimirSewooLKP20(macImpresora);*/
 
     private void enviarInfo(boolean ok, String respuestaServer, String msg) {
 
+        if(progressDoalog != null)
+            progressDoalog.dismiss();
+
         context.runOnUiThread(new Runnable() {
             public void run() {
 
@@ -4730,38 +4734,16 @@ imprimirSewooLKP20(macImpresora);*/
         sync1.start();
         envioInformacion = true;
 
-        //    File folder = new File(Environment.getExternalStorageDirectory() +
-        //           File.separator + "CarteraBaldomero/Temp.db");
+        progressDoalog = new ProgressDialog(this);
 
-        //     if (!folder.exists()) {
-        //          System.out.println("No Existe temp.....  " + folder);
-        //    } else {
-        progressDoalog = new ProgressDialog(context);
-        progressDoalog.setMax(100);
+        if (lenguajeElegido.lenguaje.equals("USA")) {
+            progressDoalog.setMessage(getResources().getString(R.string.descargando_informacion_eng));
+        } else {
+            progressDoalog.setMessage(getResources().getString(R.string.descargando_informacion_esp));
+        }
 
-        progressDoalog.setMessage("Descargando informacion....");
-        progressDoalog.setTitle("Descargando");
-        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDoalog.setCancelable(false);
         progressDoalog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (progressDoalog.getProgress() <= progressDoalog
-                            .getMax()) {
-                        Thread.sleep(200);
-                        handle.sendMessage(handle.obtainMessage());
-                        if (progressDoalog.getProgress() == progressDoalog
-                                .getMax()) {
-                            progressDoalog.dismiss();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
 
     }
 
@@ -4949,6 +4931,18 @@ imprimirSewooLKP20(macImpresora);*/
 
     public void enviarInformacion(String empresa)
     {
+
+        progressDoalog = new ProgressDialog(this);
+
+        if (lenguajeElegido.lenguaje.equals("USA")) {
+            progressDoalog.setMessage(getResources().getString(R.string.enviando_informacion_eng));
+        } else {
+            progressDoalog.setMessage(getResources().getString(R.string.enviando_informacion_esp));
+        }
+
+        progressDoalog.setCancelable(false);
+        progressDoalog.show();
+
         Sync sync = new Sync(MetodosDePagoActivity.this, Constantes.ENVIARINFORMACION, context);
         sync.user = empresa;
         sync.start();
