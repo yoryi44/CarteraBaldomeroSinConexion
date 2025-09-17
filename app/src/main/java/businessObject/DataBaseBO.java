@@ -13092,4 +13092,92 @@ public class DataBaseBO {
         return listaIdPago;
     }
 
+    public static String ObtenerVersionApp(Context context) {
+
+        String version = "";
+        SQLiteDatabase db = null;
+
+        try {
+
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
+                    SQLiteDatabase.OPEN_READWRITE);
+
+            String query = "SELECT version FROM Version";
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+
+                version = cursor.getString(cursor.getColumnIndex("version"));
+            }
+
+            Log.i("ObtenerVersionApp", "version = " + version);
+
+            if (cursor != null)
+                cursor.close();
+
+            //Se registra el Log de la consulta SQl Registrada
+
+            ArrayList<String> querys = new ArrayList<String>();
+            querys.add(query);
+
+
+        } catch (Exception e) {
+
+            mensaje = e.getMessage();
+            Log.e(TAG, "ObtenerVersionApp: " + mensaje, e);
+
+        } finally {
+
+            if (db != null)
+                db.close();
+        }
+
+        return version;
+    }
+
+    public static String obtenerUrlDownloadVersionApp(Context context) {
+
+        String url = "";
+        SQLiteDatabase db = null;
+
+        try {
+
+            File dbFile = new File(Utilidades.dirApp(context), "DataBase.db");
+            db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
+                    SQLiteDatabase.OPEN_READWRITE);
+
+            String query = "SELECT url as url FROM version";
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+
+                url = cursor.getString(cursor.getColumnIndex("url"));
+            }
+
+            Log.i("obtenerUrlDownloadVersionApp", "url = " + url);
+
+            if (cursor != null)
+                cursor.close();
+
+            //Se registra el Log de la consulta SQl Registrada
+
+            ArrayList<String> querys = new ArrayList<String>();
+            querys.add(query);
+
+
+        } catch (Exception e) {
+
+            mensaje = e.getMessage();
+            Log.e(TAG, "obtenerUrlDownloadVersionApp: " + mensaje, e);
+
+        } finally {
+
+            if (db != null)
+                db.close();
+        }
+
+        return url;
+    }
+
 }

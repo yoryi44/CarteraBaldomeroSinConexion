@@ -23,8 +23,10 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import businessObject.DataBaseBO;
 import configuracion.Synchronizer;
 import dataobject.Main;
+import dataobject.Usuario;
 import utilidades.Constantes;
 import utilidades.Utilidades;
 
@@ -172,6 +174,9 @@ public class Sync extends Thread {
                 break;
             case Constantes.LISTARDIAS:
                 listarDias();
+                break;
+            case Constantes.DOWNLOAD_VERSION_APP:
+                DownloadVersionApp();
                 break;
         }
     }
@@ -2132,5 +2137,100 @@ public class Sync extends Thread {
         }
     }
 
+    public void DownloadVersionApp() {
+
+        boolean ok = false;
+        InputStream inputStream = null;
+        FileOutputStream fileOutput = null;
+
+        try {
+
+            String urlPorEmpresa = "";
+            Usuario usuario = DataBaseBO.obtenerUsuario(context);
+
+            urlPorEmpresa = DataBaseBO.obtenerUrlDownloadVersionApp(context);
+
+            URL url = new URL(urlPorEmpresa);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+//	        urlConnection.setDoOutput(true);
+
+            urlConnection.connect();
+            inputStream = urlConnection.getInputStream();
+
+            File file = new File(Utilidades.dirApp(context), Constantes.fileNameApk);
+
+            if (file.exists())
+                file.delete();
+
+            if (file.createNewFile()) {
+
+                fileOutput = new FileOutputStream(file);
+
+                long downloadedSize = 0;
+                int bufferLength = 0;
+                byte[] buffer = new byte[1024];
+
+                /**
+                 * SE LEE LA INFORMACION DEL BUFFER Y SE ESCRIBE EL CONTENIDO EN EL ARCHIVO DE SALIDA
+                 **/
+                while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
+
+                    fileOutput.write(buffer, 0, bufferLength);
+                    downloadedSize += bufferLength;
+                }
+
+                fileOutput.flush();
+                fileOutput.close();
+                inputStream.close();
+
+                long content_length = Utilidades.ToLong(urlConnection.getHeaderField("content-length"));
+
+                if (content_length == 0) {
+
+                    ok = false;
+                    mensaje = "Error de conexion, por favor intente de nuevo";
+
+                } else  if (content_length != downloadedSize) { // La longitud de descarga no es igual al Content Length del Archivo
+
+                    ok = false;
+                    mensaje = "Error descargando la nueva version, por favor intente de nuevo";
+
+                } else {
+
+                    ok = true;
+                    mensaje = "Descargo correctamente la Nueva Version";
+                }
+
+            } else {
+
+                mensaje = "Error Creando el Archivo de la Nueva Version";
+                ok = false;
+            }
+
+        } catch (Exception e) {
+
+            mensaje = "Error Descargando la Nueva version de la Aplicacion\n";
+            mensaje += "Detalle Error: " + e.getMessage();
+            Log.e("Sync DownloadVersionApp", e.getMessage(), e);
+            ok = false;
+
+        } finally {
+
+            try {
+
+                if (fileOutput != null)
+                    fileOutput.close();
+
+                if (inputStream != null)
+                    inputStream.close();
+
+            } catch (IOException e) { }
+        }
+
+        sincronizador.respSync(ok, mensaje, mensaje, codeRequest);
+    }
 
 }

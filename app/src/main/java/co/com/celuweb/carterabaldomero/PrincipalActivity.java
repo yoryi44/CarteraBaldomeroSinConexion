@@ -1,17 +1,23 @@
 package co.com.celuweb.carterabaldomero;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.work.BackoffPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -80,6 +87,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
+        ActualizarVersionApp();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -133,7 +141,10 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
                 case Constantes.DESCARGARINFO:
                     descargarInfo(ok, respuestaServer, msg);
+                    break;
 
+                case Constantes.DOWNLOAD_VERSION_APP:
+                    RespuestaDownloadVersionApp(ok, respuestaServer, msg);
                     break;
 
             }
@@ -249,6 +260,42 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
     }
 
+    public void RespuestaDownloadVersionApp(final boolean ok, final String respuestaServer, String msg) {
+
+        if (progressDoalog != null)
+            progressDoalog.cancel();
+
+        this.runOnUiThread(new Runnable() {
+
+            public void run() {
+
+                if (ok ) {
+
+                    installApk();
+
+//                    File fileApp = new File(Utilidades.dirApp(PrincipalActivity.this), Constantes.fileNameApk);
+//
+//                    if (fileApp.exists()) {
+//
+////                        Uri uri = Uri.fromFile(fileApp);
+//                        Uri uri = FileProvider.getUriForFile(PrincipalActivity.this, BuildConfig.APPLICATION_ID + ".provider",fileApp);
+//
+//                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+//                        startActivityForResult(intent, Constantes.RESP_ACTUALIZAR_VERSION);
+//
+//                    } else {
+//
+//                        Utilidades.MostrarAlertDialog(PrincipalActivity.this, "No se pudo actualizar la version.");
+//                    }
+
+                } else {
+
+                    Utilidades.MostrarAlertDialog(PrincipalActivity.this, respuestaServer);
+                }
+            }
+        });
+    }
 
     @SuppressLint("StaticFieldLeak")
     private class cargarUsuariosAsynTask extends AsyncTask<Void, Void, Void> {
@@ -1414,5 +1461,104 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
     }
 
+    public void ActualizarVersionApp() {
+
+        final String versionSvr = DataBaseBO.ObtenerVersionApp(PrincipalActivity.this);
+        String versionApp = ObtenerVersion();
+
+        if (versionSvr != null && versionApp != null) {
+
+            float versionServer = Utilidades.ToFloat(versionSvr.replace(".", ""));
+            float versionLocal = Utilidades.ToFloat(versionApp.replace(".", ""));
+
+            if (versionLocal < versionServer) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrincipalActivity.this);
+                builder.setMessage("Hay una version de la aplicacion: " + versionSvr)
+                        .setCancelable(false)
+                        .setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                progressDoalog = ProgressDialog.show(PrincipalActivity.this, "", "Descargando Version " + versionSvr + "...", true);
+                                progressDoalog.show();
+
+                                Sync sync = new Sync(PrincipalActivity.this::respSync, Constantes.DOWNLOAD_VERSION_APP, PrincipalActivity.this);
+                                sync.start();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+        }
+    }
+
+    public String ObtenerVersion() {
+
+        String versionApp;
+
+        try {
+
+            versionApp = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+
+        } catch (PackageManager.NameNotFoundException e) {
+
+            versionApp = "0.0";
+            Log.e("FormPrincipalActivity", "ObtenerVersion: " + e.getMessage(), e);
+        }
+
+        return versionApp;
+    }
+
+    public void installApk() {
+
+        Context context = PrincipalActivity.this;
+
+        File fileApp = new File(Utilidades.dirApp(PrincipalActivity.this), Constantes.fileNameApk);
+
+        if (!fileApp.exists()) {
+            // El archivo no existe
+            return;
+        }
+
+        // Verificar permisos de instalación
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.getPackageManager().canRequestPackageInstalls()) {
+                // Solicitar permiso para instalar aplicaciones desconocidas
+                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+                return;
+            }
+        }
+
+        // Crear la URI usando FileProvider (requerido para Android 7+)
+        Uri apkUri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            apkUri = FileProvider.getUriForFile(
+                    context,
+                    context.getApplicationContext().getPackageName() + ".provider",
+                    fileApp
+            );
+        } else {
+            apkUri = Uri.fromFile(fileApp);
+        }
+
+        // Crear intent de instalación
+        Intent installIntent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        installIntent.setData(apkUri);
+        installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Para Android 10+ necesitamos flag adicional
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
+        // Iniciar la instalación
+        context.startActivity(installIntent);
+    }
 
 }

@@ -2,7 +2,9 @@ package utilidades;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -2576,6 +2578,35 @@ public class Utilidades {
     public static String obtenerImei(Context context) {
 
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static float ToFloat(String value) {
+
+        try {
+
+            return Float.parseFloat(value);
+
+        } catch (NumberFormatException e) {
+
+            return 0F;
+        }
+    }
+
+    public static void MostrarAlertDialog(final Context context, String mensaje) {
+
+        AlertDialog alertDialog;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog = builder.create();
+        alertDialog.setMessage(mensaje);
+        alertDialog.show();
     }
 
 }

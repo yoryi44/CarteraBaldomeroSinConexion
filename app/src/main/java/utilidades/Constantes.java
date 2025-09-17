@@ -121,7 +121,8 @@ public class Constantes {
     public static final int PAGO_ANTICIPO_USA = 8;
     public static final int PAGO_RECIBO_POR_LEGALIZAR_ESP = 9;
     public static final int PAGO_RECIBO_POR_LEGALIZAR_USA = 10;
-
-
+    public final static int DOWNLOAD_VERSION_APP = 44;
+    public final static int RESP_ACTUALIZAR_VERSION = 1010;
+    public final static String fileNameApk = "CarteraBaldomero.apk";
     public  static int INTENT_GPS=9000;
 }
