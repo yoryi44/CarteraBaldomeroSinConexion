@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -23,8 +22,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,8 +42,8 @@ import businessObject.DataBaseBO;
 import configuracion.Synchronizer;
 import dataobject.Anticipo;
 import dataobject.Lenguaje;
-import dataobject.Main;
 import dataobject.Usuario;
+import dataobject.Version;
 import es.dmoral.toasty.Toasty;
 import servicio.MyWorker;
 import servicio.Sync;
@@ -60,10 +57,8 @@ import sharedpreferences.PreferencesLenguaje;
 import sharedpreferences.PreferencesParcial;
 import sharedpreferences.PreferencesPendientesFacturas;
 import sharedpreferences.PreferencesReciboDinero;
-import sharedpreferences.PreferencesSaldosRecibosParcial;
 import sharedpreferences.PreferencesUsuario;
 import utilidades.Alert;
-import metodosPago.AlertPagos;
 import utilidades.Constantes;
 import utilidades.ProgressView;
 import utilidades.Utilidades;
@@ -87,7 +82,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        ActualizarVersionApp();
+        actualizarVersionApp();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -118,6 +113,7 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
     protected void onResume() {
         super.onResume();
         try {
+            actualizarVersionApp();
             configurarVista();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -1461,26 +1457,27 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
 
     }
 
-    public void ActualizarVersionApp() {
+    public void actualizarVersionApp() {
 
-        final String versionSvr = DataBaseBO.ObtenerVersionApp(PrincipalActivity.this);
+        final Version versionSvr = DataBaseBO.ObtenerVersionApp(PrincipalActivity.this);
+        final String empresa = DataBaseBO.cargarEmpresa(PrincipalActivity.this);
         String versionApp = ObtenerVersion();
 
         if (versionSvr != null && versionApp != null) {
 
-            float versionServer = Utilidades.ToFloat(versionSvr.replace(".", ""));
+            float versionServer = Utilidades.ToFloat(versionSvr.version.replace(".", ""));
             float versionLocal = Utilidades.ToFloat(versionApp.replace(".", ""));
 
-            if (versionLocal < versionServer) {
+            if (versionLocal < versionServer && empresa.equals(versionSvr.empresa)) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(PrincipalActivity.this);
-                builder.setMessage("Hay una version de la aplicacion: " + versionSvr)
+                builder.setMessage("Hay una version de la aplicacion: " + versionSvr.version)
                         .setCancelable(false)
                         .setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int id) {
 
-                                progressDoalog = ProgressDialog.show(PrincipalActivity.this, "", "Descargando Version " + versionSvr + "...", true);
+                                progressDoalog = ProgressDialog.show(PrincipalActivity.this, "", "Descargando Version " + versionSvr.version + "...", true);
                                 progressDoalog.show();
 
                                 Sync sync = new Sync(PrincipalActivity.this::respSync, Constantes.DOWNLOAD_VERSION_APP, PrincipalActivity.this);

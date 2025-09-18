@@ -41,6 +41,7 @@ import dataobject.MotivosAbono;
 import dataobject.ObjetoCalculoCartera;
 import dataobject.Pendientes;
 import dataobject.Usuario;
+import dataobject.Version;
 import utilidades.Utilidades;
 
 public class DataBaseBO {
@@ -13092,9 +13093,9 @@ public class DataBaseBO {
         return listaIdPago;
     }
 
-    public static String ObtenerVersionApp(Context context) {
+    public static Version ObtenerVersionApp(Context context) {
 
-        String version = "";
+        Version version = null;
         SQLiteDatabase db = null;
 
         try {
@@ -13103,12 +13104,15 @@ public class DataBaseBO {
             db = SQLiteDatabase.openDatabase(dbFile.getPath(), null,
                     SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT version FROM Version";
+            String query = "SELECT version, empresa FROM Version";
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
 
-                version = cursor.getString(cursor.getColumnIndex("version"));
+                version = new Version();
+
+                version.version = cursor.getString(cursor.getColumnIndex("version"));
+                version.empresa = cursor.getString(cursor.getColumnIndex("empresa"));
             }
 
             Log.i("ObtenerVersionApp", "version = " + version);
