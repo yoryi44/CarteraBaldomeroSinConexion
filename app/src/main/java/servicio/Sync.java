@@ -1532,7 +1532,7 @@ public class Sync extends Thread {
         ok = false;
         String msg = "";
         int intentos = 0;
-        int maxIntentos = 2; // Número máximo de intentos
+        int maxIntentos = 2;
         boolean exito = false;
 
         if (comprimirArchivo()) {
@@ -1544,7 +1544,6 @@ public class Sync extends Thread {
                 return;
             }
 
-            // Bucle de reintentos
             while (intentos < maxIntentos && !exito) {
                 intentos++;
                 Log.i("EnviarPedido", "Intento #" + intentos);
@@ -1607,12 +1606,10 @@ public class Sync extends Thread {
                         else
                             msg = respuestaServer;
 
-                        // Si es el último intento y sigue fallando, no reintentamos
                         if (intentos == maxIntentos) {
                             break;
                         }
 
-                        // Pequeña pausa antes del reintento
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -1626,12 +1623,10 @@ public class Sync extends Thread {
                     msg = ex.getMessage();
                     Log.e("EnviarPedido", "Intento " + intentos + " fallido: " + msg, ex);
 
-                    // Si es el último intento y sigue fallando, no reintentamos
                     if (intentos == maxIntentos) {
                         break;
                     }
 
-                    // Pequeña pausa antes del reintento
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

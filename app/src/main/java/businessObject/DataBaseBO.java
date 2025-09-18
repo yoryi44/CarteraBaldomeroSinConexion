@@ -12841,8 +12841,7 @@ public class DataBaseBO {
 
         SQLiteDatabase db = null;
         SQLiteDatabase dbTemp = null;
-        Double valorPagado = 0.0;
-        Double valorTotal = 0.0;
+        Boolean tieneOtrosPagos = false;
 
         try {
 
@@ -12852,24 +12851,18 @@ public class DataBaseBO {
             File tempFile = new File(Utilidades.dirApp(context), "Temp.db");
             dbTemp = SQLiteDatabase.openDatabase(tempFile.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
 
-            String query = "SELECT " +
-                    "SUM(r.valor_Pagado) as valorPagado, " +
-                    "(SELECT SUM(valor_Documento) " +
-                    "FROM (SELECT DISTINCT valor_Documento  " +
-                    "FROM RecaudosPendientes " +
-                    "WHERE nro_Recibo = '" + numeroRecibo + "' AND via_Pago = '6') as doc) as valor_Documento FROM RecaudosPendientes r " +
-                    "where nro_Recibo = '" + numeroRecibo + "' AND via_Pago ='6'";
+            String query = "SELECT * FROM RecaudosPendientes r " +
+                    "WHERE nro_Recibo = '" + numeroRecibo + "' AND via_Pago <> '6'";
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
 
-                valorPagado = cursor.getDouble(cursor.getColumnIndex("valorPagado"));
-                valorTotal = cursor.getDouble(cursor.getColumnIndex("valor_Documento"));
+                tieneOtrosPagos = true;
 
             }
             cursor.close();
 
-            if((Utilidades.formatearDecimales(valorTotal,2).equals(Utilidades.formatearDecimales(valorPagado,2)) && (valorTotal != 0 && valorPagado != 0)))
+            if(!tieneOtrosPagos)
             {
                 query = "DELETE FROM RecaudosPendientes " +
                         "where nro_Recibo = '" + numeroRecibo + "' ";
