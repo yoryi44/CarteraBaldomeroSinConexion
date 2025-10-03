@@ -826,7 +826,6 @@ public class LoginActivity extends AppCompatActivity implements Synchronizer {
 
         try {
 
-
             if (ok) {
 
                 if (respuestaServer.equals("Usuario Incorrecto\n")) {

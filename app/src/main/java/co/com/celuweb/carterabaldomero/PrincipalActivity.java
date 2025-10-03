@@ -143,6 +143,10 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                     RespuestaDownloadVersionApp(ok, respuestaServer, msg);
                     break;
 
+                case Constantes.CERRAR_SESION:
+                    respuestaCerrarSesion(ok, respuestaServer, msg);
+                    break;
+
             }
 
         } catch (Exception exception) {
@@ -1110,37 +1114,10 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                             Alert.dialogo.cancel();
                                         }
                                     });
-//                                    Gson gson = new Gson();
-//                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(PrincipalActivity.this);
-//                                    final Usuario usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-//                                    ProgressView.getInstance().Show(PrincipalActivity.this, "Sendig information...");
-//                                    ProgressView.getInstance().Dismiss();
-//                                    Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION);
-//                                    sync.user = usuarioApp.codigo;
-//                                    sync.start();
-//                                    Alert.dialogo.cancel();
-//
-//                                    Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-//                                    login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(login);
-//                                    finish();
 
                                 } else if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
-
-                                    PreferencesUsuario.vaciarPreferencesUsuario(PrincipalActivity.this);
-
-                                    SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
-                                    settings.edit().clear().apply();
-                                    getSharedPreferences("session", 0).edit().clear().apply();
-                                    getSharedPreferences("session", 0).edit().clear().apply();
-                                    Alert.dialogo.cancel();
-
-                                    Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-                                    login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(login);
-                                    finish();
-                                    //   Utilidades.eliminarDataBase();
+                                    cerrarSesionSync();
 
                                 }
 
@@ -1176,38 +1153,10 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
                                             Alert.dialogo.cancel();
                                         }
                                     });
-                                    // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
-//                                    Gson gson = new Gson();
-//                                    String stringJsonObject = PreferencesUsuario.obtenerUsuario(PrincipalActivity.this);
-//                                    final Usuario usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
-//                                    ProgressView.getInstance().Show(PrincipalActivity.this, "Enviando Información...");
-//                                    ProgressView.getInstance().Dismiss();
-//                                    Sync sync = new Sync(PrincipalActivity.this, Constantes.ENVIARINFORMACION);
-//                                    sync.user = usuarioApp.codigo;
-//                                    sync.start();
-//                                    Alert.dialogo.cancel();
-//
-//                                    Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-//                                    login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(login);
-//                                    finish();
 
                                 } else if (!DataBaseBO.hayInformacionXEnviar(PrincipalActivity.this)) {
 
-
-                                    PreferencesUsuario.vaciarPreferencesUsuario(PrincipalActivity.this);
-
-                                    SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
-                                    settings.edit().clear().apply();
-                                    getSharedPreferences("session", 0).edit().clear().apply();
-                                    getSharedPreferences("session", 0).edit().clear().apply();
-                                    Alert.dialogo.cancel();
-
-                                    Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-                                    login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(login);
-                                    finish();
-                                    //   Utilidades.eliminarDataBase();
+                                    cerrarSesionSync();
 
                                 }
 
@@ -1558,4 +1507,64 @@ public class PrincipalActivity extends AppCompatActivity implements Synchronizer
         context.startActivity(installIntent);
     }
 
+    private void cerrarSesionSync() {
+
+        Gson gson = new Gson();
+        String stringJsonObject = PreferencesUsuario.obtenerUsuario(PrincipalActivity.this);
+        usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
+        // SE CARGA LA INFORMACION DEL USUARIO EN LA VISTA PRINCIPAL
+
+        Sync sync1 = new Sync(PrincipalActivity.this, Constantes.CERRAR_SESION, PrincipalActivity.this);
+
+        sync1.user = usuarioApp.codigo;
+        sync1.password = usuarioApp.contrasena;
+        sync1.imei = Utilidades.obtenerImei(PrincipalActivity.this);
+        sync1.version = Utilidades.getVersion(PrincipalActivity.this);
+        sync1.start();
+        envioInformacion = true;
+
+        progressDoalog = new ProgressDialog(PrincipalActivity.this);
+        if (lenguajeElegido.lenguaje.equals("ESP")) {
+            progressDoalog.setMessage("Sincronizacion");
+        } else {
+            progressDoalog.setMessage("logging out");
+        }
+
+        progressDoalog.setCancelable(false);
+        progressDoalog.show();
+
+    }
+
+    private void respuestaCerrarSesion(boolean ok, String respuestaServer, String msg) {
+
+        if(progressDoalog != null)
+            progressDoalog.dismiss();
+
+        if(ok) {
+            PreferencesUsuario.vaciarPreferencesUsuario(PrincipalActivity.this);
+
+            SharedPreferences settings = getSharedPreferences("session", Context.MODE_PRIVATE);
+            settings.edit().clear().apply();
+            getSharedPreferences("session", 0).edit().clear().apply();
+            getSharedPreferences("session", 0).edit().clear().apply();
+            Alert.dialogo.cancel();
+
+            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(login);
+            finish();
+        } else {
+
+            String mensaje = "";
+
+            if (lenguajeElegido.lenguaje.equals("ESP")) {
+                mensaje = "Error al cerrar sesion.";
+            } else {
+                mensaje = "error when closing session";
+            }
+
+            Utilidades.MostrarAlertDialog(PrincipalActivity.this, mensaje);
+
+        }
+    }
 }

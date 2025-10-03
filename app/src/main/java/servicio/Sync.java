@@ -98,7 +98,6 @@ public class Sync extends Thread {
     }
 
 
-
     public void run() {
 
         switch (codeRequest) {
@@ -177,6 +176,10 @@ public class Sync extends Thread {
                 break;
             case Constantes.DOWNLOAD_VERSION_APP:
                 DownloadVersionApp();
+                break;
+
+            case Constantes.CERRAR_SESION:
+                cerrarSesion();
                 break;
         }
     }
@@ -365,10 +368,9 @@ public class Sync extends Thread {
                     respuestaServer = respuestaServer.concat(line);
                 }
 
-                if(respuestaServer.equals("99")) {
+                if (respuestaServer.equals("99")) {
                     mensaje = "imeiError";
-                }
-                else if (respuestaServer.equals(""))
+                } else if (respuestaServer.equals(""))
                     mensaje = "No se pudo descargar la base de datos, por favor intente de nuevo.";
                 else
                     mensaje = respuestaServer;
@@ -2171,7 +2173,7 @@ public class Sync extends Thread {
                 /**
                  * SE LEE LA INFORMACION DEL BUFFER Y SE ESCRIBE EL CONTENIDO EN EL ARCHIVO DE SALIDA
                  **/
-                while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
 
                     fileOutput.write(buffer, 0, bufferLength);
                     downloadedSize += bufferLength;
@@ -2188,7 +2190,7 @@ public class Sync extends Thread {
                     ok = false;
                     mensaje = "Error de conexion, por favor intente de nuevo";
 
-                } else  if (content_length != downloadedSize) { // La longitud de descarga no es igual al Content Length del Archivo
+                } else if (content_length != downloadedSize) { // La longitud de descarga no es igual al Content Length del Archivo
 
                     ok = false;
                     mensaje = "Error descargando la nueva version, por favor intente de nuevo";
@@ -2222,8 +2224,116 @@ public class Sync extends Thread {
                 if (inputStream != null)
                     inputStream.close();
 
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
+
+        sincronizador.respSync(ok, mensaje, mensaje, codeRequest);
+    }
+
+    private void cerrarSesion() {
+
+        ok = false;
+        int longTimeout = 45 * 1000;
+        HttpURLConnection conexion = null;
+
+        try {
+
+            /*
+             * Carga la Configuracion del Usuario.
+             */
+            Locale locale = Locale.getDefault();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd@HH_mm_ss", locale);
+
+            String urlDataBase;
+            if (!user.isEmpty()) {
+                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_LOGOUT + "?un=" + user + "&pw=" + password + "&vr=" + Main.version + "&imei=" + imei;
+            } else {
+                urlDataBase = Constantes.URL_SYNC_DB + Constantes.URL_LOGOUT + "?un=" + user + "&pw=" + password + "&vr=" + Main.version + "&imei=" + imei;
+            }
+
+            Log.i(TAG, "URL DB = " + urlDataBase);
+
+            URL url = new URL(urlDataBase);
+            conexion = (HttpURLConnection) url.openConnection();
+
+            // Send post request
+            conexion.setDoInput(true);    //Permite Entradas
+            conexion.setDoOutput(true);   //Permite Salidas
+            conexion.setUseCaches(false); //No usar cache
+
+            DataOutputStream wr = new DataOutputStream(conexion.getOutputStream());
+            wr.writeBytes(urlDataBase);
+            wr.flush();
+            wr.close();
+
+            /*
+             * SE DEFINE EL TIEMPO DE ESPERA, MAXIMO ESPERA 2 MINUTOS
+             **/
+            conexion.setConnectTimeout(longTimeout);
+            conexion.setReadTimeout(longTimeout);
+
+            int statusCode = conexion.getResponseCode();
+            respuestaServer = "";
+
+            if (statusCode == 200) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = br.readLine()) != null) {
+
+                    sb.append(line + "\n");
+                }
+
+                br.close();
+
+                mensaje = "ok";
+                respuestaServer = sb.toString();
+                ok = true;
+
+            } else {
+                String error = conexion.getResponseMessage();
+
+                if (error.contains("Usuario Incorrecto\n")) {
+
+                    mensaje = "Usuario y/o clave incorrecto";
+                    respuestaServer = "error";
+
+                } else {
+
+                    mensaje = mensajeHttpError(statusCode, "Login");
+                    respuestaServer = "error";
+                }
+            }
+
+        } catch (Exception e) {
+
+            String motivo = e.getMessage();
+
+            if (motivo.startsWith("http://"))
+                motivo = "Pagina no Encontrada: CrearDB.aspx";
+
+            mensaje = "No se pudo descargar la Base de Datos\n\n";
+            mensaje += "Motivo: " + motivo;
+
+            Log.e(TAG, "DownloadDataBase: " + e.getMessage(), e);
+
+        } finally {
+
+            try {
+
+                if (conexion != null)
+                    conexion.disconnect();
+
+                sincronizador.respSync(ok, respuestaServer, mensaje, codeRequest);
+
+            } catch (Exception e) {
+
+                Log.e("FileUpLoad", "Error cerrando conexion: " + e.getMessage(), e);
+            }
+        }
+
 
         sincronizador.respSync(ok, mensaje, mensaje, codeRequest);
     }

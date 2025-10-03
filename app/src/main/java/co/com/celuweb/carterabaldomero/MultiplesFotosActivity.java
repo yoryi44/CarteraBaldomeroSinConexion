@@ -245,7 +245,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         /*OJOOOO, esto no es la micro sd, es el archivo que se crean
         en la carpeta Android con el
         * nombre del paquete del proyecto, ahi quedan todas las fotos*/
-        File foto = new File(MultiplesFotosActivity.this.getExternalFilesDir(null),
+        File foto = new File(Utilidades.dirApp(MultiplesFotosActivity.this),
                 nombreFoto);
         /*Se añade (Permiso para almacenar  --- el archivo que contendra
         la foto)*/
@@ -375,7 +375,7 @@ public class MultiplesFotosActivity extends AppCompatActivity {
         en la carpeta android ---- y el nombre del archivo)*/
                 Bitmap bitmap1 =
                         BitmapFactory.
-                                decodeFile(MultiplesFotosActivity.this.getExternalFilesDir(null) +
+                                decodeFile(Utilidades.dirApp(MultiplesFotosActivity.this) +
                                         "/" + nombreFoto);
                 /*Se añade la foto al imageView*/
                 String posicion = String.valueOf(position);

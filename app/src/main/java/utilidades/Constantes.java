@@ -105,6 +105,8 @@ public class Constantes {
     public final static String URL_LISTAR_SEGMENTO_VENDEDOR = "/ListaSegmentosPoblacionVendedor.aspx";
     public final static String URL_LISTAR_DIAS = "/ListaBusquedaDias.aspx";
 
+    public final static String URL_LOGOUT = "/CierreLabores.aspx";
+
     public static final int BuscarClienteActivity = 100;
     public static final int RutaVendedorActivity = 101;
     public static final int CargarRuteroAnteriorActivity = 102;
@@ -125,4 +127,5 @@ public class Constantes {
     public final static int RESP_ACTUALIZAR_VERSION = 1010;
     public final static String fileNameApk = "CarteraBaldomero.apk";
     public  static int INTENT_GPS=9000;
+    public static final int CERRAR_SESION = 66;
 }
