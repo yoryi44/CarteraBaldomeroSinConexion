@@ -25,6 +25,7 @@ import java.util.Objects;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import Adapters.AdaptersRecibosPendientes;
 import businessObject.DataBaseBO;
 import configuracion.Synchronizer;
 import dataobject.Anticipo;
@@ -44,6 +45,7 @@ import sharedpreferences.PreferencesLenguaje;
 import sharedpreferences.PreferencesPendientesFacturas;
 import sharedpreferences.PreferencesReciboDinero;
 import sharedpreferences.PreferencesUsuario;
+import utilidades.Alert;
 import utilidades.Constantes;
 import utilidades.Utilidades;
 
@@ -53,15 +55,21 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
     private Lenguaje lenguajeElegido;
     ProgressDialog progressDoalog;
 
+    private Usuario usuarioApp;
+
+    private boolean envioInformacion = false;
+    Context context = ReciboDineroActivity.this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recibo_dinero);
 
+        enviarInformacion();
 
         Gson gson2 = new Gson();
-        String stringJsonObject2 = PreferencesLenguaje.obtenerLenguajeSeleccionada(ReciboDineroActivity.this);
+        String stringJsonObject2 = PreferencesLenguaje.obtenerLenguajeSeleccionada(context);
         lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
 
     }
@@ -102,7 +110,7 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
 
             case R.id.menu_forward:
 
-                progressDoalog = new ProgressDialog(ReciboDineroActivity.this);
+                progressDoalog = new ProgressDialog(context);
 
                 item.setEnabled(false);
 
@@ -181,7 +189,7 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
         final RadioButton rbReciboPago = findViewById(R.id.rbReciboPago);
 
         String empresa23 = "";
-        empresa23 = DataBaseBO.cargarEmpresa(ReciboDineroActivity.this);
+        empresa23 = DataBaseBO.cargarEmpresa(context);
         final String finalEmpresa23 = empresa23;
 
         if (empresa23.equals("AGUC")) {
@@ -235,14 +243,14 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
         String consecutivoVendedor = "";
         String empresaAguc = "";
 
-        empresa = DataBaseBO.cargarRazonSocial(ReciboDineroActivity.this);
-        empresaAguc = DataBaseBO.cargarEmpresa(ReciboDineroActivity.this);
+        empresa = DataBaseBO.cargarRazonSocial(context);
+        empresaAguc = DataBaseBO.cargarEmpresa(context);
         txtCompaReciboDinero.setText(empresa);
-        nombreUsuario = DataBaseBO.cargarUsuarioApp(ReciboDineroActivity.this);
+        nombreUsuario = DataBaseBO.cargarUsuarioApp(context);
         tvNombreUsuario.setText(nombreUsuario);
-        consecutivo = DataBaseBO.cargarConsecutivo(ReciboDineroActivity.this);
-        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(ReciboDineroActivity.this);
-        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(ReciboDineroActivity.this);
+        consecutivo = DataBaseBO.cargarConsecutivo(context);
+        consecutivoNegocio = DataBaseBO.cargarNegocioConsecutivo(context);
+        consecutivoVendedor = DataBaseBO.cargarVendedorConsecutivo(context);
 
         String strDate = sdf.format(c.getTime());
 
@@ -364,8 +372,7 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
             switch (codeRequest) {
 
                 case Constantes.ENVIARINFORMACION:
-//                    enviarInfo(ok, respuestaServer, msg);
-
+                    enviarInfo(ok, respuestaServer, msg);
                     System.out.println("respuesta server " + respuestaServer);
 
                     break;
@@ -388,6 +395,112 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
             progressDoalog.cancel();
 
         onClickCarteraActivity();
+
+    }
+
+    private void enviarInformacion() {
+
+        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
+        progressDoalog.show();
+
+        final String empresa;
+        empresa = DataBaseBO.cargarCodigo(context);
+        Sync sync = new Sync(ReciboDineroActivity.this::respSync, Constantes.ENVIARINFORMACION, context);
+        sync.user = empresa;
+        sync.start();
+
+    }
+
+    private void enviarInfo(boolean ok, String respuestaServer, String msg) {
+
+        Gson gson2 = new Gson();
+        String stringJsonObject2 = PreferencesLenguaje.obtenerLenguajeSeleccionada(context);
+        lenguajeElegido = gson2.fromJson(stringJsonObject2, Lenguaje.class);
+
+        Gson gson = new Gson();
+        String stringJsonObject = PreferencesUsuario.obtenerUsuario(context);
+        usuarioApp = gson.fromJson(stringJsonObject, Usuario.class);
+
+        (ReciboDineroActivity.this).runOnUiThread(new Runnable() {
+            public void run() {
+
+                if (respuestaServer.equals("listo")) {
+
+                    if (respuestaServer.equals("listo") || respuestaServer.equals("ok")) {
+
+                        if (lenguajeElegido == null) {
+
+                        } else if (lenguajeElegido != null) {
+                            if (lenguajeElegido.lenguaje.equals("USA")) {
+
+                                Sync sync1 = new Sync(ReciboDineroActivity.this::respSync, Constantes.DESCARGARINFO, context);
+                                sync1.user = usuarioApp.codigo;
+                                sync1.password = usuarioApp.contrasena;
+                                sync1.imei = Utilidades.obtenerImei(context);
+                                sync1.start();
+                                envioInformacion = true;
+
+                            } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+
+                                Sync sync1 = new Sync(ReciboDineroActivity.this::respSync, Constantes.DESCARGARINFO, context);
+                                sync1.user = usuarioApp.codigo;
+                                sync1.password = usuarioApp.contrasena;
+                                sync1.imei = Utilidades.obtenerImei(context);
+                                sync1.start();
+                                envioInformacion = true;
+
+                            }
+                        }
+
+
+                    } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
+                        if(progressDoalog != null)
+                            progressDoalog.cancel();
+                    }
+
+
+                } else if (respuestaServer.equals("No se pudo Registrar Informacion")) {
+
+                    if(progressDoalog != null)
+                        progressDoalog.cancel();
+
+                    if (lenguajeElegido == null) {
+
+                    } else if (lenguajeElegido != null) {
+//                        if (lenguajeElegido.lenguaje.equals("USA")) {
+//
+//                            Alert.alertGeneral(context, null, "Could not Register Information", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//
+//                                    Alert.dialogo.cancel();
+//
+//
+//                                }
+//                            }, null);
+//
+//                        } else if (lenguajeElegido.lenguaje.equals("ESP")) {
+//
+//                            Alert.alertGeneral(context, null, "No se pudo Registrar Informacion", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//
+//                                    Alert.dialogo.cancel();
+//
+//
+//                                }
+//                            }, null);
+//
+//                        }
+                    }
+
+
+                }
+            }
+        });
+
 
     }
 

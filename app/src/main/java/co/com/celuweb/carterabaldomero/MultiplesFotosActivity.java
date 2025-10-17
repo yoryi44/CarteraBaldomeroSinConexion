@@ -523,10 +523,8 @@ public class MultiplesFotosActivity extends AppCompatActivity {
                     Uri imageurl = data.getClipData().getItemAt(i).getUri();
 
                     try {
-                        ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
                         Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageurl);
-                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap1, 1024 /*Ancho*/, 1050 /*Alto*/, false /* filter*/);
-                        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*Calidad*/, bytearrayoutputstream);
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap1, 1080 /*Ancho*/, 1920 /*Alto*/, true /* filter*/);
                         imageView.setImageURI(mArrayUri.get(i));
                         imageView.setDrawingCacheEnabled(true);
                         imageView.buildDrawingCache();
