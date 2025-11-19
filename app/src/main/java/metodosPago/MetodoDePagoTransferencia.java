@@ -1524,20 +1524,10 @@ public class MetodoDePagoTransferencia {
 
                                                     } else if (nuevoValor < valorobtenido) {
 
-                                                        if((nuevoValor + valoreNegativos) > valorobtenido)
-                                                        {
-                                                            totalbotenido = Utilidades.formatearDecimales(nuevoValor - valorobtenido, 2);
-                                                            nuevoValor = totalbotenido;
-                                                            preciosParcial.add(String.valueOf(valor));
-                                                            preciosfacturasLogica.add(String.valueOf(valorobtenido));
-                                                        }
-                                                        else
-                                                        {
-                                                            totalbotenido = Utilidades.formatearDecimales(nuevoValor - valorobtenido, 2);
-                                                            preciosParcial.add(String.valueOf(valor));
-                                                            preciosfacturasLogica.add(String.valueOf(nuevoValor));
-                                                            nuevoValor = totalbotenido;
-                                                        }
+                                                        totalbotenido = Utilidades.formatearDecimales(nuevoValor - valorobtenido, 2);
+                                                        preciosParcial.add(String.valueOf(valor));
+                                                        preciosfacturasLogica.add(String.valueOf(nuevoValor));
+                                                        nuevoValor = totalbotenido;
 
                                                     } else if (nuevoValor > valorobtenido) {
 

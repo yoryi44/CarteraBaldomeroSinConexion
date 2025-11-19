@@ -400,14 +400,17 @@ public class ReciboDineroActivity extends AppCompatActivity implements Synchroni
 
     private void enviarInformacion() {
 
-        progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
-        progressDoalog.show();
+        if(Utilidades.verificarNetwork(context))
+        {
+            progressDoalog = ProgressDialog.show(context, "", "Organizando Informacion...", true);
+            progressDoalog.show();
 
-        final String empresa;
-        empresa = DataBaseBO.cargarCodigo(context);
-        Sync sync = new Sync(ReciboDineroActivity.this::respSync, Constantes.ENVIARINFORMACION, context);
-        sync.user = empresa;
-        sync.start();
+            final String empresa;
+            empresa = DataBaseBO.cargarCodigo(context);
+            Sync sync = new Sync(ReciboDineroActivity.this::respSync, Constantes.ENVIARINFORMACION, context);
+            sync.user = empresa;
+            sync.start();
+        }
 
     }
 
